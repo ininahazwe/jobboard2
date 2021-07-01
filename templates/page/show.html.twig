@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Page{% endblock %}
+
+{% block body %}
+<main id="main">
+    <!-- ======= Breadcrumbs ======= -->
+    <section id="breadcrumbs" class="breadcrumbs">
+        <div class="container">
+            <ol>
+                <li><a href="{{ path('app_home') }}">Home</a></li>
+                {% if app.user and app.user.isSuperAdmin() %}
+                <li><a href="{{ path('app_profile') }}">Dashboard</a></li>
+                <li><a href="{{ path('page_index') }}">Pages</a></li>
+                {% endif %}
+                <li>{{ page.title }}</li>
+            </ol>
+            <h1>{{ page.title }}</h1>
+        </div>
+    </section><!-- End Breadcrumbs -->
+    <section id="portfolio-details" class="portfolio-details">
+        <div class="container">
+
+            <div class="row gy-4">
+
+                <div class="col-lg-8">
+                    {{ page.content|raw }}
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="portfolio-info">
+                        {% if page.files|length %}
+                            <img class="card-img-top mx-auto" src="{{ asset(page.getUrlLastFile()) }}" alt="{{ page.getNameLastFile() }}">
+                        {% endif %}
+                    </div>
+                    <div class="portfolio-description">
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section><!-- End Portfolio Details Section -->
+    <section class="inner-page">
+        <div class="container">
+
+
+            </div>
+    </section>
+</main>
+{% endblock %}

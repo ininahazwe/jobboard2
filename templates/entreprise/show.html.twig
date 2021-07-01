@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Entreprise{% endblock %}
+
+{% block body %}
+    <main id="main">
+        <!-- ======= Breadcrumbs ======= -->
+        <section id="breadcrumbs" class="breadcrumbs">
+            <div class="container">
+                <ol>
+                    <li><a href="{{ path('app_home') }}">Home</a></li>
+                    <li><a href="{{ path('app_profile') }}">Dashboard</a></li>
+                    <li><a href="{{ path('entreprise_index') }}">Entreprises</a></li>
+                    <li>Lecture</li>
+                </ol>
+                <h1>{{ entreprise.name }}</h1>
+            </div>
+        </section><!-- End Breadcrumbs -->
+        <section class="inner-page">
+            <div class="container">
+                <div class="row">
+                     <div class="col-md-3">
+                        <div class="d-flex flex-column">
+                            {{ include('entreprise/menu.html.twig') }}
+                        </div>
+                    </div>
+                    <div class="col-md-9 text-center d-flex flex-column">
+                        <h3>Informations générales</h3>
+                          <a>{{ entreprise.name }}</a>
+                        {% if entreprise.logo|length %}
+                            <img class="card-img-top mx-auto" style="width:100px" src="{{ asset(entreprise.getUrlLastLogo()) }}" alt="{{ entreprise.getNameLastLogo() }}">
+                        {% endif %}
+                        <p>{{ entreprise.description }}</p>
+                        <p>{{ entreprise.address }}</p>
+                        <p>{{ entreprise.city }}</p>
+                        <p>{{ entreprise.zipcode }}</p>
+                        <p>{{ entreprise.secteur }}</p>
+                        <a href="{{ path('entreprise_edit', {'id': entreprise.id}) }}">edit</a>
+                      </div>
+                   </div>
+            </div>
+        </section>
+    </main>
+{% endblock %}

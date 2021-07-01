@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}EntrepriseOffre{% endblock %}
+
+{% block body %}
+<main id="main">
+    <!-- ======= Breadcrumbs ======= -->
+    <section id="breadcrumbs" class="breadcrumbs">
+        <div class="container">
+            <ol>
+                <li><a href="{{ path('app_home') }}">Home</a></li>
+                <li><a href="{{ path('app_profile') }}">Dashboard</a></li>
+                <li><a href="{{ path('modele_offre_commerciale_index') }}">Modèles Offres commerciales</a></li>
+                <li>Modele</li>
+            </ol>
+            <h1>{{ offre.formule }}</h1>
+        </div>
+    </section><!-- End Breadcrumbs -->
+    <section class="inner-page">
+        <div class="container">
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <th>Formule</th>
+                        <td>{{ offre.formule }}</td>
+                    </tr>
+                    <tr>
+                        <th>Nombre_offres</th>
+                        <td>{{ offre.nombreOffres }}</td>
+                    </tr>
+                    <tr>
+                        <th>DebutContratAt</th>
+                        <td>{{ offre.debutContratAt ? offre.debutContratAt|date('d-m-Y') : '' }}</td>
+                    </tr>
+                    <tr>
+                        <th>FinContratAt</th>
+                        <td>{{ offre.finContratAt ? offre.finContratAt|date('d-m-Y') : '' }}</td>
+                    </tr>
+                    <tr>
+                        <th>IsCvTheque</th>
+                        <td>{{ offre.isCvTheque ? 'Yes' : 'No' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Prix</th>
+                        <td>{{ offre.prix }}</td>
+                    </tr>
+
+                </tbody>
+            </table>
+             <a href="{{ path('offre_edit', {'id': offre.id}) }}">edit</a>
+        </div>
+    </section>
+</main>
+
+{% endblock %}

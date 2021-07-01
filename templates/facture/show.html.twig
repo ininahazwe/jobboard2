@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Facture{% endblock %}
+
+{% block body %}
+    <h1>Facture</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ facture.id }}</td>
+            </tr>
+            <tr>
+                <th>CreatedAt</th>
+                <td>{{ facture.createdAt ? facture.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Prix</th>
+                <td>{{ facture.prix }}</td>
+            </tr>
+            <tr>
+                <th>TVA</th>
+                <td>{{ facture.TVA }}</td>
+            </tr>
+            <tr>
+                <th>PrixTTC</th>
+                <td>{{ facture.prixTTC }}</td>
+            </tr>
+            <tr>
+                <th>IsPaid</th>
+                <td>{{ facture.isPaid ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>LimiteDatePaid</th>
+                <td>{{ facture.limiteDatePaid ? facture.limiteDatePaid|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>PaymentDate</th>
+                <td>{{ facture.paymentDate ? facture.paymentDate|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>PaymentMethods</th>
+                <td>{{ facture.paymentMethods }}</td>
+            </tr>
+            <tr>
+                <th>LinkFacture</th>
+                <td>{{ facture.linkFacture }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('facture_index') }}">back to list</a>
+
+    <a href="{{ path('facture_edit', {'id': facture.id}) }}">edit</a>
+
+    {{ include('facture/_delete_form.html.twig') }}
+{% endblock %}

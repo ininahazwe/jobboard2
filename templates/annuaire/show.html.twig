@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Annuaire{% endblock %}
+
+{% block body %}
+    <h1>Annuaire</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Title</th>
+                <td>{{ annuaire.title }}</td>
+            </tr>
+            <tr>
+                <th>Content</th>
+                <td>{{ annuaire.content }}</td>
+            </tr>
+            <tr>
+                <th>Slug</th>
+                <td>{{ annuaire.slug }}</td>
+            </tr>
+            <tr>
+                <th>Web_link</th>
+                <td>{{ annuaire.webLink }}</td>
+            </tr>
+            <tr>
+                <th>Addresse</th>
+                <td>{{ annuaire.addresse }}</td>
+            </tr>
+            <tr>
+                <th>Code_postal</th>
+                <td>{{ annuaire.codePostal }}</td>
+            </tr>
+            <tr>
+                <th>City</th>
+                <td>{{ annuaire.city }}</td>
+            </tr>
+            <tr>
+                <th>Telephone</th>
+                <td>{{ annuaire.telephone }}</td>
+            </tr>
+            <tr>
+                <th>Id</th>
+                <td>{{ annuaire.id }}</td>
+            </tr>
+            <tr>
+                <th>CreatedAt</th>
+                <td>{{ annuaire.createdAt ? annuaire.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>UpdatedAt</th>
+                <td>{{ annuaire.updatedAt ? annuaire.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('annuaire_index') }}">back to list</a>
+
+    <a href="{{ path('annuaire_edit', {'id': annuaire.id}) }}">edit</a>
+
+    {{ include('annuaire/_delete_form.html.twig') }}
+{% endblock %}

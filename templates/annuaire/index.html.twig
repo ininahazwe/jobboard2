@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Annuaire index{% endblock %}
+
+{% block body %}
+<main id="main">
+    <!-- ======= Breadcrumbs ======= -->
+    <section id="breadcrumbs" class="breadcrumbs">
+        <div class="container">
+            <ol>
+                <li><a href="{{ path('app_home') }}">Home</a></li>
+                <li><a href="{{ path('app_profile') }}">Dashboard</a></li>
+                <li><a href="{{ path('annuaire_index') }}">Annuaire</a></li>
+                <li>Répértoire</li>
+            </ol>
+            <h1>Gestion de l'annuaire</h1>
+        </div>
+    </section><!-- End Breadcrumbs -->
+    <section class="inner-page">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Content</th>
+                                <th>Slug</th>
+                                <th>Web_link</th>
+                                <th>Addresse</th>
+                                <th>Code_postal</th>
+                                <th>City</th>
+                                <th>Telephone</th>
+                                <th>actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for annuaire in annuaires %}
+                            <tr>
+                                <td><a href="{{ path('annuaire_show', {'id': annuaire.id}) }}">{{ annuaire.title }}</a></td>
+                                <td>{{ annuaire.content }}</td>
+                                <td>{{ annuaire.slug }}</td>
+                                <td>{{ annuaire.webLink }}</td>
+                                <td>{{ annuaire.addresse }}</td>
+                                <td>{{ annuaire.codePostal }}</td>
+                                <td>{{ annuaire.city }}</td>
+                                <td>{{ annuaire.telephone }}</td>
+                                <td>
+                                    <a href="{{ path('annuaire_edit', {'id': annuaire.id}) }}">edit</a>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="12">no records found</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <a class="btn btn-primary mt-1" href="{{ path('annuaire_new') }}">Create new</a>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock %}

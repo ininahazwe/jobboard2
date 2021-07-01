@@ -1,0 +1,127 @@
+{% extends "base-pdf.html.twig" %}
+
+{% block title %}Facture {{ facture.entreprise }}{% endblock %}
+{% block body %}
+    <style>
+        .entete{
+            width: 100%;
+        }
+        .prestataire, .client{
+            display: inline-block;
+            vertical-align: top;
+        }
+        .prestataire{
+            width: 50%;
+        }
+        .client{
+            width: 50%;
+        }
+        .client span{
+            margin-top: 30px;
+        }
+        .titre{
+            text-align: center;
+        }
+        .table{
+            width: 100%;
+        }
+        .table thead tr{
+            background: lightgray;
+        }
+        table tbody tr{
+            text-align: center;
+            border-bottom: 1px solid grey;
+        }
+        .table2{
+            margin-top: 20px;
+            width: 60%;
+            float: right;
+
+        }
+        /*.table2 tr{
+            background: whitesmoke;
+        }*/
+        .table2 td{
+            border-bottom: 1px solid gray;
+        }
+    </style>
+    <div class="container">
+        {#<img src="{{ absolute_url(asset('assets/img/logo.png')) }}">#}
+        <div class="entete">
+            <div class="prestataire">
+                <b>Prestataire</b>
+                <p>
+                HandiCV<br>
+                10 rue des tuilières<br>
+                06800 Cagnes sur mer
+                </p>
+            </div>
+            <div class="client">
+                <b>Client</b>
+                <p>{{ facture.entreprise }}</p>
+
+                <span>
+                    Facture n° {{ facture }}<br>
+                    Emise le {{ facture.createdAt|date('d-m-Y') }}
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        {#<img src="{{ absolute_url(asset('assets/img/logo.png')) }}">#}
+        <div class="titre">
+            <h1>Facture {{ facture }}</h1>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Période</th>
+                        <th>Prix unitaire (EUR)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for offre in facture.offre %}
+                    <tr>
+                        <td>
+                            {{ offre.formule }}
+                        </td>
+                        <td>De {{ offre.debutContratAt|date('d-m-Y') }}<br> à {{ offre.finContratAt|date('d-m-Y') }}</td>
+                        <td>{{ offre.prix }} €</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <table class="table2" cellspacing="0px" cellpadding="0px">
+                <tbody>
+                    <tr class="ligne">
+                        <td><b>Sous-total</b></td>
+                        <td>{{ facture.prix }} €</td>
+                    </tr>
+                    <tr>
+                        <td>TVA {{ facture.tVA }}%</td>
+                        <td>{{ facture.prixTVA() }} €</td>
+                    </tr>
+                    <tr>
+                        <td><b>Total</b></td>
+                        <td>{{ facture.prixTTC }} €</td>
+                    </tr>
+                    <tr>
+                        <td>Montant à payer</td>
+                        <td>
+                            {{ not facture.isPaidOk ? facture.prixTTC : '0' }} €
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Montant payé</td>
+                        <td>
+                            {{ facture.isPaidOk ? facture.prixTTC : '0' }} €
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+{% endblock %}

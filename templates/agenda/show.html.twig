@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Agenda{% endblock %}
+
+{% block body %}
+<main id="main">
+    <!-- ======= Breadcrumbs ======= -->
+    <section id="breadcrumbs" class="breadcrumbs">
+        <div class="container">
+            <ol>
+                <li><a href="{{ path('app_home') }}">Home</a></li>
+                <li><a href="{{ path('app_profile') }}">Dashboard</a></li>
+                <li><a href="{{ path('agenda_index') }}">Evénements</a></li>
+                <li>Répértoire</li>
+            </ol>
+            <h1>{{ agenda.title }}</h1>
+        </div>
+    </section><!-- End Breadcrumbs -->
+    <section class="inner-page">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <th>Nom</th>
+                                <td>{{ agenda.title }}</td>
+                            </tr>
+                            <tr>
+                                <th>Url</th>
+                                <td>{{ agenda.webLink }}</td>
+                            </tr>
+                            <tr>
+                                <th>Adresse</th>
+                                <td>{{ agenda.address }}</td>
+                            </tr>
+                            <tr>
+                                <th>Code postal</th>
+                                <td>{{ agenda.codePostal }}</td>
+                            </tr>
+                            <tr>
+                                <th>Ville</th>
+                                <td>{{ agenda.city }}</td>
+                            </tr>
+                            <tr>
+                                <th>Organisateur</th>
+                                <td>{{ agenda.organizer }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <a class="btn btn-primary" href="{{ path('agenda_edit', {'id': agenda.id}) }}">edit</a>
+
+                    {{ include('agenda/_delete_form.html.twig') }}
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock %}
