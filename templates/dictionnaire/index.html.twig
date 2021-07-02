@@ -24,7 +24,7 @@
                         <thead>
                             <tr>
                                 <th>Type</th>
-                                <th>Value</th>
+                                <th>Valeur</th>
                                 <th>actions</th>
                             </tr>
                         </thead>
@@ -34,7 +34,7 @@
                                 <td>{{ dictionnaire.type }}</td>
                                 <td>{{ dictionnaire.value }}</td>
                                 <td>
-                                    <a href="{{ path('dictionnaire_edit', {'id': dictionnaire.id}) }}">edit</a>
+                                    <a href="{{ path('dictionnaire_edit', {'id': dictionnaire.id}) }}"><i class="fas fa-edit"></i></a>
                                 </td>
                             </tr>
                         {% else %}
@@ -44,6 +44,7 @@
                         {% endfor %}
                         </tbody>
                     </table>
+                    {{ knp_pagination_render(dictionnaires, 'Pagination/twitter_bootstrap_v4_pagination.html.twig') }}
                 </div>
             </div>
         </div>

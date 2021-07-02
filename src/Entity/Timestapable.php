@@ -12,7 +12,7 @@ trait Timestapable
     private $createdAt;
 
     /**
-     * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"})
+     * @ORM\Column(type="datetime", nullable=true, options={"default": "CURRENT_TIMESTAMP"})
      */
     private $updatedAt;
 

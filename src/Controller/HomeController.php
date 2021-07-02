@@ -2,13 +2,16 @@
 
 namespace App\Controller;
 
+use App\Entity\Agenda;
+use App\Entity\Annuaire;
 use App\Entity\Menu;
 use App\Entity\Page;
+use App\Repository\AgendaRepository;
 use App\Repository\AnnonceRepository;
+use App\Repository\AnnuaireRepository;
+use App\Repository\EntrepriseRepository;
 use App\Repository\MenuRepository;
 use App\Repository\ModeleOffreCommercialeRepository;
-use App\Repository\OffreRepository;
-use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,7 +23,7 @@ class HomeController extends AbstractController
     #[Route('/', name:'app_home')]
     public function index(AnnonceRepository $annoncesRepo, Request $request, ModeleOffreCommercialeRepository $modeleOffreCommercialeRepository): Response
     {
-        $annonces = $annoncesRepo->findBy(['isActive' => true], ['createdAt' => 'desc'], 5);
+        $annonces = $annoncesRepo->findActiveAndLive(2);
         $offres = $modeleOffreCommercialeRepository->findAll();
 
         return $this->render('home/index.html.twig', [
@@ -29,6 +32,7 @@ class HomeController extends AbstractController
         ]);
     }
     #[Route('/view/menus', name:'app_view_menus')]
+
     public function menuIndex(MenuRepository $menuRepository): Response
     {
         $menus = $menuRepository->getAllMenus();
@@ -56,8 +60,87 @@ class HomeController extends AbstractController
         ]);
     }
 
+    /*Affichage des offres d'emploi*/
+    #[Route('/offres', name: 'annonces_show_all', methods: ['GET'])]
+    public function showAllAnnonces(AnnonceRepository $annonceRepository, Request $request): Response
+    {
+        $annonces = $annonceRepository->findActiveAndLive();
 
-    #[Route('/{slug}', name:'page_sss')]
+        return $this->render('annonce/showAll.html.twig', [
+            'annonces' => $annonces,
+        ]);
+    }
+
+    #[Route('/offres/{id}-{slug}', name: 'annonce_show_unit', methods: ['GET'])]
+    public function showAnnonce($slug, $id, AnnonceRepository $annonceRepository, Request $request): Response
+    {
+        $annonce = $annonceRepository->findOneBy(['slug' => $slug, 'id' => $id]);
+
+        return $this->render('annonce/show_unit.html.twig', [
+            'annonce' => $annonce,
+        ]);
+    }
+
+    /*Affichage des entreprises*/
+    #[Route('/entreprises', name: 'entreprise_show_all', methods: ['GET'])]
+    public function showAllEntreprises(EntrepriseRepository $entrepriseRepository, Request $request, ): Response
+    {
+        $entreprises = $entrepriseRepository->findAll();
+
+        return $this->render('entreprise/showAll.html.twig', [
+            'entreprises' => $entreprises,
+        ]);
+    }
+
+    #[Route('/entreprises/{id}-{slug}', name: 'entreprise_show_unit', methods: ['GET'])]
+    public function showEntreprise($id, $slug, EntrepriseRepository $entrepriseRepository, Request $request): Response
+    {
+        $entreprise = $entrepriseRepository->findOneBy(['slug' => $slug, 'id' => $id]);
+
+        return $this->render('entreprise/show_unit.html.twig', [
+            'entreprise' => $entreprise,
+        ]);
+    }
+
+    /*Affichage des agenda*/
+    #[Route('/agenda', name: 'agenda_show_all', methods: ['GET'])]
+    public function ShowAllAgendas(AgendaRepository $agendaRepository): Response
+    {
+        return $this->render('agenda/showAll.html.twig', [
+            'agendas' => $agendaRepository->findAll(),
+        ]);
+    }
+
+    #[Route('/agenda/{id}-{slug}', name: 'agenda_show_unit', methods: ['GET'])]
+    public function showAgenda($id, $slug, AgendaRepository $agendaRepository, Request $request): Response
+    {
+        $agenda = $agendaRepository->findOneBy(['slug' => $slug, 'id' => $id]);
+
+        return $this->render('agenda/show_unit.html.twig', [
+            'agenda' => $agenda,
+        ]);
+    }
+
+    /*Affichage de l'annuaire*/
+    #[Route('/annuaire', name: 'annuaire_show_all', methods: ['GET'])]
+    public function showAllAnnuaire(AnnuaireRepository $annuaireRepository): Response
+    {
+        return $this->render('annuaire/showAll.html.twig', [
+            'annuaires' => $annuaireRepository->findAll(),
+        ]);
+    }
+
+    #[Route('/annuaire/{id}-{slug}', name: 'annuaire_show_unit', methods: ['GET'])]
+    public function showAnnuaire($id, $slug, AnnuaireRepository $annuaireRepository): Response
+    {
+        $annuaire = $annuaireRepository->findOneBy(['slug' => $slug, 'id' => $id]);
+
+        return $this->render('annuaire/show_unit.html.twig', [
+            'annuaire' => $annuaire,
+        ]);
+    }
+
+    #[Route('/{slug}', name:'page_show')]
     public function page($slug): Response
     {
         $entityManager = $this->getDoctrine()->getManager();

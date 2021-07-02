@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/annonce')]
+#[Route('/cms/annonce')]
 class AnnonceController extends AbstractController
 {
     #[Route('/index', name: 'annonce_index', methods: ['GET'])]
@@ -48,16 +48,16 @@ class AnnonceController extends AbstractController
 
             $entreprise = $entityManager->getRepository(Entreprise::class)->find($form->get('entreprise')->getData());
 
-            if($entreprise->canCreateAnnonce()){
+            if ($entreprise->canCreateAnnonce()){
                 $entityManager->persist($annonce);
                 $entityManager->flush();
 
                 $this->addFlash('success', 'Publication réussie');
 
-                return $this->redirectToRoute('annonce_index', [], Response::HTTP_SEE_OTHER);
+                return $this->redirectToRoute('annonce_index', []);
             }else{
                 $this->addFlash('warning', 'Vous avez atteint le nombre maximum d\'annonces à publier');
-                return $this->redirectToRoute('annonce_index', [], Response::HTTP_SEE_OTHER);
+                return $this->redirectToRoute('annonce_index', []);
             }
 
         }
@@ -65,16 +65,6 @@ class AnnonceController extends AbstractController
         return $this->render('annonce/new.html.twig', [
             'annonce' => $annonce,
             'form' => $form->createView(),
-        ]);
-    }
-
-    #[Route('/{slug}', name: 'annonce_show', methods: ['GET'])]
-    public function show($slug, AnnonceRepository $annonceRepository, Request $request): Response
-    {
-        $annonce = $annonceRepository->findOneBy(['slug' => $slug]);
-
-        return $this->render('annonce/show.html.twig', [
-            'annonce' => $annonce,
         ]);
     }
 
@@ -101,7 +91,7 @@ class AnnonceController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'annonce_delete', methods: ['POST'])]
+    #[Route('/{id}', name: 'annonce_delete')]
     public function delete(Request $request, Annonce $annonce): Response
     {
         if ($this->isCsrfTokenValid('delete'.$annonce->getId(), $request->request->get('_token'))) {

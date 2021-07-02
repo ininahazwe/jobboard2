@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Annonce;
 use App\Entity\User;
 use App\Form\AnnonceType;
+use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
@@ -26,19 +27,18 @@ class AnnonceRepository extends ServiceEntityRepository
     public function findAllActiveQuery($user)
     {
         $query = $this->createQueryBuilder('a');
-        if($user->isSuperAdmin()){
+        if ($user->isSuperAdmin()) {
             $query//->andWhere('a.isActive = true')
-                ->addOrderBy('a.createdAt', 'DESC')
+            ->addOrderBy('a.createdAt', 'DESC')
                 ->getQuery();
 
             return $query;
-        } elseif ($user->isSuperRecruteur() || $user->isRecruteur()){
+        } elseif ($user->isSuperRecruteur() || $user->isRecruteur()) {
             $ids = $user->getEntrepriseIds();
             $query->andWhere('a.entreprise IN (:entreprises)')
                 ->addOrderBy('a.createdAt', 'DESC')
                 ->setParameter('entreprises', $ids)
-                ->getQuery()
-            ;
+                ->getQuery();
 
             return $query;
         }
@@ -53,6 +53,24 @@ class AnnonceRepository extends ServiceEntityRepository
             ->setMaxResults(4)
             ->getQuery()
             ->getResult();
+    }
+
+    /**
+     * @param null $limite
+     * @return array
+     */
+    public function findActiveAndLive($limite=null): array
+    {
+        $now = new DateTime('now');
+        $query = $this->createQueryBuilder('a')
+            ->andWhere('a.isActive = 1')
+            ->andWhere('a.dateLimiteCandidature > :date')
+            ->setParameter('date', $now)
+        ;
+        if($limite){
+            $query->setMaxResults($limite);
+        }
+        return $query->getQuery()->getResult();
     }
 
     /**

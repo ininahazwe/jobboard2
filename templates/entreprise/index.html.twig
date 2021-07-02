@@ -51,7 +51,7 @@
                                     <td>{{ entreprise.secteur }}</td>
                                     <td>
                                         <a href="{{ path('entreprise_edit', {'id': entreprise.id}) }}">
-                                            <a href="{{ path('entreprise_edit', {'id': entreprise.id}) }}">edit</a>
+                                            <a href="{{ path('entreprise_edit', {'id': entreprise.id}) }}"><i class="fas fa-edit"></i></a>
                                         </a>
                                         {% if app.user.isSuperAdmin() %}
                                             {{ include('entreprise/_delete_form.html.twig') }}

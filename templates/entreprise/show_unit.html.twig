@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Profil de | {{ entreprise.name }}{% endblock %}
+
+{% block body %}
+    <main id="main">
+        <!-- ======= Breadcrumbs ======= -->
+        <section id="breadcrumbs" class="breadcrumbs">
+            <div class="container">
+                <ol>
+                    <li><a href="{{ path('app_home') }}">Home</a></li>
+                </ol>
+                <h1>{{ entreprise.name }} </h1>
+            </div>
+        </section><!-- End Breadcrumbs -->
+        <section id="portfolio-details" class="portfolio-details">
+            <div class="container">
+
+                <div class="row gy-4">
+
+                    <div class="col-lg-8">
+                        <h2>Description</h2>
+                        {{ entreprise.description }}
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="portfolio-info">
+                            <h2>Ses offres d'emploi</h2>
+                            {% for offre in entreprise.annoncesEntreprise %}
+                                {% if "now"|date('Y-m-d') < offre.dateLimiteCandidature|date('Y-m-d') %}
+                                    <a href="{{ path('annonce_show_unit', {id:offre.id, slug:offre.slug}) }}">{{ offre.name }}</a>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <div class="portfolio-description">
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section><!-- End Portfolio Details Section -->
+    </main>
+{% endblock %}
+
+

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Dictionnaire;
 use App\Form\DictionnaireType;
 use App\Repository\DictionnaireRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,10 +15,17 @@ use Symfony\Component\Routing\Annotation\Route;
 class DictionnaireController extends AbstractController
 {
     #[Route('/', name: 'dictionnaire_index', methods: ['GET'])]
-    public function index(DictionnaireRepository $dictionnaireRepository): Response
+    public function index(DictionnaireRepository $dictionnaireRepository, PaginatorInterface $paginator, Request $request): Response
     {
+        $data = $dictionnaireRepository->findAll();
+
+        $dictionnaire = $paginator->paginate(
+            $data,
+            $request->query->getInt('page', 1),
+            10
+        );
         return $this->render('dictionnaire/index.html.twig', [
-            'dictionnaires' => $dictionnaireRepository->findAll(),
+            'dictionnaires' => $dictionnaire,
         ]);
     }
 

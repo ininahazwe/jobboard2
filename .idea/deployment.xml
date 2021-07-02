@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" serverName="HandiCV" remoteFilesAllowedToDisappearOnAutoupload="false">
+  <component name="PublishConfigData" serverName="HandiCV" uploadOnCheckin="71014425-c3e1-4daa-a16a-1cccb25470d5" remoteFilesAllowedToDisappearOnAutoupload="false">
     <serverData>
       <paths name="HandiCV">
         <serverdata>
@@ -10,5 +10,6 @@
         </serverdata>
       </paths>
     </serverData>
+    <option name="myUploadOnCheckinName" value="HandiCV" />
   </component>
 </project>

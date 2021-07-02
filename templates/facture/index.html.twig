@@ -98,11 +98,11 @@
                                         </div>
 
                                         {% if facture.isPaid == false %}
-                                            <button type="button" class="open-modal btn btn-primary" data-open="modal{{ facture.id }}">
+                                            <button type="button" class="open-modal btn btn-primary btn-sm" data-open="modal{{ facture.id }}">
                                                 Régler
                                             </button> <br>
                                         {% endif %}
-                                        <a target="_blank" href="{{ path('facture_download', {'id': facture.id}) }}">Télécharger en PDF</a>
+                                        <a target="_blank" href="{{ path('facture_download', {'id': facture.id}) }}"><i class="fas fa-download"></i></a>
                                     </td>
                                 </tr>
                             {% else %}

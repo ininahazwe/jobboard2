@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\AgendaRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity(repositoryClass=AgendaRepository::class)
@@ -42,6 +43,12 @@ class Agenda
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private ?string $organizer;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Gedmo\Slug(fields={"title"})
+     */
+    private ?string $slug;
 
     public function getTitle(): ?string
     {
@@ -113,5 +120,10 @@ class Agenda
         $this->organizer = $organizer;
 
         return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
     }
 }

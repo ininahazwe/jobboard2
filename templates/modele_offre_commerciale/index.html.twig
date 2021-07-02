@@ -35,7 +35,7 @@
             <tbody>
             {% for modele_offre_commerciale in modele_offre_commerciales %}
                 <tr>
-                    <td>{{ modele_offre_commerciale.name }}</td>
+                    <td><a href="{{ path('modele_offre_commerciale_show', {'id': modele_offre_commerciale.id}) }}">{{ modele_offre_commerciale.name }}</a></td>
                     <td>{{ modele_offre_commerciale.slug }}</td>
                     <td>{{ modele_offre_commerciale.nombreOffres }}</td>
                     <td>{{ modele_offre_commerciale.nombreRecruteurs }}</td>
@@ -43,8 +43,7 @@
                     <td>{{ modele_offre_commerciale.dureeContrat }}</td>
                     <td>{{ modele_offre_commerciale.prix }}</td>
                     <td>
-                        <a href="{{ path('modele_offre_commerciale_show', {'id': modele_offre_commerciale.id}) }}">show</a>
-                        <a href="{{ path('modele_offre_commerciale_edit', {'id': modele_offre_commerciale.id}) }}">edit</a>
+                        <a href="{{ path('modele_offre_commerciale_edit', {'id': modele_offre_commerciale.id}) }}"><i class="fas fa-edit"></i></a>
                     </td>
                 </tr>
             {% else %}

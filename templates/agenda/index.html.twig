@@ -20,7 +20,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <a class=" btn btn-primary" href="{{ path('agenda_new') }}">Ajouter</a>
+                    <a class=" btn btn-primary btn-small" href="{{ path('agenda_new') }}">Ajouter</a>
                     <table class="table">
                         <thead>
                             <tr>
@@ -47,7 +47,7 @@
                                 <td>{{ agenda.createdAt ? agenda.createdAt|date('Y-m-d H:i:s') : '' }}</td>
                                 <td>{{ agenda.updatedAt ? agenda.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
                                 <td>
-                                    <a href="{{ path('agenda_edit', {'id': agenda.id}) }}">edit</a>
+                                    <a href="{{ path('agenda_edit', {'id': agenda.id}) }}"><i class="fas fa-edit"></i></a>
                                 </td>
                             </tr>
                         {% else %}

@@ -22,29 +22,28 @@
             <table class="table">
                 <tbody>
                     <tr>
-                        <th>Name</th>
+                        <th>Nom</th>
                         <td>{{ modele_offre_commerciale.name }}</td>
                     </tr>
                     <tr>
-                        <th>Nombre_offres</th>
+                        <th>Nombre d'offres</th>
                         <td>{{ modele_offre_commerciale.nombreOffres }}</td>
                     </tr>
                     <tr>
-                        <th>IsCvTheque</th>
+                        <th>CVthèque</th>
                         <td>{{ modele_offre_commerciale.isCvTheque ? 'Yes' : 'No' }}</td>
                     </tr>
                     <tr>
-                        <th>DureeContrat</th>
+                        <th>Durée de contrat</th>
                         <td>{{ modele_offre_commerciale.dureeContrat }}</td>
                     </tr>
                     <tr>
                         <th>Prix</th>
-                        <td>{{ modele_offre_commerciale.prix }}</td>
+                        <td>{{ modele_offre_commerciale.prix }}€</td>
                     </tr>
                 </tbody>
             </table>
             <di>
-                <a href="{{ path('modele_offre_commerciale_edit', {'id': modele_offre_commerciale.id}) }}">edit</a>
                 {{ include('modele_offre_commerciale/_delete_form.html.twig') }}
             </di>
         </div>

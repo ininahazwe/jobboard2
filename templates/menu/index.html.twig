@@ -21,12 +21,12 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Link</th>
-                        <th>Display_order</th>
+                        <th>Nom</th>
+                        <th>Url personnalisé</th>
+                        <th>Ordre d'affichage</th>
                         <th>Niveau</th>
                         <th>Type</th>
-                        <th>actions</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -38,8 +38,7 @@
                         <td>{{ menu.niveau }}</td>
                         <td>{{ menu.type }}</td>
                         <td>
-                            <a href="{{ path('menu_edit', {'id': menu.id}) }}">edit</a>
-                            <a href="{{ path('menu_delete', {'id': menu.id}) }}">Delete</a>
+                            <a href="{{ path('menu_edit', {'id': menu.id}) }}"><i class="fas fa-edit"></i></a>
                         </td>
                     </tr>
                 {% else %}
