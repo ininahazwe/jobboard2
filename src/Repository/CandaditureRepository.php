@@ -47,4 +47,19 @@ class CandaditureRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function hasCandidature($user, $annonce): ?Candidature
+    {
+        $query = $this->createQueryBuilder('c')
+            ->andWhere('c.candidat = :candidat')
+            ->innerJoin('c.annonces', 'annonces');
+
+        $query->andWhere($query->expr()->in('annonces.id', array($annonce->getId())))
+            ->setParameter('candidat', $user);
+
+        return $query->getQuery()
+            ->getOneOrNullResult()
+            ;
+    }
+
 }

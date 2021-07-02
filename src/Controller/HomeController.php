@@ -9,6 +9,7 @@ use App\Entity\Page;
 use App\Repository\AgendaRepository;
 use App\Repository\AnnonceRepository;
 use App\Repository\AnnuaireRepository;
+use App\Repository\CandaditureRepository;
 use App\Repository\EntrepriseRepository;
 use App\Repository\MenuRepository;
 use App\Repository\ModeleOffreCommercialeRepository;
@@ -72,12 +73,23 @@ class HomeController extends AbstractController
     }
 
     #[Route('/offres/{id}-{slug}', name: 'annonce_show_unit', methods: ['GET'])]
-    public function showAnnonce($slug, $id, AnnonceRepository $annonceRepository, Request $request): Response
+    public function showAnnonce($slug, $id,
+                                AnnonceRepository $annonceRepository,
+                                CandaditureRepository $candaditureRepository,
+                                Request $request
+    ): Response
     {
         $annonce = $annonceRepository->findOneBy(['slug' => $slug, 'id' => $id]);
 
+        $hasCandidature = false;
+        if ($this->getUser()){
+            $hasCandidature = $candaditureRepository->hasCandidature($this->getUser(), $annonce);
+        }
+
+
         return $this->render('annonce/show_unit.html.twig', [
             'annonce' => $annonce,
+            'hasCandidature' => $hasCandidature
         ]);
     }
 

@@ -1,0 +1,12 @@
+{% form_theme form _self %}
+{{ form_start(form) }}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <b>Description du poste et missions</b>
+            {{ form_row(form.message) }}
+        </div>
+    </div>
+    <button class="btn btn-primary mt-3">{{ button_label|default('Envoyer') }}</button>
+</div>
+{{ form_end(form, {'render_rest': false}) }}

@@ -52,6 +52,16 @@ class File
      */
     private ?Annuaire $annuaire;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Candidature::class, inversedBy="cv")
+     */
+    private $candidature;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Candidature::class, inversedBy="lettre_motivation")
+     */
+    private $candidature_motivation;
+
     public function getName(): ?string
     {
         return $this->name;
@@ -132,6 +142,30 @@ class File
     public function setAnnuaire(?Annuaire $annuaire): self
     {
         $this->annuaire = $annuaire;
+
+        return $this;
+    }
+
+    public function getCandidature(): ?Candidature
+    {
+        return $this->candidature;
+    }
+
+    public function setCandidature(?Candidature $candidature): self
+    {
+        $this->candidature = $candidature;
+
+        return $this;
+    }
+
+    public function getCandidatureMotivation(): ?Candidature
+    {
+        return $this->candidature_motivation;
+    }
+
+    public function setCandidatureMotivation(?Candidature $candidature_motivation): self
+    {
+        $this->candidature_motivation = $candidature_motivation;
 
         return $this;
     }

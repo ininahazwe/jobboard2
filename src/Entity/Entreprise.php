@@ -98,6 +98,11 @@ class Entreprise
      */
     private Collection $annonces_entreprise;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Candidature::class, mappedBy="entreprise")
+     */
+    private $candidatures;
+
     public function __construct()
     {
         $this->Offres = new ArrayCollection();
@@ -107,6 +112,7 @@ class Entreprise
         $this->logo = new ArrayCollection();
         $this->factures = new ArrayCollection();
         $this->annonces_entreprise = new ArrayCollection();
+        $this->candidatures = new ArrayCollection();
     }
 
     /**
@@ -437,5 +443,35 @@ class Entreprise
             return true;
         }
         return false;
+    }
+
+    /**
+     * @return Collection|Candidature[]
+     */
+    public function getCandidatures(): Collection
+    {
+        return $this->candidatures;
+    }
+
+    public function addCandidature(Candidature $candidature): self
+    {
+        if (!$this->candidatures->contains($candidature)) {
+            $this->candidatures[] = $candidature;
+            $candidature->setEntreprise($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCandidature(Candidature $candidature): self
+    {
+        if ($this->candidatures->removeElement($candidature)) {
+            // set the owning side to null (unless already changed)
+            if ($candidature->getEntreprise() === $this) {
+                $candidature->setEntreprise(null);
+            }
+        }
+
+        return $this;
     }
 }

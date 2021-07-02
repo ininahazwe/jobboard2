@@ -105,12 +105,18 @@ class Annonce
      */
     private ?\DateTimeInterface $dateLimiteCandidature;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Candidature::class, mappedBy="annonces")
+     */
+    private $candidatures;
+
     public function __construct()
     {
         $this->type_contrat = new ArrayCollection();
         $this->auteur = new ArrayCollection();
         $this->location = new ArrayCollection();
         $this->createdAt = new \DateTimeImmutable('now');
+        $this->candidatures = new ArrayCollection();
     }
 
     public function getName(): ?string
@@ -328,5 +334,32 @@ class Annonce
             return true;
         }
         return false;
+    }
+
+    /**
+     * @return Collection|Candidature[]
+     */
+    public function getCandidatures(): Collection
+    {
+        return $this->candidatures;
+    }
+
+    public function addCandidature(Candidature $candidature): self
+    {
+        if (!$this->candidatures->contains($candidature)) {
+            $this->candidatures[] = $candidature;
+            $candidature->addAnnonce($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCandidature(Candidature $candidature): self
+    {
+        if ($this->candidatures->removeElement($candidature)) {
+            $candidature->removeAnnonce($this);
+        }
+
+        return $this;
     }
 }

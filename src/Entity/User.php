@@ -81,70 +81,6 @@ class User implements UserInterface
     private ?DateTimeImmutable $lastConnextionAt;
 
     /**
-     * @return string|null
-     */
-    public function getForgotPasswordToken(): ?string
-    {
-        return $this->forgotPasswordToken;
-    }
-
-    /**
-     * @param string|null $forgotPasswordToken
-     */
-    public function setForgotPasswordToken(?string $forgotPasswordToken): void
-    {
-        $this->forgotPasswordToken = $forgotPasswordToken;
-    }
-
-    /**
-     * @return DateTimeImmutable|null
-     */
-    public function getForgotPasswordTokenRequestedAt(): ?DateTimeImmutable
-    {
-        return $this->forgotPasswordTokenRequestedAt;
-    }
-
-    /**
-     * @param DateTimeImmutable|null $forgotPasswordTokenRequestedAt
-     */
-    public function setForgotPasswordTokenRequestedAt(?DateTimeImmutable $forgotPasswordTokenRequestedAt): void
-    {
-        $this->forgotPasswordTokenRequestedAt = $forgotPasswordTokenRequestedAt;
-    }
-
-    /**
-     * @return DateTimeImmutable|null
-     */
-    public function getForgotPasswordTokenMustBeVerifiedBefore(): ?DateTimeImmutable
-    {
-        return $this->forgotPasswordTokenMustBeVerifiedBefore;
-    }
-
-    /**
-     * @param DateTimeImmutable|null $forgotPasswordTokenMustBeVerifiedBefore
-     */
-    public function setForgotPasswordTokenMustBeVerifiedBefore(?DateTimeImmutable $forgotPasswordTokenMustBeVerifiedBefore): void
-    {
-        $this->forgotPasswordTokenMustBeVerifiedBefore = $forgotPasswordTokenMustBeVerifiedBefore;
-    }
-
-    /**
-     * @return DateTimeImmutable|null
-     */
-    public function getForgotPasswordTokenVerifiedAt(): ?DateTimeImmutable
-    {
-        return $this->forgotPasswordTokenVerifiedAt;
-    }
-
-    /**
-     * @param DateTimeImmutable|null $forgotPasswordTokenVerifiedAt
-     */
-    public function setForgotPasswordTokenVerifiedAt(?DateTimeImmutable $forgotPasswordTokenVerifiedAt): void
-    {
-        $this->forgotPasswordTokenVerifiedAt = $forgotPasswordTokenVerifiedAt;
-    }
-
-    /**
      * @ORM\Column(type="datetime_immutable", nullable=true)
      */
     private ?DateTimeImmutable $forgotPasswordTokenRequestedAt;
@@ -189,6 +125,26 @@ class User implements UserInterface
      */
     private Collection $annonces_auteurs;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Candidature::class, mappedBy="recruteur")
+     */
+    private Collection $candidatures_recruteur;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Messages::class, mappedBy="sender")
+     */
+    private Collection $messages;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Messages::class, mappedBy="sender", orphanRemoval=true)
+     */
+    private Collection $sent;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Messages::class, mappedBy="recipient", orphanRemoval=true)
+     */
+    private Collection $received;
+
     public function __construct()
     {
         $this->isTermsClients = false;
@@ -198,6 +154,10 @@ class User implements UserInterface
         $this->recruteurs_entreprise = new ArrayCollection();
         $this->files = new ArrayCollection();
         $this->annonces_auteurs = new ArrayCollection();
+        $this->candidatures_recruteur = new ArrayCollection();
+        $this->messages = new ArrayCollection();
+        $this->sent = new ArrayCollection();
+        $this->received = new ArrayCollection();
     }
 
     public function getEmail(): string
@@ -362,6 +322,70 @@ class User implements UserInterface
         $this->profile = $profile;
 
         return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getForgotPasswordToken(): ?string
+    {
+        return $this->forgotPasswordToken;
+    }
+
+    /**
+     * @param string|null $forgotPasswordToken
+     */
+    public function setForgotPasswordToken(?string $forgotPasswordToken): void
+    {
+        $this->forgotPasswordToken = $forgotPasswordToken;
+    }
+
+    /**
+     * @return DateTimeImmutable|null
+     */
+    public function getForgotPasswordTokenRequestedAt(): ?DateTimeImmutable
+    {
+        return $this->forgotPasswordTokenRequestedAt;
+    }
+
+    /**
+     * @param DateTimeImmutable|null $forgotPasswordTokenRequestedAt
+     */
+    public function setForgotPasswordTokenRequestedAt(?DateTimeImmutable $forgotPasswordTokenRequestedAt): void
+    {
+        $this->forgotPasswordTokenRequestedAt = $forgotPasswordTokenRequestedAt;
+    }
+
+    /**
+     * @return DateTimeImmutable|null
+     */
+    public function getForgotPasswordTokenMustBeVerifiedBefore(): ?DateTimeImmutable
+    {
+        return $this->forgotPasswordTokenMustBeVerifiedBefore;
+    }
+
+    /**
+     * @param DateTimeImmutable|null $forgotPasswordTokenMustBeVerifiedBefore
+     */
+    public function setForgotPasswordTokenMustBeVerifiedBefore(?DateTimeImmutable $forgotPasswordTokenMustBeVerifiedBefore): void
+    {
+        $this->forgotPasswordTokenMustBeVerifiedBefore = $forgotPasswordTokenMustBeVerifiedBefore;
+    }
+
+    /**
+     * @return DateTimeImmutable|null
+     */
+    public function getForgotPasswordTokenVerifiedAt(): ?DateTimeImmutable
+    {
+        return $this->forgotPasswordTokenVerifiedAt;
+    }
+
+    /**
+     * @param DateTimeImmutable|null $forgotPasswordTokenVerifiedAt
+     */
+    public function setForgotPasswordTokenVerifiedAt(?DateTimeImmutable $forgotPasswordTokenVerifiedAt): void
+    {
+        $this->forgotPasswordTokenVerifiedAt = $forgotPasswordTokenVerifiedAt;
     }
 
     /**
@@ -578,6 +602,123 @@ class User implements UserInterface
     }
 
     /**
+     * @return Collection
+     */
+    public function getCandidaturesRecruteur(): Collection
+    {
+        return $this->candidatures_recruteur;
+    }
+
+    public function addCandidaturesRecruteur(Candidature $candidaturesRecruteur): self
+    {
+        if (!$this->candidatures_recruteur->contains($candidaturesRecruteur)) {
+            $this->candidatures_recruteur[] = $candidaturesRecruteur;
+            $candidaturesRecruteur->setRecruteur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCandidaturesRecruteur(Candidature $candidaturesRecruteur): self
+    {
+        if ($this->candidatures_recruteur->removeElement($candidaturesRecruteur)) {
+            // set the owning side to null (unless already changed)
+            if ($candidaturesRecruteur->getRecruteur() === $this) {
+                $candidaturesRecruteur->setRecruteur(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getMessages(): Collection
+    {
+        return $this->messages;
+    }
+
+    public function addMessage(Messages $message): self
+    {
+        if (!$this->messages->contains($message)) {
+            $this->messages[] = $message;
+            $message->setSender($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMessage(Messages $message): self
+    {
+        if ($this->messages->removeElement($message)) {
+            if ($message->getSender() === $this) {
+                $message->setSender(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getSent(): Collection
+    {
+        return $this->sent;
+    }
+
+    public function addSent(Messages $sent): self
+    {
+        if (!$this->sent->contains($sent)) {
+            $this->sent[] = $sent;
+            $sent->setSender($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSent(Messages $sent): self
+    {
+        if ($this->sent->removeElement($sent)) {
+            if ($sent->getSender() === $this) {
+                $sent->setSender(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getReceived(): Collection
+    {
+        return $this->received;
+    }
+
+    public function addReceived(Messages $received): self
+    {
+        if (!$this->received->contains($received)) {
+            $this->received[] = $received;
+            $received->setRecipient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReceived(Messages $received): self
+    {
+        if ($this->received->removeElement($received)) {
+            if ($received->getRecipient() === $this) {
+                $received->setRecipient(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
      * @return string
      */
     public function getUrlLastFile(): string
@@ -722,5 +863,4 @@ class User implements UserInterface
         return implode(' - ', $nombres);
 
     }
-
 }
