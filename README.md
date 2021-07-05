@@ -229,8 +229,8 @@ Distribué sous la License MIT. Voir `LICENSE` for plus d'informations.
 <!-- CONTACT -->
 ## Contact
 
-Yves Ininahazwe - [@your_twitter](https://twitter.com/your_username) - yves.ininahazwe@talents-handicap.com
-Salah Bahri - [@your_twitter](https://twitter.com/your_username) - salah.bahri@talents-handicap.com
+Yves Ininahazwe - yves.ininahazwe@talents-handicap.com
+Salah Bahri - salah.bahri@talents-handicap.com
 
 Project Link: [https://github.com/your_username/repo_name](https://github.com/your_username/repo_name)
 
