@@ -31,6 +31,7 @@
                             <div class="col"><div class="p-3 border bg-light"><a href="{{ path('dictionnaire_index') }}">Dictionnaire</a></div></div>
                             <div class="col"><div class="p-3 border bg-light"><a href="{{ path('annuaire_index') }}">Annuaire</a></div></div>
                             <div class="col"><div class="p-3 border bg-light"><a href="{{ path('agenda_index') }}">Agenda</a></div></div>
+                            <div class="col"><div class="p-3 border bg-light"><a href="{{ path('email_index') }}">Emails</a></div></div>
                         </div>
                         {% endif %}
                         {% if app.user.isSuperRecruteur() %}
@@ -48,7 +49,7 @@
                         {% endif %}
                         {% if app.user.isCandidat() %}
                         <div class="row row-cols-3 g-lg-3">
-                            <div class="col"><div class="p-3 border bg-light"><a href="{{ path('menu_index') }}">Mes candidatures</a></div></div>
+                            <div class="col"><div class="p-3 border bg-light"><a href="{{ path('candidature_index') }}">Mes candidatures</a></div></div>
                             <div class="col"><div class="p-3 border bg-light"><a href="{{ path('menu_index') }}">Offres en adéquation avec mon profil</a></div></div>
                             <div class="col"><div class="p-3 border bg-light"><a href="{{ path('menu_index') }}">Offres sélectionnées</a></div></div>
                         </div>

@@ -15,16 +15,20 @@
         </section><!-- End Breadcrumbs -->
         <section id="portfolio-details" class="portfolio-details">
             <div class="container">
-
                 <div class="row gy-4">
-
                     <div class="col-lg-8">
                         <h2>Description</h2>
-                        {{ agenda.city }}
+                        {{ agenda.title }}
+                        <h2>Organisateur</h2>
+                        {{ agenda.organizer }}
                     </div>
 
                     <div class="col-lg-4">
                         <div class="portfolio-info">
+                            <h2>Adresse</h2>
+                            {{ agenda.address }}<br>
+                            {{ agenda.codePostal }}<br>
+                            {{ agenda.city }}<br>
 
                         </div>
                         <div class="portfolio-description">

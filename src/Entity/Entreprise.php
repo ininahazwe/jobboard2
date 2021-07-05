@@ -101,7 +101,12 @@ class Entreprise
     /**
      * @ORM\OneToMany(targetEntity=Candidature::class, mappedBy="entreprise")
      */
-    private $candidatures;
+    private Collection $candidatures;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $regroupement_candidatures;
 
     public function __construct()
     {
@@ -471,6 +476,18 @@ class Entreprise
                 $candidature->setEntreprise(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getRegroupementCandidatures(): ?bool
+    {
+        return $this->regroupement_candidatures;
+    }
+
+    public function setRegroupementCandidatures(?bool $regroupement_candidatures): self
+    {
+        $this->regroupement_candidatures = $regroupement_candidatures;
 
         return $this;
     }

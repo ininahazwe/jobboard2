@@ -13,7 +13,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Service\Mailer;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/candidature')]
@@ -86,8 +85,8 @@ class CandidatureController extends AbstractController
         return $this->redirectToRoute('candidature_index');
     }
 
-    #[Route('/postuler/{id}/{type}', name: 'candidature_postuler')]
-    public function postuler(Request $request, Annonce $annonce,CandaditureRepository $candaditureRepository, $type): Response
+    #[Route('/postuler/{id}/{type}', name: 'candidature_postuler-externe')]
+    public function postuler(Request $request, Annonce $annonce,CandaditureRepository $candaditureRepository, $type, Mailer $mailer): Response
     {
         $candidature = new Candidature();
         if ($type == Candidature::TYPE_MAIL){
@@ -108,12 +107,21 @@ class CandidatureController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($candidature);
             $entityManager->flush();
+
+            $this->addFlash('success', 'Candidature réussie');
+
+            /*$mailer->send([
+                'recipient_email' => $annonce->getAdresseEmail(),
+                'subject' => 'Candidature sur l\'offre' . '' . $annonce->getName(),
+                'html_template' => 'emails/nouvelle_candidature.html.twig',
+                'context' => [
+                    'candidature' => $candidature
+                ]
+            ]);*/
         }
-        //dd($candidature);
+
         if ($type == Candidature::TYPE_EXTERNE){
-            //return $this->redirectToRoute($annonce->getLien());
-            return $this->redirect($annonce->getLien());
-            //return new RedirectResponse($annonce->getLien());
+             return $this->redirect($annonce->getLien());
         }
         return $this->redirectToRoute('annonce_show_unit', ['id'=> $annonce->getId(), 'slug'=> $annonce->getSlug()]);
     }
@@ -159,14 +167,16 @@ class CandidatureController extends AbstractController
             $entityManager->persist($message);
             $entityManager->flush();
 
-            $mailer->send([
+            $this->addFlash('success', 'Candidature réussie');
+
+            /*$mailer->send([
                 'recipient_email' => $annonce->getAdresseEmail(),
                 'subject'         => 'Candidature sur l\'offre' . '' . $annonce->getName(),
                 'html_template'   => 'emails/nouvelle_candidature.html.twig',
                 'context'         => [
                     'candidature' => $candidature
                 ]
-            ]);
+            ]);*/
 
             return $this->redirectToRoute('annonce_show_unit', ['id'=> $annonce->getId(), 'slug'=> $annonce->getSlug()]);
         }
@@ -177,5 +187,44 @@ class CandidatureController extends AbstractController
             'form' => $form->createView(),
         ]);
 
+    }
+
+    #[Route('/postuler/{id}/{type}', name: 'candidature_postuler_interne')]
+    public function postulerInterne(Request $request, Annonce $annonce,CandaditureRepository $candaditureRepository, $type, Mailer $mailer): Response
+    {
+        $candidature = new Candidature();
+        if ($type == Candidature::TYPE_INTERNE){
+            return $this->redirectToRoute('candidature_postuler_interne', ['id'=> $annonce->getId()]);
+        }
+
+        $hasCandidature = $candaditureRepository->hasCandidature($this->getUser(), $annonce);
+
+        if (!$hasCandidature){
+
+            if ($this->getUser()){
+                $candidature->setCandidat($this->getUser());
+            }
+
+            $candidature->addAnnonce($annonce);
+            $candidature->setEntreprise($annonce->getEntreprise());
+            $candidature->setType($type);
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($candidature);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Candidature réussie');
+
+            /*$mailer->send([
+                'recipient_email' => $annonce->getAdresseEmail(),
+                'subject'         => 'Candidature sur l\'offre' . '' . $annonce->getName(),
+                'html_template'   => 'emails/nouvelle_candidature.html.twig',
+                'context'         => [
+                    'candidature' => $candidature
+                ]
+            ]);*/
+        }
+
+        return $this->redirectToRoute('annonce_show_unit', ['id'=> $annonce->getId(), 'slug'=> $annonce->getSlug()]);
     }
 }

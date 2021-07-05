@@ -224,6 +224,8 @@ class FactureController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($facture);
             $entityManager->flush();
+
+            $this->addFlash('success', 'Suppression réussie');
         }
 
         return $this->redirectToRoute('facture_index');

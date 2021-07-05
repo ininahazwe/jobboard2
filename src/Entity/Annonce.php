@@ -337,7 +337,7 @@ class Annonce
     }
 
     /**
-     * @return Collection|Candidature[]
+     * @return Collection
      */
     public function getCandidatures(): Collection
     {

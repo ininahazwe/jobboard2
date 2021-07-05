@@ -17,38 +17,49 @@
     </section><!-- End Breadcrumbs -->
     <section class="inner-page">
         <div class="container">
-
-            <table class="table">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Motivation</th>
-                <th>CreatedAt</th>
-                <th>UpdatedAt</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for candidature in candidatures %}
-            <tr>
-                <td>{{ candidature.name }}</td>
-                <td>{{ candidature.motivation }}</td>
-                <td>{{ candidature.createdAt ? candidature.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ candidature.updatedAt ? candidature.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('candidature_show', {'id': candidature.id}) }}">show</a>
-                    <a href="{{ path('candidature_edit', {'id': candidature.id}) }}"><i class="fas fa-edit"></i></a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="6">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-            <a class="btn btn-primary" href="{{ path('candidature_new') }}">Create new</a>
+            <div class="col-md-12">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Annonce</th>
+                            <th>Candidat</th>
+                            <th>Motivation</th>
+                            <th>Entreprise</th>
+                            <th>Recruteur</th>
+                            <th>Type</th>
+                            <th>Date de réception</th>
+                            <th>actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for candidature in candidatures %}
+                        <tr>
+                            <td>
+                                {% for annonce in candidature.annonces %}
+                                <a href="{{ path('annonce_show_unit', {'id': annonce.id, 'slug': annonce.slug }) }}">{{ annonce.name }}</a>
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {{ candidature.candidat.fullname }}
+                            </td>
+                            <td>{{ candidature.motivation }}</td>
+                            <td><a href="{{ path('entreprise_show_unit', {'id': candidature.entreprise.id, 'slug': candidature.entreprise.slug }) }}">{{ candidature.entreprise }}</a></td>
+                            <td>{{ candidature.recruteur }}</td>
+                            <td>{{ candidature.type }}</td>
+                            <td>{{ candidature.createdAt ? candidature.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                            <td>
+                                <a href="{{ path('candidature_edit', {'id': candidature.id}) }}"><i class="fas fa-edit"></i></a>
+                                {{ include('candidature/_delete_form.html.twig') }}
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="6">no records found</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </section>
 </main>

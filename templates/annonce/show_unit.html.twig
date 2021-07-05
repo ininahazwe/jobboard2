@@ -15,29 +15,27 @@
         </section><!-- End Breadcrumbs -->
         <section id="portfolio-details" class="portfolio-details">
             <div class="container">
-
                 <div class="row gy-4">
-
                     <div class="col-lg-8">
                         <h2>Description du poste et missions</h2>
                         {{ annonce.description }}
                         {% if annonce.lien %}
                             {% if app.user and hasCandidature %}
-                                <div>Vous avez déjà postuler! </div>
+                                <div class="alert-info mt-2 p-3">Vous avez déjà postulé à cette offre! </div>
                             {% else %}
-                                <div><a href="{{ path('candidature_postuler', {id : annonce.id, type : 1}) }}" class="btn btn-primary btn-small" target="_blank">Postuler Lien</a></div>
+                                <div><a href="{{ path('candidature_postuler-externe', {id : annonce.id, type : 1}) }}" class="btn btn-primary btn-small mt-2" target="_blank">Postuler (ext)</a></div>
                             {% endif %}
                         {% elseif annonce.adresseEmail() %}
                             {% if app.user and hasCandidature %}
-                                <div>Vous avez déjà postuler! </div>
+                                <div class="alert-info mt-2 p-3">Vous avez déjà postulé à cette offre! </div>
                             {% else %}
-                                <div><a href="{{ path('candidature_postuler_email', {id : annonce.id}) }}" class="btn btn-primary btn-small">Postuler Email</a></div>
+                                <div><a href="{{ path('candidature_postuler_email', {id : annonce.id}) }}" class="btn btn-primary btn-small mt-2">Postuler (Email)</a></div>
                             {% endif %}
                         {% else %}
                             {% if app.user and hasCandidature %}
-                                <div>Vous avez déjà postuler! </div>
+                                <div class="alert-info mt-2 p-3">Vous avez déjà postulé à cette offre! </div>
                             {% else %}
-                            <div><a href="{{ path('candidature_postuler', {id : annonce.id, type : 3}) }}" class="btn btn-primary btn-small">Postuler</a></div>
+                            <div><a href="{{ path('candidature_postuler_interne', {id : annonce.id, type : 3}) }}" class="btn btn-primary btn-small mt-2">Postuler (interne)</a></div>
                             {% endif %}
                         {% endif %}
                     </div>
@@ -49,7 +47,7 @@
                                     <img class="card-img-top" style="width:100px" src="{{ asset(entreprise.getUrlLastLogo()) }}" alt="{{ entreprise.getNameLastLogo() }}">
                                 {% endif %}
                             {% endfor %}
-                            <b>Entreprise:</b> {{ annonce.entreprise }}<br>
+                            <b>Entreprise:</b> <a href="{{ path('entreprise_show_unit', {'id':annonce.entreprise.id, 'slug':annonce.entreprise.slug }) }}">{{ annonce.entreprise }}</a><br>
                             <b>Localisation:</b> {{ annonce.location|join('-') }}<br>
                             <b>Type de contrat:</b> {{ annonce.typeContrat|join('-') }}<br>
                             <b>Expérience souhaitée:</b> {{ annonce.experience }}<br>
@@ -60,7 +58,6 @@
                             <b>Date de limite de candidature:</b> {{ annonce.dateLimiteCandidature|date('d-m-Y') }}
                         </div>
                     </div>
-
                 </div>
             </div>
         </section><!-- End Portfolio Details Section -->

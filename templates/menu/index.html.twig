@@ -32,13 +32,14 @@
                 <tbody>
                 {% for menu in menus %}
                     <tr>
-                        <td>{{ menu.name }}</td>
+                        <td><a href="{{ path('menu_show', {'id': menu.id}) }}">{{ menu.name }}</a></td>
                         <td>{{ menu.link }}</td>
                         <td>{{ menu.displayOrder }}</td>
                         <td>{{ menu.niveau }}</td>
                         <td>{{ menu.type }}</td>
                         <td>
                             <a href="{{ path('menu_edit', {'id': menu.id}) }}"><i class="fas fa-edit"></i></a>
+                            {{ include('menu/_delete_form.html.twig') }}
                         </td>
                     </tr>
                 {% else %}

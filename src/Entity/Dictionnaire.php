@@ -86,7 +86,7 @@ class Dictionnaire
     /**
      * @ORM\OneToMany(targetEntity=Annuaire::class, mappedBy="categorie")
      */
-    private $annuaires;
+    private Collection $annuaires;
 
     public function __construct()
     {
@@ -433,7 +433,7 @@ class Dictionnaire
     }
 
     /**
-     * @return Collection|Annuaire[]
+     * @return Collection
      */
     public function getAnnuaires(): Collection
     {

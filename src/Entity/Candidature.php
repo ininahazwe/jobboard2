@@ -57,17 +57,17 @@ class Candidature
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="candidatures_recruteur")
      */
-    private $recruteur;
+    private ?User $recruteur;
 
     /**
      * @ORM\OneToMany(targetEntity=File::class, mappedBy="candidature")
      */
-    private $cv;
+    private Collection $cv;
 
     /**
      * @ORM\OneToMany(targetEntity=File::class, mappedBy="candidature_motivation")
      */
-    private $lettre_motivation;
+    private Collection $lettre_motivation;
 
     public function __construct()
     {
@@ -174,7 +174,7 @@ class Candidature
     }
 
     /**
-     * @return Collection|File[]
+     * @return Collection
      */
     public function getCv(): Collection
     {
@@ -204,7 +204,7 @@ class Candidature
     }
 
     /**
-     * @return Collection|File[]
+     * @return Collection
      */
     public function getLettreMotivation(): Collection
     {
