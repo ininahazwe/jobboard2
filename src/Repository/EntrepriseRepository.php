@@ -156,7 +156,6 @@ class EntrepriseRepository extends ServiceEntityRepository
 
         $entreprise = current($query->getQuery()->getResult());
 
-
         $referance = "10000001";
         if ($entreprise){
             $int_value = (int) $entreprise->getRefClient();

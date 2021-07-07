@@ -3,10 +3,8 @@
 namespace App\Form;
 
 use App\Entity\Entreprise;
-use App\Entity\Offre;
-use App\Entity\Regions;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -27,6 +25,14 @@ class EntrepriseType extends AbstractType
             ->add('address')
             ->add('city')
             ->add('zipcode')
+            ->add('regroupementCandidatures', ChoiceType::class, [
+                'choices' => [
+                    'Non' => '0',
+                    'Oui' => '1'
+                ],
+                'label' => 'Regrouper les candidatures / candidat',
+                'required' => true
+            ])
             ->add('secteur')
         ;
     }

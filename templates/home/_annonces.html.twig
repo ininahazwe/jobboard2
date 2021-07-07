@@ -12,8 +12,8 @@
             <div class="col-xl-3 col-md-6" data-aos="zoom-in" data-aos-delay="100">
                 <div class="icon-box">
                     <div class="icon"><i class="bx bxl-dribbble"></i></div>
-                    <h4><a href="{{ path('annonce_show_unit', {slug: annonce.slug, id: annonce.id})}}">{{ annonce.name }}</a></h4>
-                    <p>{{ annonce.description|slice(0, 100)}}...</p>
+                    <h4><a href="{{ path('annonce_show_unit', {id:annonce.id, slug:annonce.slug}) }}">{{ annonce.name }}</a></h4>
+                    <p>{{ annonce.description|slice(0, 100) }}...</p>
                 </div>
             </div>
             {% endfor %}

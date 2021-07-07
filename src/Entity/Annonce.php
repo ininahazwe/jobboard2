@@ -108,7 +108,12 @@ class Annonce
     /**
      * @ORM\ManyToMany(targetEntity=Candidature::class, mappedBy="annonces")
      */
-    private $candidatures;
+    private Collection $candidatures;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="annonces")
+     */
+    private ?User $current_recruteur;
 
     public function __construct()
     {
@@ -362,4 +367,42 @@ class Annonce
 
         return $this;
     }
+
+    public function getNextRecruteur()
+    {
+
+        if ($this->getAuteur()->count() == 0) {
+            return null;
+        }
+
+        if ($this->getCurrentRecruteur() == null) {
+            return $this->getAuteur()->first();
+        } else {
+            foreach ($this->getAuteur() as $index => $_owner) {
+                if ($this->getCurrentRecruteur() == $_owner) {
+                    if ($this->getAuteur()->get($index + 1) == null) {
+                        return $this->getAuteur()->first();
+                    }
+
+                    return $this->getAuteur()->get($index + 1);
+                }
+            }
+        }
+
+        // in other case remove first owners
+        return $this->getAuteur()->first();
+    }
+
+    public function getCurrentRecruteur(): ?User
+    {
+        return $this->current_recruteur;
+    }
+
+    public function setCurrentRecruteur(?User $current_recruteur): self
+    {
+        $this->current_recruteur = $current_recruteur;
+
+        return $this;
+    }
+
 }

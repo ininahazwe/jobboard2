@@ -18,7 +18,6 @@ class SecurityController extends AbstractController
             $this->addFlash('error', 'Already logged in');
              return $this->redirectToRoute('app_profile');
         }
-
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
         // last username entered by the user

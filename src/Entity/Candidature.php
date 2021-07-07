@@ -232,4 +232,18 @@ class Candidature
 
         return $this;
     }
+
+    public function getTypeName(): string
+    {
+        $type = $this->type;
+        if ($type == 1){
+            return 'Externe';
+        }else if($type == 2){
+            return 'Email';
+        }else if($type == 3){
+            return 'Interne';
+        }else{
+            return 'Non renseigné';
+        }
+    }
 }

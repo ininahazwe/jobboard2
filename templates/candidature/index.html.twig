@@ -18,47 +18,83 @@
     <section class="inner-page">
         <div class="container">
             <div class="col-md-12">
-                <table class="table">
-                    <thead>
+                {% if app.user.isSuperAdmin() or app.user.isSuperRecruteur() or app.user.isRecruteur() %}
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Infos candidature</th>
+                            <th>Infos offre</th>
+                            <th>Suivi</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for candidature in candidatures %}
+                            <tr>
+                                <td>
+                                    <b>Nom et prénom : </b>{{ candidature.candidat.fullname()|upper }}<br>
+                                    <b>Date de candidature : </b>{{ candidature.createdAt ? candidature.createdAt|date('d-m-Y') : '' }}<br>
+                                    {% if candidature.cv %}
+                                        <a href=""><i class="fas fa-download"></i> Télécharger son cv</a>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <b>Annonce : </b>{% for annonce in candidature.annonces %}
+                                    <a href="{{ path('annonce_show_unit', {'id': annonce.id, 'slug': annonce.slug }) }}">{{ annonce.name }}</a>
+                                    {% endfor %}<br>
+                                    <b>Entreprise : </b><a href="{{ path('entreprise_show_unit', {'id': candidature.entreprise.id, 'slug': candidature.entreprise.slug }) }}">{{ candidature.entreprise }}</a> <br>
+                                    <b>Recruteur : </b>{{ candidature.recruteur }}
+                                </td>
+                                <td>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" />
+                                        <label class="form-check-label" for="flexSwitchCheckDefault">Accepter</label>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="6">no records found</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
+                {% if app.user.isCandidat() %}
+                    <table class="table">
+                        <thead>
                         <tr>
                             <th>Annonce</th>
-                            <th>Candidat</th>
-                            <th>Motivation</th>
                             <th>Entreprise</th>
-                            <th>Recruteur</th>
-                            <th>Type</th>
-                            <th>Date de réception</th>
-                            <th>actions</th>
+                            <th>Date de candidature</th>
+                            <th>Résumé</th>
+                            <th>Suivi</th>
                         </tr>
-                    </thead>
-                    <tbody>
-                    {% for candidature in candidatures %}
-                        <tr>
-                            <td>
-                                {% for annonce in candidature.annonces %}
-                                <a href="{{ path('annonce_show_unit', {'id': annonce.id, 'slug': annonce.slug }) }}">{{ annonce.name }}</a>
-                                {% endfor %}
-                            </td>
-                            <td>
-                                {{ candidature.candidat.fullname }}
-                            </td>
-                            <td>{{ candidature.motivation }}</td>
-                            <td><a href="{{ path('entreprise_show_unit', {'id': candidature.entreprise.id, 'slug': candidature.entreprise.slug }) }}">{{ candidature.entreprise }}</a></td>
-                            <td>{{ candidature.recruteur }}</td>
-                            <td>{{ candidature.type }}</td>
-                            <td>{{ candidature.createdAt ? candidature.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                            <td>
-                                <a href="{{ path('candidature_edit', {'id': candidature.id}) }}"><i class="fas fa-edit"></i></a>
-                                {{ include('candidature/_delete_form.html.twig') }}
-                            </td>
-                        </tr>
-                    {% else %}
-                        <tr>
-                            <td colspan="6">no records found</td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                        {% for candidature in candidatures %}
+                            <tr>
+                                <td>
+                                    {% for annonce in candidature.annonces %}
+                                        <a href="{{ path('annonce_show_unit', {'id': annonce.id, 'slug': annonce.slug }) }}">{{ annonce.name }}</a>
+                                    {% endfor %}
+                                </td>
+                                <td><a href="{{ path('entreprise_show_unit', {'id': candidature.entreprise.id, 'slug': candidature.entreprise.slug }) }}">{{ candidature.entreprise }}</a></td>
+                                <td>{{ candidature.createdAt ? candidature.createdAt|date('d-m-Y à H:i') : '' }}</td>
+                                <td>
+                                    <a href="{{ path('candidature_show', {'id': candidature.id}) }}"><i class="fas fa-eye"></i></a>
+                                </td>
+                                <td>
+
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="6">no records found</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
             </div>
         </div>
     </section>

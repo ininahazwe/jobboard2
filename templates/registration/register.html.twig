@@ -29,11 +29,14 @@
 
                                 {{ form_start(registrationForm) }}
                                 {{ form_row(registrationForm.email) }}
-                                {{ form_row(registrationForm.username) }}
+                                {#{{ form_row(registrationForm.username) }}#}
                                 {{ form_row(registrationForm.firstname) }}
                                 {{ form_row(registrationForm.lastname) }}
                                 {{ form_row(registrationForm.password) }}
-                                {{ form_row(registrationForm.agreeTerms) }}
+                                {{ form_label(registrationForm.agreeTerms) }}
+                                {{ form_errors(registrationForm.agreeTerms) }}
+                                {#{{ form_widget(registrationForm.agreeTerms) }}#}
+
                                 <fieldset class="sweet-candy">
                                     {{ form_label(registrationForm.phone) }}
                                     {{ form_errors(registrationForm.phone) }}
@@ -45,18 +48,17 @@
                                     {{ form_widget(registrationForm.faxNumber) }}
                                 </fieldset>
 
-                                <button type="submit" class="btn btn-lg btn-primary">Register</button>
+                                <button type="submit" class="btn btn-primary mt-2">Valider</button>
                                 {{ form_end(registrationForm) }}
                            {% endif %}
                 </div>
             </div>
         </section>
     </main>
-
 {% endblock %}
 
 {% form_theme registrationForm _self %}
-{% block _registration_form_agreeTerms_label %}
+{% block _registration_form_agreeTerms_widget %}
     <input type="checkbox" id="registration_form_agreeTerms" name="registration_form[agreeTerms]" required="required" class="form-check-input" value="1">
     <label class="form-check-label required" for="registration_form_agreeTerms">
         J'accepte les conditions d'utilisation <a href="#">TOTO</a>

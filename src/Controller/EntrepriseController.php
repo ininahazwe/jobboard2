@@ -13,6 +13,7 @@ use App\Repository\EntrepriseRepository;
 use App\Repository\FactureRepository;
 use App\Repository\ModeleOffreCommercialeRepository;
 use App\Repository\UserRepository;
+use App\Service\Mailer;
 use Exception;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -24,6 +25,11 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Twig\Environment;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
+use Twig\Loader\ArrayLoader;
 
 #[Route('/cms/entreprise')]
 class EntrepriseController extends AbstractController
@@ -196,10 +202,19 @@ class EntrepriseController extends AbstractController
     }
 
     /**
+     * @param Request $request
+     * @param Entreprise $entreprise
+     * @param UserRepository $userRepository
+     * @param UserPasswordEncoderInterface $passwordEncoder
+     * @param Mailer $mailer
+     * @return Response
      * @throws TransportExceptionInterface
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     #[Route('/{id}/recruteur/create', name: 'entreprise_recruteurs_create', methods: ['GET', 'POST'])]
-    public function recruteurCreate(Request $request, Entreprise $entreprise, UserRepository $userRepository, UserPasswordEncoderInterface $passwordEncoder, MailerInterface $mailer): Response
+    public function recruteurCreate(Request $request, Entreprise $entreprise, UserRepository $userRepository, UserPasswordEncoderInterface $passwordEncoder, Mailer $mailer): Response
     {
         $userExist = $userRepository->findOneBy(['email' =>$request->get('user[email]')]);
         $password = $userRepository->genererMDP();
@@ -224,8 +239,6 @@ class EntrepriseController extends AbstractController
                     )
                 );
             }
-            $user->setActivationToken(md5(uniqid()));
-            $user->setForgotPasswordTokenRequestedAt(new \DateTimeImmutable('now'));
 
             if ($superRecruteur){
                 $entreprise->addSuperRecruteur($user);
@@ -239,19 +252,25 @@ class EntrepriseController extends AbstractController
             $entityManager->persist($entreprise);
             $entityManager->flush();
 
-            $email = (new TemplatedEmail())
-                ->from('haha@gmail.com')
-                ->to($user->getEmail())
-                ->subject('Activation de compte!')
-                ->text('Sending emails is fun again!')
-                ->htmlTemplate('emails/creation.html.twig')
-                ->context([
-                    'password' => $password, 'user' => $user,
-                    'token' => $user->getActivationToken()
-                ])
-            ;
+            $email = $entityManager->getRepository('App:Email')->findOneBy(['code' => 'EMAIL_CREATION_RECRUTEUR']);
 
-            $mailer->send($email);
+            $loader = new ArrayLoader([
+                'email' => $email->getContent(),
+            ]);
+
+            $twig = new Environment($loader);
+            $message = $twig->render('email',['user' => $this->getUser(), 'recruteur' => $user, 'password' => $password ]);
+
+            $this->addFlash('success', 'Ajout réussi');
+
+            $mailer->send([
+                'recipient_email' => $user->getEmail(),
+                'subject'         => $email->getSubject(),
+                'html_template'   => 'emails/email_vide.html.twig',
+                'context'         => [
+                    'message' => $message
+                ]
+            ]);
 
             $this->addFlash('success', 'Ajout réussi');
 
@@ -274,12 +293,15 @@ class EntrepriseController extends AbstractController
      * @param Entreprise $entreprise
      * @param UserRepository $userRepository
      * @param UserPasswordEncoderInterface $passwordEncoder
-     * @param MailerInterface $mailer
+     * @param Mailer $mailer
      * @return Response
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      * @throws TransportExceptionInterface
      */
     #[Route('/{id}/recruteur/generateMDP/{userID}', name: 'entreprise_recruteurs_generateMDP', methods: ['GET', 'POST'])]
-    public function generateMDPRecruteurs($userID, Request $request, Entreprise $entreprise, UserRepository $userRepository, UserPasswordEncoderInterface $passwordEncoder, MailerInterface $mailer): Response
+    public function generateMDPRecruteurs($userID, Request $request, Entreprise $entreprise, UserRepository $userRepository, UserPasswordEncoderInterface $passwordEncoder, Mailer $mailer): Response
     {
         $password = $userRepository->genererMDP();
         $user = $userRepository->find($userID);
@@ -295,18 +317,25 @@ class EntrepriseController extends AbstractController
         $entityManager->persist($user);
         $entityManager->flush();
 
-        $email = (new TemplatedEmail())
-            ->from('haha@gmail.com')
-            ->to($user->getEmail())
-            ->subject('Modification de mot de passe')
-            ->text('Sending emails is fun again!')
-            ->htmlTemplate('emails/modification_mot_passe.html.twig')
-            ->context([
-                'password' => $password, 'user' => $user,
-            ])
-        ;
+        $email = $entityManager->getRepository('App:Email')->findOneBy(['code' => 'EMAIL_GENERATION_PASSWORD_RECRUTEUR']);
 
-        $mailer->send($email);
+        $loader = new ArrayLoader([
+            'email' => $email->getContent(),
+        ]);
+
+        $twig = new Environment($loader);
+        $message = $twig->render('email',['user' => $this->getUser(), 'recruteur' => $user, 'password' => $password ]);
+
+        $this->addFlash('success', 'Candidature réussie');
+
+        $mailer->send([
+            'recipient_email' => $user->getEmail(),
+            'subject'         => $email->getSubject(),
+            'html_template'   => 'emails/email_vide.html.twig',
+            'context'         => [
+                'message' => $message
+            ]
+        ]);
 
         $this->addFlash('success', 'Le mot de passe a été généré avec succès');
         return $this->redirectToRoute('entreprise_recruteurs',['id' => $entreprise->getId()], Response::HTTP_SEE_OTHER);

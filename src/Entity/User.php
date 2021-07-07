@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -22,6 +23,8 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Assert\NotBlank(message="Please enter a valid email address.")
+     * @Assert\Email(message="{{value}} is not valid")
      */
     private string $email;
 
@@ -145,6 +148,11 @@ class User implements UserInterface
      */
     private Collection $received;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Annonce::class, mappedBy="current_recruteur")
+     */
+    private Collection $annonces;
+
     public function __construct()
     {
         $this->isTermsClients = false;
@@ -158,6 +166,8 @@ class User implements UserInterface
         $this->messages = new ArrayCollection();
         $this->sent = new ArrayCollection();
         $this->received = new ArrayCollection();
+        $this->annonces = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable('now');
     }
 
     public function getEmail(): string
@@ -862,5 +872,35 @@ class User implements UserInterface
 
         return implode(' - ', $nombres);
 
+    }
+
+    /**
+     * @return Collection|Annonce[]
+     */
+    public function getAnnonces(): Collection
+    {
+        return $this->annonces;
+    }
+
+    public function addAnnonce(Annonce $annonce): self
+    {
+        if (!$this->annonces->contains($annonce)) {
+            $this->annonces[] = $annonce;
+            $annonce->setCurrentRecruteur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAnnonce(Annonce $annonce): self
+    {
+        if ($this->annonces->removeElement($annonce)) {
+            // set the owning side to null (unless already changed)
+            if ($annonce->getCurrentRecruteur() === $this) {
+                $annonce->setCurrentRecruteur(null);
+            }
+        }
+
+        return $this;
     }
 }

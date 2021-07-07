@@ -17,7 +17,10 @@
     <section class="inner-page">
         <div class="container">
             {% for annonce in annonces %}
-                <h2><a href="{{ path('annonce_show_unit', {id:annonce.id, slug:annonce.slug}) }}">{{ annonce.name }}</a></h2>
+                <div class="border mb-2 p-2">
+                    <h2><a href="{{ path('annonce_show_unit', {id:annonce.id, slug:annonce.slug}) }}">{{ annonce.name }}</a></h2>
+                    <p>par <a href="{{ path('entreprise_show_unit', {id:annonce.entreprise.id, slug:annonce.entreprise.slug}) }}">{{ annonce.entreprise.name }}</a></p>
+                </div>
             {% endfor %}
         </div>
     </section>

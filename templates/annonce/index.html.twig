@@ -32,23 +32,13 @@
                         <div class="p-3 border bg-light">
                             <b>{{ pluralize(annonces|length, 'annonce') }} enregistrées </b>
                         </div>
-                        {#<div class="p-3 border bg-light">
-                            <b> :</b> {{ app.user.getNbrAnnoncesMaxi() }}
-                        </div>
-                        <div class="p-3 border bg-light">
-                            {{ app.user.getNbrAnnoncesMaxi() }}
-                        </div>#}
                         <div class="p-3 border bg-light">
                             {% for entreprise in app.user.getEntrepriseAll() %}
-                                {{ entreprise.name }} : {{ entreprise.getNomberAnnonoces() }}/{{ entreprise.getMaxAnnonoces() }} Annonces
+                                <b>{{ entreprise.name }} : </b>{{ entreprise.getNumberAnnonces() }}/{{ entreprise.getMaxAnnonces() }} Annonces
 
-                                {% if entreprise.canCreateAnnonce() %}
+                                {#{% if entreprise.canCreateAnnonce() %}
                                     <a class="btn btn-primary btn-sm mb-1" href="{{ path('annonce_new') }}">Créer une offre d'emploi</a><br/>
-                                {% endif %}
-
-                                {#{%  if not loop.index.last() %}#}
-                                <hr/>
-                                {#{% endif %}#}
+                                {% endif %}#}
                             {% endfor %}
                         </div>
                     {% endif %}
@@ -75,9 +65,9 @@
                                 <td>{{ annonce.entreprise }}</td>
                                 <td>{{ annonce.createdAt|date('d/m/Y') }}</td>
                                 <td>
-                                    <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="customSwitch1" {{ (annonce.isActive) ? 'checked' : ''}} data-id="{{annonce.id}}">
-                                        <label class="custom-control-label" for="customSwitch1">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" {{ (annonce.isActive) ? 'checked' : ''}} data-id="{{annonce.id}}"/>
+                                        <label class="form-check-label" for="flexSwitchCheckDefault">
                                             {% if annonce.isActive  ? 'checked'%}
                                                 publiée
                                             {% else %}

@@ -3,36 +3,39 @@
 {% block title %}Candidature{% endblock %}
 
 {% block body %}
-    <h1>Candidature</h1>
-
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ candidature.id }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ candidature.name }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ candidature.description }}</td>
-            </tr>
-            <tr>
-                <th>CreatedAt</th>
-                <td>{{ candidature.createdAt ? candidature.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>UpdatedAt</th>
-                <td>{{ candidature.updatedAt ? candidature.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <a href="{{ path('candidature_index') }}">back to list</a>
-
-    <a href="{{ path('candidature_edit', {'id': candidature.id}) }}">edit</a>
-
-    {{ include('candidature/_delete_form.html.twig') }}
+<main id="main">
+    <!-- ======= Breadcrumbs ======= -->
+    <section id="breadcrumbs" class="breadcrumbs">
+        <div class="container">
+            <ol>
+                <li><a href="{{ path('app_home') }}">Home</a></li>
+                <li><a href="{{ path('app_profile') }}">Dashboard</a></li>
+                <li>Lecture</li>
+            </ol>
+            <h2>Fiche de candidature</h2>
+        </div>
+    </section><!-- End Breadcrumbs -->
+    <section class="inner-page">
+        <div class="container">
+            <div class="col-md-12">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <th>Name</th>
+                            <td>{{ candidature.name }}</td>
+                        </tr>
+                        <tr>
+                            <th>Motivation</th>
+                            <td>{{ candidature.motivation }}</td>
+                        </tr>
+                        <tr>
+                            <th>Envoyé le</th>
+                            <td>{{ candidature.createdAt ? candidature.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</main>
 {% endblock %}

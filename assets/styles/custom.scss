@@ -22,11 +22,18 @@ a{
   z-index: 999;
   position: absolute !important;
   width: 100%;
-  animation-name: affichage;
-  animation-duration: 3s;
 }
-@keyframes affichage {
-  50% {
-    opacity: 0;
-  }
+.closebtn {
+  margin-left: 15px;
+  color: white;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.closebtn:hover {
+  color: black;
 }

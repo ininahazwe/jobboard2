@@ -12,6 +12,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
+use Twig\Environment;
+use Twig\Loader\ArrayLoader;
 
 class RegistrationController extends AbstractController
 {
@@ -33,7 +35,7 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // encode the plain password
+
             $user->setPassword(
                 $passwordEncoder->encodePassword(
                     $user,
@@ -45,13 +47,21 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
+            $email = $entityManager->getRepository('App:Email')->findOneBy(['code' => 'EMAIL_REGISTRATION']);
+
+            $loader = new ArrayLoader([
+                'email' => $email->getContent(),
+            ]);
+            $twig = new Environment($loader);
+            $message = $twig->render('email',['user' => $user]);
+
             $mailer->send([
                 'recipient_email' => $user->getEmail(),
-                'subject'         => "Bienvenue sur Talents-Handicap",
-                'html_template'   => "emails/registration.html.twig",
+                'subject'         => $email->getSubject(),
+                'html_template'   => 'emails/email_vide.html.twig',
                 'context'         => [
-                    'userID'            => $user->getId(),
-                                    ]
+                    'message' => $message
+                ]
             ]);
 
             $this->addFlash('success', "Un mail de bienvenue vous a été envoyé !");

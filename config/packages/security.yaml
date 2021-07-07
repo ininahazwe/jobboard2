@@ -25,7 +25,7 @@ security:
                     #- App\Security\TwoFactorsAuthenticator
             logout:
                 path: app_logout
-                # target: app_login
+                target: app_login
 
             form_login:
                 target_path_parameter: go_to

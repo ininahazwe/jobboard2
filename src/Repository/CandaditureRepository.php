@@ -62,4 +62,48 @@ class CandaditureRepository extends ServiceEntityRepository
             ;
     }
 
+    public function getAllCandidatures($user)
+    {
+        $query = $this->createQueryBuilder('c');
+        if($user->isSuperAdmin()){
+            $query
+                ->orderBy('c.createdAt', 'DESC');
+        } elseif ($user->isSuperRecruteur() || $user->isRecruteur()){
+            $entreprises = $user->getEntrepriseAll();
+            $query
+                ->orderBy('c.createdAt', 'DESC')
+                ->andWhere('c.entreprise IN(:entreprises)')
+                ->setParameter('entreprises', $entreprises)
+                ;
+        }elseif($user->isCandidat()){
+            $query
+                ->orderBy('c.createdAt', 'DESC')
+                ->andWhere('c.candidat = :user')
+                ->setParameter('user', $user)
+                ;
+        }else{
+            return null;
+        }
+        return $query->getQuery()->getResult();
+    }
+
+
+    public function hasCandidatureEntreprise($user, $entreprise): ?Candidature
+    {
+        $query = $this->createQueryBuilder('c')
+            ->orderBy('c.createdAt', 'DESC')
+            ->andWhere('c.candidat = :candidat')
+            ->andWhere('c.entreprise = :entreprise');
+
+        $query
+            ->setParameter('entreprise', $entreprise)
+            ->setParameter('candidat', $user)
+            ->setMaxResults(1)
+        ;
+
+        return $query->getQuery()
+            ->getOneOrNullResult()
+            ;
+    }
+
 }

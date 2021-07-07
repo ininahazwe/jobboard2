@@ -26,13 +26,13 @@ class RegistrationFormType extends HoneyPotType
                 ]
             ])
             ->add('password', RepeatedPasswordType::class)
-            ->add('username', TextType::class, [
+            /*->add('username', TextType::class, [
                 'label'         => "Nom d'utilisateur",
                 'required'      => true,
                 'attr' => [
                     'autofocus' => true
                 ]
-            ])
+            ])*/
             ->add('firstname', TextType::class, [
                 'label'         => "Prénom",
                 'required'      => true,

@@ -42,6 +42,7 @@ services:
         arguments:
             $senderEmail: '%app.sender_email%'
             $senderName: '%app.sender_name%'
+
     App\Service\FileUploader:
         arguments:
             $targetDirectory: '%logo_directory%'

@@ -6,6 +6,7 @@ use App\Entity\Facture;
 use App\Form\FactureType;
 use App\Repository\FactureRepository;
 use App\Repository\OffreRepository;
+use App\Service\Mailer;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Dompdf\Dompdf;
@@ -19,6 +20,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Twig\Environment;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
+use Twig\Loader\ArrayLoader;
 
 #[Route('/cms/facture')]
 class FactureController extends AbstractController
@@ -30,7 +36,7 @@ class FactureController extends AbstractController
         $factures = $paginator->paginate(
             $data,
             $request->query->getInt('page', 1),
-            4
+            10
         );
         return $this->render('facture/index.html.twig', [
             'factures' => $factures,
@@ -75,12 +81,15 @@ class FactureController extends AbstractController
 
     /**
      * @param OffreRepository $offreRepository
-     * @param MailerInterface $mailer
+     * @param Mailer $mailer
      * @return Response
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      * @throws TransportExceptionInterface
      */
     #[Route('/generate', name: 'factures_generate')]
-    public function generateFactures(OffreRepository $offreRepository, MailerInterface $mailer): Response
+    public function generateFactures(OffreRepository $offreRepository, Mailer $mailer): Response
     {
         $tva = 20;
         $entityManager = $this->getDoctrine()->getManager();
@@ -126,18 +135,25 @@ class FactureController extends AbstractController
 
             foreach($entreprise->getSuperRecruteurs() as $user)
             {
-                $email = (new TemplatedEmail())
-                    ->from('haha@gmail.com')
-                    ->to($user->getEmail())
-                    ->subject('Génération de factures')
-                    ->text('Sending emails is fun again!')
-                    ->htmlTemplate('emails/generation_factures.html.twig')
-                    ->context([
-                        'password' => "000", 'user' => $user,
-                    ])
-                ;
+                $email = $entityManager->getRepository('App:Email')->findOneBy(['code' => 'EMAIL_GENERATION_FACTURE']);
 
-                $mailer->send($email);
+                $loader = new ArrayLoader([
+                    'email' => $email->getContent(),
+                ]);
+
+                $twig = new Environment($loader);
+                $message = $twig->render('email',['user' =>$user, 'factures' => $facture, 'entreprises' => $entreprises, 'offres' => $offres ]);
+
+                $this->addFlash('success', 'Candidature réussie');
+
+                $mailer->send([
+                    'recipient_email' => $user->getEmail(),
+                    'subject'         => $email->getSubject(),
+                    'html_template'   => 'emails/email_vide.html.twig',
+                    'context'         => [
+                        'message' => $message
+                    ]
+                ]);
             }
         }
 
@@ -274,11 +290,20 @@ class FactureController extends AbstractController
     }
 
     /**
-     * @throws Exception
+     * @param Request $request
+     * @param Facture $facture
+     * @param Mailer $mailer
+     * @return Response
+     * @throws TransportExceptionInterface
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     #[Route('/{id}/reglement', name: 'facture_reglement')]
-    public function reglement(Request $request, Facture $facture): Response
+    public function reglement(Request $request, Facture $facture, Mailer $mailer): Response
     {
+        $user = $this->getUser();
+
         $entityManager = $this->getDoctrine()->getManager();
         $date = new DateTime($request->get('date') . " 00:00:00") ;
         $payment = $request->get('choixPaiement');
@@ -287,10 +312,28 @@ class FactureController extends AbstractController
         $facture->setPaymentMethods($payment);
         $facture->setLimiteDatePaid(null);
         $facture->setIsPaid(true);
-
-
         $entityManager->persist($facture);
         $entityManager->flush();
+
+        $email = $entityManager->getRepository('App:Email')->findOneBy(['code' => 'EMAIL_REGLEMENT_FACTURE']);
+
+        $loader = new ArrayLoader([
+            'email' => $email->getContent(),
+        ]);
+
+        $twig = new Environment($loader);
+        $message = $twig->render('email',['facture' => $facture]);
+
+        $this->addFlash('success', 'Candidature réussie');
+
+        $mailer->send([
+            'recipient_email' => $user->getEmail(),
+            'subject'         => $email->getSubject(),
+            'html_template'   => 'emails/email_vide.html.twig',
+            'context'         => [
+                'message' => $message
+            ]
+        ]);
 
         $this->addFlash('success', 'Reglèment enregistré');
 

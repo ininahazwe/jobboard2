@@ -104,9 +104,9 @@ class Entreprise
     private Collection $candidatures;
 
     /**
-     * @ORM\Column(type="boolean", nullable=true)
+     * @ORM\Column(type="integer", nullable=true)
      */
-    private $regroupement_candidatures;
+    private ?bool $regroupement_candidatures;
 
     public function __construct()
     {
@@ -314,6 +314,30 @@ class Entreprise
         return $this;
     }
 
+    public function removeCandidature(Candidature $candidature): self
+    {
+        if ($this->candidatures->removeElement($candidature)) {
+            // set the owning side to null (unless already changed)
+            if ($candidature->getEntreprise() === $this) {
+                $candidature->setEntreprise(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getRegroupementCandidatures(): ?bool
+    {
+        return $this->regroupement_candidatures;
+    }
+
+    public function setRegroupementCandidatures(?bool $regroupement_candidatures): self
+    {
+        $this->regroupement_candidatures = $regroupement_candidatures;
+
+        return $this;
+    }
+
     /**
      * @return string
      */
@@ -417,7 +441,7 @@ class Entreprise
         return $this;
     }
 
-    public function getMaxAnnonoces()
+    public function getMaxAnnonces()
     {
         $nombre = null;
         foreach($this->getOffres() as $offre){
@@ -431,7 +455,10 @@ class Entreprise
         return $nombre;
     }
 
-    public function getNomberAnnonoces()
+    /**
+     * @return mixed
+     */
+    public function getNumberAnnonces(): mixed
     {
         $nombre = 0;
         foreach($this->getAnnoncesEntreprise() as $annonce){
@@ -442,16 +469,16 @@ class Entreprise
         return $nombre;
     }
 
-    public function canCreateAnnonce()
+    public function canCreateAnnonce(): bool
     {
-        if (($this->getNomberAnnonoces() < $this->getMaxAnnonoces()) || ($this->getMaxAnnonoces() == 0)){
+        if (($this->getNumberAnnonces() < $this->getMaxAnnonces()) || ($this->getMaxAnnonces() == 0)){
             return true;
         }
         return false;
     }
 
     /**
-     * @return Collection|Candidature[]
+     * @return Collection
      */
     public function getCandidatures(): Collection
     {
@@ -468,27 +495,11 @@ class Entreprise
         return $this;
     }
 
-    public function removeCandidature(Candidature $candidature): self
-    {
-        if ($this->candidatures->removeElement($candidature)) {
-            // set the owning side to null (unless already changed)
-            if ($candidature->getEntreprise() === $this) {
-                $candidature->setEntreprise(null);
-            }
+    public function isRegroupementCandidature(){
+        if($this->regroupement_candidatures == 1 ){
+            return true;
         }
-
-        return $this;
+        return false;
     }
 
-    public function getRegroupementCandidatures(): ?bool
-    {
-        return $this->regroupement_candidatures;
-    }
-
-    public function setRegroupementCandidatures(?bool $regroupement_candidatures): self
-    {
-        $this->regroupement_candidatures = $regroupement_candidatures;
-
-        return $this;
-    }
 }

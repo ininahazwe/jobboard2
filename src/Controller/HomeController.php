@@ -24,7 +24,7 @@ class HomeController extends AbstractController
     #[Route('/', name:'app_home')]
     public function index(AnnonceRepository $annoncesRepo, Request $request, ModeleOffreCommercialeRepository $modeleOffreCommercialeRepository): Response
     {
-        $annonces = $annoncesRepo->findActiveAndLive(2);
+        $annonces = $annoncesRepo->findActiveAndLive(5);
         $offres = $modeleOffreCommercialeRepository->findAll();
 
         return $this->render('home/index.html.twig', [
@@ -76,8 +76,7 @@ class HomeController extends AbstractController
     public function showAnnonce($slug, $id,
                                 AnnonceRepository $annonceRepository,
                                 CandaditureRepository $candaditureRepository,
-                                Request $request
-    ): Response
+                                Request $request): Response
     {
         $annonce = $annonceRepository->findOneBy(['slug' => $slug, 'id' => $id]);
 

@@ -51,6 +51,7 @@
                                 </td>
                                 <td>
                                     <a href="{{ path('page_edit', {'id': page.id}) }}"><i class="fas fa-edit"></i></a>
+                                    {{ include('page/_delete_form.html.twig') }}
                                 </td>
                             </tr>
                         {% else %}
