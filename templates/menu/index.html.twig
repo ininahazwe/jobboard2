@@ -18,6 +18,7 @@
     </section><!-- End Breadcrumbs -->
     <section class="inner-page">
         <div class="container">
+            <a class="btn btn-primary btn-sm mt-1" href="{{ path('menu_new') }}">Ajouter</a>
             <table class="table">
                 <thead>
                     <tr>
@@ -50,7 +51,6 @@
                 </tbody>
             </table>
             {{ knp_pagination_render(menus, 'Pagination/twitter_bootstrap_v4_pagination.html.twig') }}
-            <a class="btn btn-primary" href="{{ path('menu_new') }}">Create new</a>
         </div>
     </section>
 </main>

@@ -4,7 +4,7 @@
 
 {% block body %}
     <h1>Profile index</h1>
-
+    <a href="{{ path('profile_new') }}" class="btn btn-primary btn-sm mt-1">Ajouter</a>
     <table class="table">
         <thead>
             <tr>
@@ -52,6 +52,4 @@
         {% endfor %}
         </tbody>
     </table>
-
-    <a href="{{ path('profile_new') }}">Create new</a>
 {% endblock %}

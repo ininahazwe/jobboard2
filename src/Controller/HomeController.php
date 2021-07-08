@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
-use App\Entity\Agenda;
 use App\Entity\Annuaire;
+use App\Entity\Entreprise;
 use App\Entity\Menu;
 use App\Entity\Page;
 use App\Repository\AgendaRepository;
@@ -22,14 +22,16 @@ use Symfony\Component\Routing\Annotation\Route;
 class HomeController extends AbstractController
 {
     #[Route('/', name:'app_home')]
-    public function index(AnnonceRepository $annoncesRepo, Request $request, ModeleOffreCommercialeRepository $modeleOffreCommercialeRepository): Response
+    public function index(AnnonceRepository $annoncesRepo, Request $request, ModeleOffreCommercialeRepository $modeleOffreCommercialeRepository, EntrepriseRepository $entrepriseRepository): Response
     {
         $annonces = $annoncesRepo->findActiveAndLive(5);
         $offres = $modeleOffreCommercialeRepository->findAll();
+        $entreprises = $entrepriseRepository->getEntrepriseHome(6);
 
         return $this->render('home/index.html.twig', [
             'annonces' => $annonces,
             'modeles' => $offres,
+            'entreprises' => $entreprises
         ]);
     }
     #[Route('/view/menus', name:'app_view_menus')]
@@ -73,10 +75,7 @@ class HomeController extends AbstractController
     }
 
     #[Route('/offres/{id}-{slug}', name: 'annonce_show_unit', methods: ['GET'])]
-    public function showAnnonce($slug, $id,
-                                AnnonceRepository $annonceRepository,
-                                CandaditureRepository $candaditureRepository,
-                                Request $request): Response
+    public function showAnnonce($slug, $id, AnnonceRepository $annonceRepository, CandaditureRepository $candaditureRepository, Request $request): Response
     {
         $annonce = $annonceRepository->findOneBy(['slug' => $slug, 'id' => $id]);
 
@@ -114,6 +113,7 @@ class HomeController extends AbstractController
     }
 
     /*Affichage des agenda*/
+    /*
     #[Route('/agenda', name: 'agenda_show_all', methods: ['GET'])]
     public function ShowAllAgendas(AgendaRepository $agendaRepository): Response
     {
@@ -130,7 +130,7 @@ class HomeController extends AbstractController
         return $this->render('agenda/show_unit.html.twig', [
             'agenda' => $agenda,
         ]);
-    }
+    }*/
 
     /*Affichage de l'annuaire*/
     #[Route('/annuaire', name: 'annuaire_show_all', methods: ['GET'])]

@@ -1,5 +1,5 @@
 <!-- ======= Services Section ======= -->
-<section id="services" class="services section-bg">
+<section id="services" class="services">
     <div class="container" data-aos="fade-up">
 
         {#<div class="section-title">
@@ -11,16 +11,18 @@
             <div class="col-xl-3 col-md-6 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100">
                 <div class="icon-box">
                     <div class="icon"><i class="bx bxl-dribbble"></i></div>
-                    <h4><a href="">Dépôt de CV</a></h4>
+                    <h4><a href="{{ path('app_register') }}">Dépôt de CV</a></h4>
                     <p>Enregistrez votre profil et informez votre RQTH et votre potentiel aux recruteurs handi-engagés.</p>
+                    <a href="#" class="btn btn-outline-info btn-sm mt-2">Je dépose mon CV</a>
                 </div>
             </div>
 
             <div class="col-xl-3 col-md-6 d-flex align-items-stretch mt-4 mt-md-0" data-aos="zoom-in" data-aos-delay="200">
                 <div class="icon-box">
                     <div class="icon"><i class="bx bx-file"></i></div>
-                    <h4><a href="">+2000 offres d'emploi</a></h4>
+                    <h4><a href="{{ path('annonces_show_all') }}">+2000 offres d'emploi</a></h4>
                     <p>Parcourez et filtrez les opportunités d'emploi par secteur, région et entreprise.</p>
+                    <a href="#" class="btn btn-outline-info btn-sm mt-2">Je consulte les offres</a>
                 </div>
             </div>
 
@@ -29,6 +31,7 @@
                     <div class="icon"><i class="bx bx-tachometer"></i></div>
                     <h4><a href="">Conseils carrière</a></h4>
                     <p>Consultez nos conseils pour concilier emploi et handicap dans votre carrière professionnelle.</p>
+                    <a href="#" class="btn btn-outline-info btn-sm mt-2">Je lis les conseils</a>
                 </div>
             </div>
 
@@ -37,6 +40,7 @@
                     <div class="icon"><i class="bx bx-layer"></i></div>
                     <h4><a href="">Alerte email</a></h4>
                     <p>Recevez des notifications par email sur des abonnements liés au contenu ou à une recherche d'emploi.</p>
+                    <a href="#" class="btn btn-outline-info btn-sm mt-2">Je crée mon alerte</a>
                 </div>
             </div>
 

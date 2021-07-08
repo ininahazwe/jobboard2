@@ -1,5 +1,5 @@
 {% extends 'base.html.twig' %}
-{% block title %}{% endblock %}
+{% block title %}Les entreprises qui recrutent{% endblock %}
 
 {% block body %}
     <main id="main">
@@ -17,8 +17,20 @@
         <section class="inner-page">
             <div class="container">
                 {% for entreprise in entreprises %}
-                    <div class="border mb-2 p-2">
-                        <h2><a href="{{ path('entreprise_show_unit', {id:entreprise.id, slug:entreprise.slug}) }}">{{ entreprise.name }}</a></h2>
+                    <div class="row mb-1 p-3 border">
+                        <div class="col-6">
+                            <h4><a href="{{ path('entreprise_show_unit', {id:entreprise.id, slug:entreprise.slug}) }}">{{ entreprise.name }}</a></h4>
+                        </div>
+                        <div class="col-4">
+                            {% if entreprise.annoncesEntreprise|length >= 1 %}
+                                <span class="btn-secondary btn-sm">{{ pluralize(entreprise.annoncesEntreprise|length, 'annonce') }}</span>
+                            {% endif %}
+                        </div>
+                        <div class="col-2">
+                            {% if entreprise.logo|length %}
+                                <img class="card-img-top mx-auto" style="width:100px" src="{{ asset(entreprise.getUrlLastLogo()) }}" alt="{{ entreprise.getNameLastLogo() }}">
+                            {% endif %}
+                        </div>
                     </div>
                 {% endfor %}
             </div>

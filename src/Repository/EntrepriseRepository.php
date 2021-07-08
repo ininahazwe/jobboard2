@@ -222,4 +222,17 @@ class EntrepriseRepository extends ServiceEntityRepository
             ;
          return $query;
     }
+
+    public function getEntrepriseHome(int $int)
+    {
+        $query = $this->createQueryBuilder('e')
+            ->leftJoin('e.logo', '_logo')
+            ->having("COUNT(DISTINCT _logo.id) > 0")
+            ->groupBy('e.id')
+            ->orderBy('e.createdAt', 'DESC')
+            ->orderBy('RAND()')
+            ->setMaxResults($int)
+        ;
+        return $query->getQuery()->getResult();
+    }
 }

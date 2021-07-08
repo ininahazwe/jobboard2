@@ -17,9 +17,24 @@
     <section class="inner-page">
         <div class="container">
             {% for annonce in annonces %}
-                <div class="border mb-2 p-2">
-                    <h2><a href="{{ path('annonce_show_unit', {id:annonce.id, slug:annonce.slug}) }}">{{ annonce.name }}</a></h2>
-                    <p>par <a href="{{ path('entreprise_show_unit', {id:annonce.entreprise.id, slug:annonce.entreprise.slug}) }}">{{ annonce.entreprise.name }}</a></p>
+                <div class="row section-bg mb-1 p-3">
+                    <div class="col-6">
+                        <h5><a href="{{ path('annonce_show_unit', {id:annonce.id, slug:annonce.slug}) }}">{{ annonce.name }}</a></h5>
+                        {% if annonce.experience %}
+                        <span class="btn-secondary btn-sm">{{ annonce.experience }}</span>
+                        {% endif %}
+                    </div>
+                    <div class="col-2">
+                        Date limite de candidature <br>
+                        <b>{{ annonce.dateLimiteCandidature|date('d-m-Y') }}</b>
+                    </div>
+                    <div class="col-4">
+                        <a href="{{ path('entreprise_show_unit', {id:annonce.entreprise.id, slug:annonce.entreprise.slug}) }}">{{ annonce.entreprise.name }}</a><br>
+                        <span>{{ annonce.entreprise.city }}</span><br>
+                        {% for typ in annonce.typeContrat %}
+                            <span class="btn-secondary btn-sm">{{ typ.value }}</span>
+                        {% endfor %}
+                    </div>
                 </div>
             {% endfor %}
         </div>

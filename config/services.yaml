@@ -46,3 +46,11 @@ services:
     App\Service\FileUploader:
         arguments:
             $targetDirectory: '%logo_directory%'
+
+doctrine:
+    orm:
+        dql:
+            numeric_functions:
+                rand: DoctrineExtensions\Query\Mysql\Rand
+            string_functions:
+                IFNULL: DoctrineExtensions\Query\Mysql\IFNULL

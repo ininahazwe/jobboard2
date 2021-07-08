@@ -189,6 +189,10 @@ Voici les
    composer require knplabs/knp-paginator-bundle
    ```
 
+14. Extensions SQL
+   ```sh
+   composer require beberlei/doctrineextensions
+   ```
 
 <!-- USAGE EXAMPLES -->
 ## Usage

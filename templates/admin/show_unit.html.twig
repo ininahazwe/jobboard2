@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Agenda | {{ agenda.title }}{% endblock %}
+
+{% block body %}
+    <main id="main">
+        <!-- ======= Breadcrumbs ======= -->
+        <section id="breadcrumbs" class="breadcrumbs">
+            <div class="container">
+                <ol>
+                    <li><a href="{{ path('app_home') }}">Home</a></li>
+                </ol>
+                <h1>{{ agenda.title }}</h1>
+            </div>
+        </section><!-- End Breadcrumbs -->
+        <section id="portfolio-details" class="portfolio-details">
+            <div class="container">
+                <div class="row gy-4">
+                    <div class="row mb-1">
+                        <div class="col-3">
+                            <i class="fas fa-calendar-week"></i><br>
+                            De {{ agenda.debut|date('d-m-Y H:i:s') }}<br> à
+                            {{ agenda.fin|date('d-m-Y H:i:s') }}
+                            <hr>
+                            <i class="fas fa-search-location"></i><br>
+                            {{ agenda.organizer }}<br>
+                            {{ agenda.address }}<br>
+                            {{ agenda.codePostal}}<br>
+                            {{ agenda.city }}<br>
+                            <hr>
+                            <i class="fas fa-link"></i><br>
+                            <a href="{{ agenda.webLink }}" target="_blank">{{ agenda.organizer }}</a>
+                        </div>
+                        <div class="col-8 section-bg p-4">
+                            <h5><a href="{{ path('agenda_show_unit', {id:agenda.id, slug:agenda.slug}) }}">{{ agenda.title }}</a></h5>
+                            {{ agenda.description }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section><!-- End Portfolio Details Section -->
+    </main>
+{% endblock %}

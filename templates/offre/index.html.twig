@@ -19,43 +19,41 @@
     </section><!-- End Breadcrumbs -->
     <section class="inner-page">
         <div class="container">
-
+            <a href="{{ path('offre_new') }}" class="btn btn-primary btn-sm mt-1">Ajouter</a>
             <table class="table">
                 <thead>
-            <tr>
-                <th>Formule</th>
-                <th>Nombre d'offres</th>
-                <th>Début de contrat</th>
-                <th>Fin de contrat</th>
-                <th>Accès Cvthèque</th>
-                <th>Prix</th>
-
-                <th>actions</th>
-            </tr>
-        </thead>
+                    <tr>
+                        <th>Formule</th>
+                        <th>Nombre d'offres</th>
+                        <th>Début de contrat</th>
+                        <th>Fin de contrat</th>
+                        <th>Accès Cvthèque</th>
+                        <th>Prix</th>
+                        <th>actions</th>
+                    </tr>
+                </thead>
                 <tbody>
-        {% for offre in offres %}
-            <tr>
-                <td>{{ offre.formule }}</td>
-                <td>{{ offre.nombreOffres }}</td>
-                <td>{{ offre.debutContratAt ? offre.debutContratAt|date('d-m-Y') : '' }}</td>
-                <td>{{ offre.finContratAt ? offre.finContratAt|date('d-m-Y') : '' }}</td>
-                <td>{{ offre.isCvTheque ? 'Yes' : 'No' }}</td>
-                <td>{{ offre.prix }}$</td>
+                {% for offre in offres %}
+                    <tr>
+                        <td>{{ offre.formule }}</td>
+                        <td>{{ offre.nombreOffres }}</td>
+                        <td>{{ offre.debutContratAt ? offre.debutContratAt|date('d-m-Y') : '' }}</td>
+                        <td>{{ offre.finContratAt ? offre.finContratAt|date('d-m-Y') : '' }}</td>
+                        <td>{{ offre.isCvTheque ? 'Yes' : 'No' }}</td>
+                        <td>{{ offre.prix }}$</td>
 
-                <td>
-                    <a href="{{ path('offre_show', {'id': offre.id}) }}">show</a>
-                    <a href="{{ path('offre_edit', {'id': offre.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="11">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
+                        <td>
+                            <a href="{{ path('offre_show', {'id': offre.id}) }}">show</a>
+                            <a href="{{ path('offre_edit', {'id': offre.id}) }}">edit</a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="11">no records found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
             </table>
-            <a href="{{ path('offre_new') }}">Create new</a>
         </div>
     </section>
 </main>

@@ -18,7 +18,7 @@
                 <div class="row gy-4">
                     <div class="col-lg-8">
                         <h2>Description du poste et missions</h2>
-                        {{ annonce.description }}
+                        {{ annonce.description|raw }}
                         {% if annonce.lien %}
                             {% if app.user and hasCandidature %}
                                 <div class="alert-info mt-2 p-3">Vous avez déjà postulé à cette offre! </div>
