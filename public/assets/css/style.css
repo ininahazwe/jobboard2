@@ -139,6 +139,36 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /*--------------------------------------------------------------
+# Header-recruteur
+--------------------------------------------------------------*/
+#header-recruteur {
+  transition: all 0.5s;
+  z-index: 997;
+  padding: 15px 0;
+}
+
+#header-recruteur.header-scrolled, #header-recruteur.header-inner-pages {
+  background: rgba(197, 82, 15, 0.9);
+}
+
+#header-recruteur .logo {
+  font-size: 30px;
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+#header-recruteur .logo a {
+  color: #fff;
+}
+
+#header-recruteur .logo img {
+  max-height: 40px;
+}
+/*--------------------------------------------------------------
 # Navigation Menu
 --------------------------------------------------------------*/
 /**

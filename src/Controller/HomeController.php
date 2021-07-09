@@ -34,6 +34,29 @@ class HomeController extends AbstractController
             'entreprises' => $entreprises
         ]);
     }
+    #[Route('/recruteur', name:'app_home_recruteur')]
+    public function indexRecruteur(AnnonceRepository $annoncesRepo, Request $request, ModeleOffreCommercialeRepository $modeleOffreCommercialeRepository, EntrepriseRepository $entrepriseRepository): Response
+    {
+        $annonces = $annoncesRepo->findActiveAndLive(5);
+        $offres = $modeleOffreCommercialeRepository->findAll();
+        $entreprises = $entrepriseRepository->getEntrepriseHome(6);
+
+        return $this->render('home/index_recruteur.html.twig', [
+            'annonces' => $annonces,
+            'modeles' => $offres,
+            'entreprises' => $entreprises
+        ]);
+    }
+    #[Route('/view/recruteur/menus', name:'app_view_recruteur_menus')]
+
+    public function menuRecruteurIndex(MenuRepository $menuRepository): Response
+    {
+        $menus = $menuRepository->getAllMenus(Menu::TYPE_MENU_RECRUTEUR);
+        return $this->render('layouts/_header_recruteur.html.twig', [
+            'menus' => $menus,
+            'menuRepository' => $menuRepository
+        ]);
+    }
     #[Route('/view/menus', name:'app_view_menus')]
 
     public function menuIndex(MenuRepository $menuRepository): Response
@@ -113,7 +136,7 @@ class HomeController extends AbstractController
     }
 
     /*Affichage des agenda*/
-    /*
+
     #[Route('/agenda', name: 'agenda_show_all', methods: ['GET'])]
     public function ShowAllAgendas(AgendaRepository $agendaRepository): Response
     {
@@ -130,7 +153,7 @@ class HomeController extends AbstractController
         return $this->render('agenda/show_unit.html.twig', [
             'agenda' => $agenda,
         ]);
-    }*/
+    }
 
     /*Affichage de l'annuaire*/
     #[Route('/annuaire', name: 'annuaire_show_all', methods: ['GET'])]
@@ -159,6 +182,20 @@ class HomeController extends AbstractController
         if(!$page){
             return $this->redirect($this->generateUrl('app_home'));
         }
+
+        return $this->render('page/show.html.twig', [
+            'page' => $page
+        ]);
+    }
+    #[Route('/recruteur/{slug}', name:'page_show_recruteur')]
+    public function pageRecruteur($slug): Response
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $page = $entityManager->getRepository(Page::class)->findOneBy(['slug' => $slug]);
+        if(!$page){
+            return $this->redirect($this->generateUrl('app_home'));
+        }
+
         return $this->render('page/show.html.twig', [
             'page' => $page
         ]);

@@ -226,4 +226,11 @@ class Page
     {
         return $this->title;
     }
+
+    public function getTypeRecruteur(){
+        if ($this->type == Page::TYPE_PAGE_RECRUTEUR){
+            return true;
+        }
+        return false;
+    }
 }

@@ -1,10 +1,4 @@
-{% if page.getTypeRecruteur() %}
-    {% set url = 'base-recruteur.html.twig' %}
-{% else %}
-    {% set url = 'base.html.twig' %}
-{% endif %}
-
-{% extends url %}
+{% extends 'base-recruteur.html.twig' %}
 
 {% block title %}Page{% endblock %}
 

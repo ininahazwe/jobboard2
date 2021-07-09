@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Agenda | Nouveau{% endblock %}
+
+{% block body %}
+    <main id="main">
+        <!-- ======= Breadcrumbs ======= -->
+        <section id="breadcrumbs" class="breadcrumbs">
+            <div class="container">
+                <ol>
+                    <li><a href="{{ path('app_home') }}">Home</a></li>
+                    <li><a href="{{ path('app_profile') }}">Dashboard</a></li>
+                    <li>Lecture</li>
+                </ol>
+                <h2>Fiche de candidature</h2>
+            </div>
+        </section><!-- End Breadcrumbs -->
+        <section class="inner-page">
+            <div class="container">
+                <div class="col-md-12">
+
+                {{ include('agenda/_form.html.twig') }}
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+{% endblock %}

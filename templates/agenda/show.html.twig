@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Agenda | {{ agenda.title }}{% endblock %}
+
+{% block body %}
+    <main id="main">
+        <!-- ======= Breadcrumbs ======= -->
+        <section id="breadcrumbs" class="breadcrumbs">
+            <div class="container">
+                <ol>
+                    <li><a href="{{ path('app_home') }}">Home</a></li>
+                    <li><a href="{{ path('app_profile') }}">Dashboard</a></li>
+                    <li><a href="{{ path('annuaire_index') }}">Annuaire</a></li>
+                    <li>Lecture</li>
+                </ol>
+                <h1>{{ agenda.title}}</h1>
+            </div>
+        </section><!-- End Breadcrumbs -->
+        <section class="inner-page">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <th>Titre</th>
+                                    <td>{{ agenda.title }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Description</th>
+                                    <td>{{ agenda.description }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Date de début</th>
+                                    <td>{{ agenda.dateDebut ? agenda.dateDebut|date('Y-m-d H:i:s') : '' }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Date de début</th>
+                                    <td>{{ agenda.dateFin ? agenda.dateFin|date('Y-m-d H:i:s') : '' }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Toute la journée</th>
+                                    <td>{{ agenda.allDay }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Weblink</th>
+                                    <td>{{ agenda.weblink }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Adresse</th>
+                                    <td>{{ agenda.address }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Code Postal</th>
+                                    <td>{{ agenda.codePostal }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Ville</th>
+                                    <td>{{ agenda.city }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Organisateur</th>
+                                    <td>{{ agenda.organizer }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+{% endblock %}

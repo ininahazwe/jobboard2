@@ -72,14 +72,6 @@ class PageController extends AbstractController
         ]);
     }
 
-    #[Route('/{slug}', name: 'page_show', methods: ['GET'])]
-    public function show(Page $page): Response
-    {
-        return $this->render('page/show.html.twig', [
-            'page' => $page,
-        ]);
-    }
-
     #[Route('/{id}/edit', name: 'page_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Page $page): Response
     {

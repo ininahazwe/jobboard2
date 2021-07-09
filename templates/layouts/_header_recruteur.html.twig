@@ -1,7 +1,7 @@
 <!-- ======= Header ======= -->
 
-<header id="header"
-        {% if app.request.attributes.get('_route') == 'app_home' %}
+<header id="header-recruteur"
+        {% if app.request.attributes.get('_route') == 'app_home_recruteur' %}
             class="fixed-top"
         {% else %}
             class="fixed-top header-inner-pages"
@@ -11,7 +11,7 @@
 
         <!-- <div class="logo me-auto"><a href="{{ path('app_home') }}"><img src="{{ asset('assets/img/logo.png') }}" class="img-fluid" alt=""></a></div>-->
         <!-- Uncomment below if you prefer to use an image logo -->
-        <a href="{{ path('app_home') }}" class="logo me-auto"><img src="{{ asset('assets/img/logo.png') }}" alt=""
+        <a href="{{ path('app_home_recruteur') }}" class="logo me-auto"><img src="{{ asset('assets/img/logo.png') }}" alt=""
                                                                    class="img-fluid"></a>
 
         <nav id="navbar" class="navbar">
@@ -23,15 +23,15 @@
                     {% if menuN2|length %}
                         <li class="dropdown"><a href="#"><span>{{ menu.name }}</span> <i class="bi bi-chevron-down"></i></a>
                             <ul>
-                                <li><a href="../../{{ menu.link }}">{{ menu.name }}</a></li>
+                                <li><a href="../../recruteur/{{ menu.link }}">{{ menu.name }}</a></li>
                                 {% for _menu in menuN2 %}
 
-                                    <li><a href="../{{ _menu.link }}">{{ _menu.name }}</a></li>
+                                    <li><a href="../recruteur/{{ _menu.link }}">{{ _menu.name }}</a></li>
                                 {% endfor %}
                             </ul>
                         </li>
                     {% else %}
-                        <li><a class="nav-link" href="../../{{ menu.link }}">{{ menu.name }}</a></li>
+                        <li><a class="nav-link" href="../../recruteur/{{ menu.link }}">{{ menu.name }}</a></li>
                     {% endif %}
 
                 {% endfor %}

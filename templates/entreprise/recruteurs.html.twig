@@ -60,9 +60,9 @@
                                         <td>{{ user.email }} <b><small>(Super recruteur)</small></b></td>
                                         <td>{{ user.telephone }}</td>
                                         <td>
-                                            <a href="#">Générer un nouveau mot de passe</a>
+                                            <a href="{{ path('entreprise_recruteurs_generateMDP', {id: entreprise.id, userID: user.id}) }}">Générer un nouveau mot de passe</a>
                                             <a> | </a>
-                                            <a href="#">Supprimer</a>
+                                            <a href="{{ path('entreprise_recruteurs_delete', {id: entreprise.id, userID: user.id}) }}">Supprimer</a>
                                         </td>
                                     </tr>
                                 {% endfor %}

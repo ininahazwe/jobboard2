@@ -22,15 +22,24 @@ class MenuRepository extends ServiceEntityRepository
     /**
      * @return array
      */
-    public function getAllMenus():array
+    public function getAllMenus($type = null):array
     {
-        return $this->createQueryBuilder('m')
+        $query =  $this->createQueryBuilder('m')
 
             ->orderBy('m.display_order', 'ASC')
             ->andWhere('m.niveau = :niveau OR m.niveau IS NULL')
             ->andWhere('m.type = :type')
             ->setParameter('niveau' , Menu::NIVEAU_MENU_1)
-            ->setParameter('type', Menu::TYPE_MENU_CANDIDAT)
+            ;
+        if ($type){
+            $query->setParameter('type', $type);
+        }else{
+            $query->setParameter('type', Menu::TYPE_MENU_CANDIDAT);
+        }
+
+
+            return $query
+
             //->setMaxResults(10)
             ->getQuery()
             ->getResult()
