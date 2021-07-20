@@ -6,25 +6,63 @@ use App\Entity\Entreprise;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class EntrepriseType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name')
-            ->add('description')
+            ->add('name', TextType::class, [
+                'label' => 'Nom',
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Veuillez saisir un nom',
+                    ]),
+                ],
+            ])
+            ->add('description', TextareaType::class, [
+                'label' => 'Description',
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Veuillez saisir une description',
+                    ]),
+                ],
+            ])
             ->add('logo', FileType::class, [
                 'label' => false,
                 'multiple' => false,
                 'mapped' => false,
                 'required' => false
             ])
-            ->add('address')
-            ->add('city')
-            ->add('zipcode')
+            ->add('address', TextType::class, [
+                'label' => 'Adresse',
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Veuillez saisir une adresse',
+                    ]),
+                ],
+            ])
+            ->add('city', TextType::class, [
+                'label' => 'Ville',
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Veuillez saisir une ville',
+                    ]),
+                ],
+            ])
+            ->add('zipcode' , TextType::class, [
+                'label' => 'Code postal',
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Veuillez saisir un code postal',
+                    ]),
+                ],
+            ])
             ->add('regroupementCandidatures', ChoiceType::class, [
                 'choices' => [
                     'Non' => '0',
@@ -33,7 +71,9 @@ class EntrepriseType extends AbstractType
                 'label' => 'Regrouper les candidatures / candidat',
                 'required' => true
             ])
-            ->add('secteur')
+            ->add('secteur' , TextType::class, [
+                'label' => 'Secteur'
+            ])
         ;
     }
 

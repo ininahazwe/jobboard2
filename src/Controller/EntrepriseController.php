@@ -37,6 +37,7 @@ class EntrepriseController extends AbstractController
     #[Route('/', name: 'entreprise_index', methods: ['GET'])]
     public function index(Request $request, EntrepriseRepository $entrepriseRepository, PaginatorInterface $paginator): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN_HANDICV');
         $data = $entrepriseRepository->findAllEntreprise($this->getUser());
 
         $entreprises = $paginator->paginate(
@@ -89,6 +90,93 @@ class EntrepriseController extends AbstractController
             'entreprise' => $entreprise,
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Route('/new', name: 'entreprise_new_without_account', methods: ['GET', 'POST'])]
+    public function newWithoutAccount(Request $request, ModeleOffreCommercialeRepository $modeleOffreCommercialeRepository, EntrepriseRepository $entrepriseRepository, UserRepository $userRepository, UserPasswordEncoderInterface $passwordEncoder, Mailer $mailer): Response
+    {
+        $userExist = $userRepository->findOneBy(['email' =>$request->get('user[email]')]);
+        $password = $userRepository->genererMDP();
+        if ($userExist){
+            $user = $userExist;
+        }else{
+            $user = new User();
+        }
+
+        $form = $this->createForm(UserType::class, $user);
+        $form->handleRequest($request);
+        $entityManager = $this->getDoctrine()->getManager();
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            if (!$userExist) {
+                $user->setPassword(
+                    $passwordEncoder->encodePassword(
+                        $user,
+                        $password
+                    )
+                );
+
+                $entreprise = new Entreprise();
+                $form = $this->createForm(EntrepriseType::class, $entreprise);
+                $form->handleRequest($request);
+                $ref = $entrepriseRepository->genererRef();
+                $entreprise->addSuperRecruteur($user);
+                $user->setRoles(['ROLE_SUPER_RECRUTEUR']);
+
+                if ($form->isSubmitted() && $form->isValid()) {
+                    if ($form->get('logo')->getData()){
+                        $this->uploadFile($form->get('logo')->getData(), $entreprise);
+                    }
+                    $entreprise->setRefClient($ref);
+                    $entityManager = $this->getDoctrine()->getManager();
+                    $entityManager->persist($entreprise);
+                    $entityManager->flush();
+
+                    $modele = $modeleOffreCommercialeRepository->findOneBy(['prix' => '0']);
+                    $this->saveOffreModele($entreprise->getId(), $modele->getId());
+                }
+            }
+
+            $entityManager->persist($user);
+            $entityManager->persist($entreprise);
+            $entityManager->flush();
+            $this->addFlash('success', 'Ajout réussi');
+
+            $email = $entityManager->getRepository('App:Email')->findOneBy(['code' => 'EMAIL_CREATION_RECRUTEUR']);
+
+            $loader = new ArrayLoader([
+                'email' => $email->getContent(),
+            ]);
+
+            $twig = new Environment($loader);
+            $message = $twig->render('email',['user' => $this->getUser(), 'recruteur' => $user, 'password' => $password ]);
+
+            $this->addFlash('success', 'Ajout réussi');
+
+            $mailer->send([
+                'recipient_email' => $user->getEmail(),
+                'subject'         => $email->getSubject(),
+                'html_template'   => 'emails/email_vide.html.twig',
+                'context'         => [
+                    'message' => $message
+                ]
+            ]);
+
+            $this->addFlash('success', 'Ajout réussi');
+
+            return $this->redirectToRoute('app_profile', [], Response::HTTP_SEE_OTHER);
+        }
+
+        $response = new Response(null, $form->isSubmitted() ? 422 : 200);
+
+        return $this->render('entreprise/new_without_account.html.twig', [
+            'user' => $user,
+            'form' => $form->createView(),
+        ], $response);
     }
 
     #[Route('/{slug}', name: 'entreprise_show', methods: ['GET'])]
@@ -145,6 +233,7 @@ class EntrepriseController extends AbstractController
     #[Route('/{id}/edit', name: 'entreprise_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Entreprise $entreprise): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_SUPER_RECRUTEUR');
         $form = $this->createForm(EntrepriseType::class, $entreprise);
         $form->handleRequest($request);
 
@@ -283,8 +372,6 @@ class EntrepriseController extends AbstractController
             'user' => $user,
             'form' => $form->createView(),
         ], $response);
-
-        //return $this->redirect($this->generateUrl('entreprise_recruteurs',['id' => $entreprise->getId()]));
     }
 
     /**

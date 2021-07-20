@@ -41,7 +41,7 @@ class DictionnaireController extends AbstractController
             $entityManager->persist($dictionnaire);
             $entityManager->flush();
 
-            return $this->redirectToRoute('dictionnaire_index');
+            return $this->redirectToRoute('dictionnaire_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('dictionnaire/new.html.twig', [
@@ -67,7 +67,7 @@ class DictionnaireController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('dictionnaire_index');
+            return $this->redirectToRoute('dictionnaire_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('dictionnaire/edit.html.twig', [

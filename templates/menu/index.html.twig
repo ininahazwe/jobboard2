@@ -33,7 +33,7 @@
                 <tbody>
                 {% for menu in menus %}
                     <tr>
-                        <td><a href="{{ path('menu_show', {'id': menu.id}) }}">{{ menu.name }}</a></td>
+                        <td><b>{{ menu.name }}</b></td>
                         <td>{{ menu.link }}</td>
                         <td>{{ menu.displayOrder }}</td>
                         <td>{{ menu.niveau }}</td>

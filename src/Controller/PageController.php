@@ -63,7 +63,7 @@ class PageController extends AbstractController
 
             $this->addFlash('success', 'Ajout réussi');
 
-            return $this->redirectToRoute('page_index');
+            return $this->redirectToRoute('page_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('page/new.html.twig', [
@@ -91,7 +91,7 @@ class PageController extends AbstractController
 
             $this->addFlash('success', 'Mise à jour réussie');
 
-            return $this->redirectToRoute('page_index');
+            return $this->redirectToRoute('page_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('page/edit.html.twig', [

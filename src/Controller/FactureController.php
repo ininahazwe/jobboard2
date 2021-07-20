@@ -182,7 +182,7 @@ class FactureController extends AbstractController
 
             $this->addFlash('success', 'Ajout réussi');
 
-            return $this->redirectToRoute('facture_index');
+            return $this->redirectToRoute('facture_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('facture/new.html.twig', [
@@ -219,7 +219,7 @@ class FactureController extends AbstractController
 
             $this->addFlash('success', 'Mise à jour réussie');
 
-            return $this->redirectToRoute('facture_index');
+            return $this->redirectToRoute('facture_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('facture/edit.html.twig', [

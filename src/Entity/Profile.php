@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\ProfileRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 
 /**
@@ -83,6 +84,7 @@ class Profile
     public function __construct()
     {
         $this->isVisible = false;
+        $this->createdAt = new \DateTime('now');
     }
 
     public function getDescription(): ?string

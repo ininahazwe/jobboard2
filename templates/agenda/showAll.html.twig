@@ -21,24 +21,19 @@
                     <p>Les évènements sont automatiquement classés par ordre chronologique et archivés dès que leurs dates sont dépassées.</p>
                 </div>
                 {% for agenda in agendas %}
-                    <div class="row mb-1">
-                        <div class="col-3">
+                    <div class="row mb-1 border">
+                        <div class="col-4 p-4">
                             <i class="fas fa-calendar-week"></i><br>
-                            De {{ agenda.debut|date('d-m-Y H:i:s') }}<br> à
-                            {{ agenda.fin|date('d-m-Y H:i:s') }}
-                            <hr>
+                            De {{ agenda.dateDebut|date('d-m-Y H:i:s') }}<br> à
+                            {{ agenda.dateFin|date('d-m-Y H:i:s') }}
+                        </div>
+                        <div class="col-6 section-bg">
+                            <h5 class="p-4"><a href="{{ path('agenda_show_unit', {id:agenda.id, slug:agenda.slug}) }}">{{ agenda.title }}</a></h5>
+                        </div>
+                        <div class="col-2 p-4">
                             <i class="fas fa-search-location"></i><br>
                             {{ agenda.organizer }}<br>
-                            {{ agenda.address }}<br>
-                            {{ agenda.codePostal}}<br>
                             {{ agenda.city }}<br>
-                            <hr>
-                            <i class="fas fa-link"></i><br>
-                            <a href="{{ agenda.webLink }}" target="_blank">{{ agenda.organizer }}</a>
-                        </div>
-                        <div class="col-8 section-bg p-4">
-                            <h5><a href="{{ path('agenda_show_unit', {id:agenda.id, slug:agenda.slug}) }}">{{ agenda.title }}</a></h5>
-                            {{ agenda.description }}
                         </div>
                     </div>
                 {% endfor %}

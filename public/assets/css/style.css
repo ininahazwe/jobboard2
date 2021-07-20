@@ -148,7 +148,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #header-recruteur.header-scrolled, #header-recruteur.header-inner-pages {
-  background: rgba(197, 82, 15, 0.9);
+  background: rgba(241, 115, 0, 0.9);
 }
 
 #header-recruteur .logo {
@@ -168,6 +168,15 @@ h1, h2, h3, h4, h5, h6 {
 #header-recruteur .logo img {
   max-height: 40px;
 }
+
+.orange{
+  background: rgba(197, 82, 15, 0.9);
+}
+
+/*--------------------------------------------------------------
+# Navigation Recruteur
+--------------------------------------------------------------*/
+
 /*--------------------------------------------------------------
 # Navigation Menu
 --------------------------------------------------------------*/
@@ -393,6 +402,77 @@ h1, h2, h3, h4, h5, h6 {
 
 .navbar-mobile .dropdown > .dropdown-active {
   display: block;
+}
+
+/*--------------------------------------------------------------
+# Hero Section Recruteur
+--------------------------------------------------------------*/
+#hero-recruteur {
+  width: 100%;
+  height: 80vh;
+  background: #DBE4EE;
+}
+
+#hero-recruteur .btn-get-started{
+  font-weight: 500;
+  font-size: 16px;
+  letter-spacing: 1px;
+  display: inline-block;
+  padding: 10px 28px 11px 28px;
+  border-radius: 50px;
+  transition: 0.5s;
+  margin: 10px 0 0 0;
+  color: #fff;
+  background: #3E7CB1;
+}
+
+#hero-recruteur .btn-watch-video {
+  font-family: "Jost", sans-serif;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  transition: 0.5s;
+  margin: 10px 0 0 25px;
+  color: #fff;
+  line-height: 1;
+}
+
+#hero .container {
+  padding-top: 72px;
+}
+
+#hero h1 {
+  margin: 0 0 10px 0;
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 56px;
+  color: #fff;
+}
+
+#hero h2 {
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 50px;
+  font-size: 24px;
+}
+
+#hero .btn-get-started:hover {
+  background: #209dd8;
+}
+
+#hero .btn-watch-video i {
+  line-height: 0;
+  color: #fff;
+  font-size: 32px;
+  transition: 0.3s;
+  margin-right: 8px;
+}
+
+#hero .btn-watch-video:hover i {
+  color: #47b2e4;
+}
+
+#hero .animated {
+  animation: up-down 2s ease-in-out infinite alternate-reverse both;
 }
 
 /*--------------------------------------------------------------

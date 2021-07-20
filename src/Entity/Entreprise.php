@@ -16,6 +16,10 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 class Entreprise
 {
+    const EN_ATTENTE = 0;
+    const ACCEPTEE = 1;
+    const REFUSEE = 2;
+
     use ResourceId;
     use Timestapable;
 
@@ -107,6 +111,26 @@ class Entreprise
      * @ORM\Column(type="integer", nullable=true)
      */
     private ?bool $regroupement_candidatures;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private ?int $numero_siret;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private ?int $numero_siren;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private ?int $taille;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private ?int $moderation;
 
     public function __construct()
     {
@@ -495,11 +519,60 @@ class Entreprise
         return $this;
     }
 
-    public function isRegroupementCandidature(){
+    public function isRegroupementCandidature(): bool
+    {
         if($this->regroupement_candidatures == 1 ){
             return true;
         }
         return false;
+    }
+
+    public function getNumeroSiret(): ?int
+    {
+        return $this->numero_siret;
+    }
+
+    public function setNumeroSiret(?int $numero_siret): self
+    {
+        $this->numero_siret = $numero_siret;
+
+        return $this;
+    }
+
+    public function getNumeroSiren(): ?int
+    {
+        return $this->numero_siren;
+    }
+
+    public function setNumeroSiren(?int $numero_siren): self
+    {
+        $this->numero_siren = $numero_siren;
+
+        return $this;
+    }
+
+    public function getTaille(): ?int
+    {
+        return $this->taille;
+    }
+
+    public function setTaille(?int $taille): self
+    {
+        $this->taille = $taille;
+
+        return $this;
+    }
+
+    public function getModeration(): ?int
+    {
+        return $this->moderation;
+    }
+
+    public function setModeration(?int $moderation): self
+    {
+        $this->moderation = $moderation;
+
+        return $this;
     }
 
 }

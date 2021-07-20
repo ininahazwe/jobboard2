@@ -1,4 +1,18 @@
+{% form_theme form _self %}
 {{ form_start(form) }}
-    {{ form_widget(form) }}
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            {{ form_row(form.formule) }}
+            {{ form_row(form.nombre_offres) }}
+            {{ form_row(form.debutContratAt) }}
+            {{ form_row(form.finContratAt) }}
+            {{ form_row(form.isCvTheque) }}
+        </div>
+        <div class="col-md-6">
+            {{ form_row(form.prix) }}
+            {{ form_row(form.facture) }}
+            {{ form_row(form.entreprise) }}
+        </div>
     <button class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
 {{ form_end(form) }}

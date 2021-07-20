@@ -1,4 +1,14 @@
 {{ form_start(form) }}
     {{ form_widget(form) }}
-    <button class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
+    <button class="btn btn-primary mt-2">{{ button_label|default('Enregistrer') }}</button>
 {{ form_end(form) }}
+
+
+<style>
+    #profile_birthdate_time_hour{
+        display: none;
+    }
+    div.sr-only{
+        display: none;
+    }
+</style>

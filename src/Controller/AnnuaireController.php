@@ -33,7 +33,7 @@ class AnnuaireController extends AbstractController
             $entityManager->persist($annuaire);
             $entityManager->flush();
 
-            return $this->redirectToRoute('annuaire_index');
+            return $this->redirectToRoute('annuaire_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('annuaire/new.html.twig', [
@@ -59,7 +59,7 @@ class AnnuaireController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('annuaire_index');
+            return $this->redirectToRoute('annuaire_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('annuaire/edit.html.twig', [

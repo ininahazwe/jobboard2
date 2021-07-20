@@ -23,7 +23,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Assert\NotBlank(message="Please enter a valid email address.")
+     * @Assert\NotBlank(message="Merci de saisir une adresse email valide")
      * @Assert\Email(message="{{value}} is not valid")
      */
     private string $email;
@@ -37,6 +37,7 @@ class User implements UserInterface
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
+     * @Assert\NotBlank(message="Le mot de passe est requis")
      */
     private string $password;
 
@@ -47,17 +48,28 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\Regex(
+     *     pattern="/\d/",
+     *     match=false,
+     *     message="Ton prénom ne doit pas contenir de chiffre"
+     * )
+     * @Assert\Length(min="3", max="15")
      */
     private string $firstname;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\Regex(
+     *     pattern="/\d/",
+     *     match=false,
+     *     message="Ton nom ne doit pas contenir de chiffre"
+     * )
+     * @Assert\Length(min="3", max="15")
      */
     private string $lastname;
 
     /**
-     * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(type="datetime", nullable=true)
+     * @ORM\Column(type="datetime", nullable=true, options={"default": "CURRENT_TIMESTAMP"})
      */
     protected ?\DateTime $lastConnexionAt;
 
@@ -875,7 +887,7 @@ class User implements UserInterface
     }
 
     /**
-     * @return Collection|Annonce[]
+     * @return Collection
      */
     public function getAnnonces(): Collection
     {

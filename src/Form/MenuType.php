@@ -3,22 +3,28 @@
 namespace App\Form;
 
 use App\Entity\Menu;
-use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotNull;
 
 class MenuType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name')
+            ->add('name', TextType::class, [
+                'label' => 'Nom',
+                'constraints' => [
+                    new NotNull([
+                        'message' => 'Veuillez saisir un nom',
+                    ]),
+                ],
+            ])
             ->add('link', TextType::class, [
                 'required' => false
             ])
@@ -30,7 +36,7 @@ class MenuType extends AbstractType
             ->add('type',  ChoiceType::class, [
                 'choices' => Menu::getTypeList()
             ])
-            ->add('contenu',  CKEditorType::class, [
+            ->add('contenu',  TextareaType::class, [
                 'required' => false
             ])
             ->add('childMenu', EntityType::class, [

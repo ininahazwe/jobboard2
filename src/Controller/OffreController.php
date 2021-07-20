@@ -35,7 +35,7 @@ class OffreController extends AbstractController
 
             $this->addFlash('success', 'Ajout réussi');
 
-            return $this->redirectToRoute('offre_index');
+            return $this->redirectToRoute('offre_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('offre/new.html.twig', [
@@ -63,7 +63,7 @@ class OffreController extends AbstractController
 
             $this->addFlash('success', 'Mise à jour réussie');
 
-            return $this->redirectToRoute('offre_index');
+            return $this->redirectToRoute('offre_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('offre/edit.html.twig', [

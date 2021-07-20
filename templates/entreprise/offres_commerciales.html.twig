@@ -96,7 +96,7 @@
 
         <!-- Modal -->
         <div class="modal" id="modal1" data-animation="slideInOutDown">
-            <div class="modal-dialog">
+            <div class="modal-dialog w-75">
                 <header class="modal-header">
                     Ajouter une offre
                     <button class="close-modal" aria-label="close modal" data-close>
@@ -122,8 +122,8 @@
             </div>
         </div>
 
-        <div class="modal" id="modal2" data-animation="slideInOutDown">
-            <div class="modal-dialog">
+        <div class="modal fade" id="modal2" data-animation="slideInOutDown" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog w-75" role="document">
                 <header class="modal-header">
                     Ajouter une offre personnalisée
                     <button class="close-modal" aria-label="close modal" data-close>
@@ -240,6 +240,12 @@
             margin-top: 1rem;
         }
 
+        #offre_debutContratAt_time_hour{
+            display: none;
+        }
+        div.sr-only{
+            display: none;
+        }
 
         /* ANIMATIONS
         –––––––––––––––––––––––––––––––––––––––––––––––––– */

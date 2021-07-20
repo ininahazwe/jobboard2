@@ -72,7 +72,7 @@ class UserController extends AbstractController
             ]);
 
             $this->addFlash('success', 'Mise à jour réussie');
-            return $this->redirectToRoute('app_profile');
+            return $this->redirectToRoute('app_profile', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('user/edit_user.html.twig', [
@@ -126,7 +126,7 @@ class UserController extends AbstractController
                     ]
                 ]);
 
-                return $this->redirectToRoute('app_profile');
+                return $this->redirectToRoute('app_profile', [], Response::HTTP_SEE_OTHER);
             }else{
                 $this->addFlash('error', 'Les deux mots de passe doivent être identiques');
             }

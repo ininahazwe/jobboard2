@@ -50,7 +50,7 @@ class MenuController extends AbstractController
 
             $this->addFlash('success', 'Ajout réussi');
 
-            return $this->redirectToRoute('menu_index');
+            return $this->redirectToRoute('menu_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('menu/new.html.twig', [
@@ -80,7 +80,7 @@ class MenuController extends AbstractController
 
             $this->addFlash('success', 'Mise à jour réussie');
 
-            return $this->redirectToRoute('menu_index');
+            return $this->redirectToRoute('menu_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('menu/edit.html.twig', [

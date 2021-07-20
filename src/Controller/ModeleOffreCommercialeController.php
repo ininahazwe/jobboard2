@@ -42,7 +42,7 @@ class ModeleOffreCommercialeController extends AbstractController
 
             $this->addFlash('success', 'Ajout réussi');
 
-            return $this->redirectToRoute('modele_offre_commerciale_index');
+            return $this->redirectToRoute('modele_offre_commerciale_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('modele_offre_commerciale/new.html.twig', [
@@ -70,7 +70,7 @@ class ModeleOffreCommercialeController extends AbstractController
 
             $this->addFlash('success', 'Mise à jour réussie');
 
-            return $this->redirectToRoute('modele_offre_commerciale_index');
+            return $this->redirectToRoute('modele_offre_commerciale_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('modele_offre_commerciale/edit.html.twig', [

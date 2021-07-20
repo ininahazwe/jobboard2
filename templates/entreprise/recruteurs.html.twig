@@ -39,7 +39,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {%  if entreprise.recruteurs|length or  entreprise.superRecruteurs|length %}
+                                {%  if entreprise.recruteurs|length or entreprise.superRecruteurs|length %}
                                 {% for user in entreprise.recruteurs %}
                                     <tr>
                                         <td>{{ user.firstname }}</td>
@@ -81,7 +81,7 @@
                             </div>
                             <!-- Modal -->
                             <div class="modal" id="modal1" data-animation="slideInOutDown">
-                                <div class="modal-dialog">
+                                <div class="modal-dialog w-75">
                                     <header class="modal-header">
                                         Ajouter un nouveau recruteur
                                         <button class="close-modal" aria-label="close modal" data-close>

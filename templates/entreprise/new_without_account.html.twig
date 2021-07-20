@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Profile{% endblock %}
+{% block title %}New Entreprise{% endblock %}
 
 {% block body %}
 <main id="main">
@@ -10,16 +10,15 @@
             <ol>
                 <li><a href="{{ path('app_home') }}">Home</a></li>
                 <li><a href="{{ path('app_profile') }}">Dashboard</a></li>
-                <li>Profile</li>
+                <li><a href="{{ path('entreprise_index') }}">Entreprises</a></li>
+                <li>Création</li>
             </ol>
-            <h1>Gestion de mes infos</h1>
+            <h1>Création d'une entreprise</h1>
         </div>
     </section><!-- End Breadcrumbs -->
     <section class="inner-page">
         <div class="container">
-            <div class="row">
-                {{ include('profile/_form.html.twig') }}
-            </div>
+            {{ include('entreprise/_form_not_connected.html.twig') }}
         </div>
     </section>
 </main>

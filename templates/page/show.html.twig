@@ -13,14 +13,14 @@
     <!-- ======= Breadcrumbs ======= -->
     <section id="breadcrumbs" class="breadcrumbs">
         <div class="container">
-            {#<ol>
+            <ol>
                 <li><a href="{{ path('app_home') }}">Home</a></li>
-                {% if app.user and app.user.isSuperAdmin() %}
+{#                {% if app.user and app.user.isSuperAdmin() %}
                 <li><a href="{{ path('app_profile') }}">Dashboard</a></li>
                 <li><a href="{{ path('page_index') }}">Pages</a></li>
                 {% endif %}
-                <li>{{ page.title }}</li>
-            </ol>#}
+                <li>{{ page.title }}</li>#}
+            </ol>
             <h1>{{ page.title }}</h1>
         </div>
     </section><!-- End Breadcrumbs -->

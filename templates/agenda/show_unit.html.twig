@@ -17,10 +17,10 @@
             <div class="container">
                 <div class="row gy-4">
                     <div class="row mb-1">
-                        <div class="col-3">
+                        <div class="col-4">
                             <i class="fas fa-calendar-week"></i><br>
-                            De {{ agenda.debut|date('d-m-Y H:i:s') }}<br> à
-                            {{ agenda.fin|date('d-m-Y H:i:s') }}
+                            De {{ agenda.dateDebut|date('d-m-Y H:i:s') }}<br> à
+                               {{ agenda.dateFin|date('d-m-Y H:i:s') }}
                             <hr>
                             <i class="fas fa-search-location"></i><br>
                             {{ agenda.organizer }}<br>
