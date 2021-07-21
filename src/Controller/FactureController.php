@@ -157,8 +157,6 @@ class FactureController extends AbstractController
             }
         }
 
-        //TODO envoi d'email suite à la génération de facture.s
-
         $this->addFlash('success', 'La génération des factures a été faite avec succès');
 
         return $this->redirectToRoute('facture_index');

@@ -6,6 +6,7 @@ use App\Entity\Entreprise;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -74,6 +75,9 @@ class EntrepriseType extends AbstractType
             ->add('secteur' , TextType::class, [
                 'label' => 'Secteur'
             ])
+            ->add('numeroSiren', IntegerType::class)
+            ->add('numeroSiret', IntegerType::class)
+            ->add('taille', IntegerType::class)
         ;
     }
 

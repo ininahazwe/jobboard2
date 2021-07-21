@@ -20,21 +20,27 @@ class RepeatedPasswordType extends AbstractType
     {
         $resolver->setDefaults([
             'type'                  => PasswordType::class,
-            'invalid_message'       => "Les mots de passe saisis ne correspondent pas",
+            'invalid_message'       => "Veuillez saisir le même mot de passe",
             'required'              => true,
-            'first_options'  => ['label' => 'Mot de passe'],
-            'second_options' => ['label' => 'Confirmer le mot de passe'],
-            'mapped' => false,
-            'constraints' => [
-                new NotBlank([
-                    'message' => 'Veuillez saisir un mot de passe',
-                ]),
-                new Length([
-                    'min' => 4,
-                    'minMessage' => 'Votre mot de passe doit contenir au moins {{ limit }} caractères',
-                    // max length allowed by Symfony for security reasons
-                    'max' => 4096,
-                ]),
+            'first_options'         => [
+                'label'             => "Password",
+                'label_attr'        => [
+                    'title'         => 'For security reasons, your password must contains...',
+                ],
+                'attr'              => [
+                    'title'         => "For security reasons, your password must contains",
+                    'maxlength'     => 255
+                ]
+            ],
+            'second_options'        => [
+                'label'             => "Confirmer le mot de passe",
+                'label_attr'        => [
+                    'title'         => "Confirmer le mot de passe"
+                ],
+                'attr'              => [
+                    'title'         => "Confirm  password",
+                    'maxlength'     => 255
+                ]
             ],
         ]);
     }

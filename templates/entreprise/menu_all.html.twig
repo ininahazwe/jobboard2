@@ -1,0 +1,6 @@
+<div class="col"><div class="p-3 border bg-light "><a href="{{ path('entreprise_index') }}">Entreprises</a></div></div>
+{% if app.user.isSuperAdmin() %}
+<div class="col"><div class="p-3 border bg-light "><a href="{{ path('entreprise_en_attente') }}">Entreprises en attente </a></div></div>
+<div class="col"><div class="p-3 border bg-light "><a href="{{ path('entreprise_acceptees') }}">Entreprises acceptées</a></div></div>
+<div class="col"><div class="p-3 border bg-light "><a href="{{ path('entreprise_refusees') }}">Entreprises refusées</a></div></div>
+{% endif %}

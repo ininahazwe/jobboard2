@@ -12,6 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -88,13 +89,12 @@ class AnnonceType extends AbstractType
                     return $repository->getEntreprisesRecruteur($user);
                 }
             ])
-            ->add('reference')
+            ->add('reference', TextType::class)
             ->add('dateLimiteCandidature', DateTimeType::class, [
                 'date_widget' => 'single_text',
                 'with_minutes' => false,
                 'with_seconds' => false
             ])
-            //TODO enlever l'heure
             ->add('type_contrat', EntityType::class, [
                 'required'  => false,
                 'label' => 'Type de contrat',
@@ -113,7 +113,7 @@ class AnnonceType extends AbstractType
             ->add('adresse_email', EmailType::class, [
                 'required' => false,
             ])
-            ->add('lien')
+            ->add('lien', UrlType::class)
             ;
     }
 

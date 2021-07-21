@@ -24,7 +24,7 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      * @Assert\NotBlank(message="Merci de saisir une adresse email valide")
-     * @Assert\Email(message="{{value}} is not valid")
+     * @Assert\Email(message="{{value}} n'est pas valide")
      */
     private string $email;
 
@@ -37,7 +37,6 @@ class User implements UserInterface
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
-     * @Assert\NotBlank(message="Le mot de passe est requis")
      */
     private string $password;
 

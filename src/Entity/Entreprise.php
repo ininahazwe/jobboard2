@@ -575,4 +575,14 @@ class Entreprise
         return $this;
     }
 
+    public static function getModerationName(): string
+    {
+        if ($moderation = '0'){
+            return 'En attente';
+        }else if($moderation = '1'){
+            return 'Acceptée';
+        }else if($moderation = '2'){
+            return 'Refusée';
+        }
+    }
 }

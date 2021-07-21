@@ -17,7 +17,7 @@ class PageType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title')
+            ->add('title', TextType::class)
             ->add('content', CKEditorType::class)
             ->add('style', TextareaType::class, [
                 'required' => false

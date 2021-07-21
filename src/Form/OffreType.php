@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Offre;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -16,8 +17,8 @@ class OffreType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('formule')
-            ->add('nombre_offres')
+            ->add('formule', TextType::class)
+            ->add('nombre_offres', IntegerType::class)
             ->add('debutContratAt', DateTimeType::class, [
                 'date_widget' => 'single_text',
                 'with_minutes' => false,

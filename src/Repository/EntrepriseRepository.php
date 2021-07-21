@@ -8,6 +8,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * @method Entreprise|null find($id, $lockMode = null, $lockVersion = null)
@@ -232,6 +233,30 @@ class EntrepriseRepository extends ServiceEntityRepository
             ->orderBy('e.createdAt', 'DESC')
             ->orderBy('RAND()')
             ->setMaxResults($int)
+        ;
+        return $query->getQuery()->getResult();
+    }
+
+    public function getEntreprisesEnAttente()
+    {
+        $query = $this->createQueryBuilder('e')
+            ->andWhere('e.moderation = 0')
+        ;
+        return $query->getQuery()->getResult();
+    }
+
+    public function getEntreprisesAcceptees()
+    {
+        $query = $this->createQueryBuilder('e')
+            ->andWhere('e.moderation = 1')
+        ;
+        return $query->getQuery()->getResult();
+    }
+
+    public function getEntreprisesRefusees()
+    {
+        $query = $this->createQueryBuilder('e')
+            ->andWhere('e.moderation = 2')
         ;
         return $query->getQuery()->getResult();
     }

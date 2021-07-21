@@ -1,0 +1,87 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Entreprise index{% endblock %}
+
+{% block body %}
+    <main id="main">
+        <!-- ======= Breadcrumbs ======= -->
+        <section id="breadcrumbs" class="breadcrumbs">
+            <div class="container">
+                <ol>
+                    <li><a href="{{ path('app_home') }}">Home</a></li>
+                    <li><a href="{{ path('app_profile') }}">Dashboard</a></li>
+                    <li><a href="{{ path('entreprise_index') }}">Entreprises</a></li>
+                    <li>Répértoire</li>
+                </ol>
+                <h1>Gestion des entreprises</h1>
+            </div>
+        </section><!-- End Breadcrumbs -->
+        <section class="inner-page">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-2">
+                        <div class="d-flex flex-column">
+                            {{ include('entreprise/menu_all.html.twig') }}
+                        </div>
+                    </div>
+                    <div class="col-md-10">
+                        <div class="float-right">
+                            <a class="btn btn-primary btn-sm mt-1" href="{{ path('entreprise_new') }}">Ajouter</a>
+                        </div>
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Logo</th>
+                                <th>Address</th>
+                                <th>Secteur</th>
+                                <th>Status</th>
+                                <th>actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            {% for entreprise in entreprises %}
+                                <tr>
+                                    <td><a href="{{ path('entreprise_show', {slug: entreprise.slug})}}">{{ entreprise.name }}</a></td>
+                                    <td>{{ entreprise.description }}</td>
+                                    <td>
+                                        {% if entreprise.logo|length %}
+                                            <img class="card-img-top" style="width:50px" src="{{ asset(entreprise.getUrlLastLogo()) }}" alt="{{ entreprise.getNameLastLogo() }}">
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ entreprise.address }}<br>{{ entreprise.city }}<br>{{ entreprise.zipcode }}</td>
+                                    <td>{{ entreprise.secteur }}</td>
+                                    <td>
+                                        {%  if entreprise.moderation is same as 0 %}
+                                            <span class="bg-warning px-2 rounded text-white">En attente</span>
+                                        {% elseif entreprise.moderation is same as 2 %}
+                                            <span class="bg-danger px-2 rounded text-white">Refusée</span>
+                                        {% else %}
+                                            <span class="bg-success px-2 rounded text-white">Acceptée</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a href="{{ path('entreprise_edit', {'id': entreprise.id}) }}">
+                                            <a href="{{ path('entreprise_edit', {'id': entreprise.id}) }}"><i class="fas fa-edit"></i></a>
+                                        </a>
+                                        {% if app.user.isSuperAdmin() %}
+                                            {{ include('entreprise/_delete_form.html.twig') }}
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="12">no records found</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        {{ knp_pagination_render(entreprises, 'Pagination/twitter_bootstrap_v4_pagination.html.twig') }}
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+{% endblock %}
