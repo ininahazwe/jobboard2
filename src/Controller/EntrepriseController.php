@@ -296,7 +296,7 @@ class EntrepriseController extends AbstractController
             $entityManager->flush();
 
             if ($anonymous){
-                $email = $entityManager->getRepository('App:Email')->findOneBy(['code' => 'EMAIL_CREATION_ENTREPRISE']);
+                $email = $entityManager->getRepository('App:Email')->findOneBy(['code' => 'EMAIL_DEMANDE_VALIDATION_ENTREPRISE']);
             } else {
                 $email = $entityManager->getRepository('App:Email')->findOneBy(['code' => 'EMAIL_CREATION_RECRUTEUR']);
             }
@@ -306,7 +306,7 @@ class EntrepriseController extends AbstractController
             ]);
 
             $twig = new Environment($loader);
-            $message = $twig->render('email',['user' => $this->getUser(), 'recruteur' => $user, 'password' => $password ]);
+            $message = $twig->render('email',['user' => $this->getUser(), 'recruteur' => $user, 'password' => $password, 'entreprise' => $entreprise ]);
 
             $this->addFlash('success', 'Ajout réussi');
 
@@ -539,33 +539,13 @@ class EntrepriseController extends AbstractController
     }
 
     #[Route('/{id}/accepter', name: 'entreprise_accepter', methods: ['GET'])]
-    public function accepter($id, Request $request, Entreprise $entreprise, Mailer $mailer): Response
+    public function accepter($id, Request $request, Entreprise $entreprise): Response
     {
         $entityManager = $this->getDoctrine()->getManager();
         $entreprise = $entityManager->getRepository('App:Entreprise')->find($id);
         $entreprise->setModeration('1');
         $entityManager->persist($entreprise);
         $entityManager->flush();
-
-        $email = $entityManager->getRepository('App:Email')->findOneBy(['code' => 'EMAIL_VALIDATION_ENTREPRISE']);
-
-        $loader = new ArrayLoader([
-            'email' => $email->getContent(),
-        ]);
-
-        $twig = new Environment($loader);
-        $message = $twig->render('email',['user' => $this->getUser(), 'entreprise' => $entreprise ]);
-
-        $this->addFlash('success', 'Ajout réussi');
-
-        $mailer->send([
-            'recipient_email' => 'contact@talents-handicap.com',
-            'subject'         => $email->getSubject(),
-            'html_template'   => 'emails/email_vide.html.twig',
-            'context'         => [
-                'message' => $message
-            ]
-        ]);
 
         $this->addFlash('success', 'Acceptation validée');
 

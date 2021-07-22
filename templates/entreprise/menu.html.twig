@@ -1,8 +1,8 @@
 <div class="col"><div class="p-3 border bg-light "><a href="{{ path('entreprise_show', {slug: entreprise.slug}) }}">Informations générales</a></div></div>
-{% if app.user %}
+{% if is_granted('ROLE_SUPER_RECRUTEUR') %}
 <div class="col"><div class="p-3 border bg-light "><a href="{{ path('entreprise_recruteurs', {id: entreprise.id}) }}">Recruteurs</a></div></div>
 {% endif %}
 <div class="col"><div class="p-3 border bg-light "><a href="{{ path('entreprise_offres_commerciales', {id: entreprise.id}) }}">Offres commerciales</a></div></div>
-{% if app.user %}
+{% if is_granted('ROLE_SUPER_RECRUTEUR') %}
 <div class="col"><div class="p-3 border bg-light "><a href="{{ path('entreprise_factures', {id: entreprise.id}) }}">Factures</a></div></div>
 {% endif %}
