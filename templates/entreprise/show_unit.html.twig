@@ -28,9 +28,13 @@
                     <div class="col-lg-4">
                         <div class="portfolio-info">
                             <h2>Ses offres d'emploi</h2>
+                                {% if entreprise.annoncesEntreprise|length < 1 %}
+                                   <p>(Aucune offre n'est disponible pour le moment)</p>
+                                {% endif %}
+
                             {% for offre in entreprise.annoncesEntreprise %}
                                 {% if "now"|date('Y-m-d') < offre.dateLimiteCandidature|date('Y-m-d') %}
-                                    <a href="{{ path('annonce_show_unit', {id:offre.id, slug:offre.slug}) }}">{{ offre.name }}</a>
+                                    <a href="{{ path('annonce_show_unit', {id:offre.id, slug:offre.slug}) }}">{{ offre.name }}</a><br>
                                 {% endif %}
                             {% endfor %}
                         </div>
@@ -38,9 +42,7 @@
 
                         </div>
                     </div>
-
                 </div>
-
             </div>
         </section><!-- End Portfolio Details Section -->
     </main>

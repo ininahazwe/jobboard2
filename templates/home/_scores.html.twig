@@ -1,0 +1,54 @@
+<!-- ======= Services Section ======= -->
+<section id="services" class="services section-bg">
+    <div class="container" data-aos="fade-up">
+
+        <div class="section-title">
+            <h2>Où et Qui recrute le plus</h2>
+        </div>
+
+        <div class="row gap-2">
+            <div class="col">
+                <p><b>Les entreprises qui recrutent le plus</b></p>
+                {% for entreprise in entreprises %}
+                    <div class="row bg-white mb-1 p-1">
+                        <div class="col">
+                            <h5><a href="{{ path('entreprise_show_unit', {id:entreprise.id, slug:entreprise.slug}) }}">{{ entreprise.name }}</a></h5>
+                        </div>
+                        <div class="col text-end">
+                            {{ entreprise.annoncesEntreprise|length }}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="col">
+                <p><b>Les secteurs qui recrutent le plus</b></p>
+                {% for entreprise in entreprises%}
+                    <div class="row bg-white mb-1 p-1">
+                        <div class="col">
+                           {{ entreprise.secteur }}
+                        </div>
+                        <div class="col text-end">
+                            {{ entreprise.annoncesEntreprise|length }}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="col">
+                <p><b>Les villes proposant le plus d'offres</b></p>
+                {% for entreprise in entreprises %}
+                    <div class="row bg-white mb-1 p-1">
+                        <div class="col">
+                            {{ entreprise.city }}
+                        </div>
+                        <div class="col text-end">
+                            {{ entreprise.annoncesEntreprise|length }}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    </div>
+</section><!-- End Services Section -->

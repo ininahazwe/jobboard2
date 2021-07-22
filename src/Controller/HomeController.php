@@ -13,6 +13,7 @@ use App\Repository\CandaditureRepository;
 use App\Repository\EntrepriseRepository;
 use App\Repository\MenuRepository;
 use App\Repository\ModeleOffreCommercialeRepository;
+use App\Repository\OffreRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
