@@ -6,6 +6,7 @@
 parameters:
     app.sender_email: '%env(MAILER_SENDER_EMAIL)%'
     app.sender_name: '%env(MAILER_SENDER_NAME)%'
+    app.hcaptcha_secret_key: '%env(HCAPTCHA_SECRET_KEY)%'
     #app.path.pages_images: /uploads/images/pages
     files_directory: '%kernel.project_dir%/public/uploads'
 
@@ -46,6 +47,10 @@ services:
     App\Service\FileUploader:
         arguments:
             $targetDirectory: '%logo_directory%'
+
+    App\Service\HCaptcha:
+        arguments:
+            $hCaptchaSecretKey: '%app.hcaptcha_secret_key%'
 
 doctrine:
     orm:

@@ -19,8 +19,10 @@
                 <div class="row gy-4">
 
                     <div class="col-lg-8">
-                        <h2>Description</h2>
-                        {{ entreprise.description }}
+                        <p>{{ entreprise.description }}</p>
+                        {% if entreprise.secteur %}<b>Secteur:</b> {{ entreprise.secteur }}{% endif %}<br>
+                        {% if entreprise.numeroSiren %}<b>Siren:</b> {{ entreprise.numeroSiren }}{% endif %}<br>
+                        {% if entreprise.numeroSiret %}<b>Siret:</b> {{ entreprise.numeroSiret }}{% endif %}<br>
                     </div>
 
                     <div class="col-lg-4">

@@ -76,11 +76,11 @@
                         {% endif %}
                         <a class="btn btn-primary px-4 ms-3 m-3" href="{{ path('pass_modifier', {id: user.id}) }}">Changer le mot de passe</a></>
 
-                        {% if not app.user.isCandidat() %}
+                        {#{% if not app.user.isCandidat() %}
                             <div>
                                 {{ app.user.getOneRecruteurEntreprise()|raw }}
                             </div>
-                        {% endif %}
+                        {% endif %}#}
                     </div>
                 </div>
             </div>

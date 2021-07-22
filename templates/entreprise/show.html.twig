@@ -36,12 +36,16 @@
                         {% endif %}
 
                         {% if entreprise.moderation is same as 0 and entreprise.superRecruteurs is empty %}
-                        Pour que l'entreprise soit prise en compte, demandez la validation
-                        <div>
-                            <button type="button" class="open-modal btn btn-primary" data-open="modal1">
-                                Demander la validation
-                            </button>
-                        </div>
+                            {% if is_granted('ROLE_SUPER_ADMIN_HANDICV') == false %}
+                                Pour que l'entreprise soit prise en compte, demandez la validation
+                                <div>
+                                    <button type="button" class="open-modal btn btn-primary" data-open="modal1">
+                                        Demander la validation
+                                    </button>
+                                </div>
+                                {% else %}
+                                    <span class="bg-warning px-2 rounded text-white mt-1">Identification pas encore faite</span>
+                           {% endif %}
                         {% endif %}
 
                         <h3>Informations générales</h3>
@@ -57,12 +61,12 @@
                         {{ entreprise.city }}<br>
                         {{ entreprise.zipcode }}
                         <br><br>
-                        <b>identification</b>
+                        <b>Identification</b>
                         <i>Siret :</i> {{ entreprise.numeroSiret }}<br>
                         <i>Siren :</i> {{ entreprise.numeroSiren }}<br>
                         <i>Taille :</i> {{ entreprise.taille }} salariés<br>
 
-                        {% if app.user.isSuperAdmin() %}
+                        {% if app.user %}
                             <a href="{{ path('entreprise_edit', {'id': entreprise.id}) }}"><i class="fas fa-edit"></i></a>
                             {% if entreprise.superRecruteurs is not empty and entreprise.moderation is same as 0 %}
                             <a href="{{ path('entreprise_accepter', {'id': entreprise.id}) }}" class="btn-sm btn-success">Accepter</a>

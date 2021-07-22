@@ -15,8 +15,12 @@ class CandidatureType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', TextType::class)
-            ->add('motivation', TextareaType::class)
+            ->add('name', TextType::class, [
+                'required' => false
+            ])
+            ->add('motivation', TextareaType::class, [
+                'required' => false
+            ])
             ->add('Valider', SubmitType::class)
         ;
     }

@@ -1,5 +1,10 @@
 {% extends 'base.html.twig' %}
 
+{% block javascripts %}
+    <script async defer src="https://hcaptcha.com/1/api.js?hl={{ app.request.locale }}"></script>
+    {% include 'partials/hcaptcha_callback_script.html.twig' %}
+{% endblock %}
+
 {% block title %}New Entreprise{% endblock %}
 
 {% block body %}

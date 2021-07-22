@@ -26,7 +26,11 @@
             {% endif %}
         </div>
     </div>
-    <button class="btn btn-primary mt-3">{{ button_label|default('Enregistrer') }}</button>
+    {% if app.user %}
+        <button class="btn btn-primary mt-3">{{ button_label|default('Enregistrer') }}</button>
+    {% else %}
+        {% include 'partials/hcaptcha_submit_button.html.twig' %}
+    {% endif %}
 </div>
 {{ form_end(form) }}
 

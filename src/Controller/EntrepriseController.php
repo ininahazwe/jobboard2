@@ -13,6 +13,7 @@ use App\Repository\EntrepriseRepository;
 use App\Repository\FactureRepository;
 use App\Repository\ModeleOffreCommercialeRepository;
 use App\Repository\UserRepository;
+use App\Service\HCaptcha;
 use App\Service\Mailer;
 use Exception;
 use Knp\Component\Pager\PaginatorInterface;
@@ -57,10 +58,18 @@ class EntrepriseController extends AbstractController
     }
 
     /**
-     * @throws Exception
+     * @param Request $request
+     * @param ModeleOffreCommercialeRepository $modeleOffreCommercialeRepository
+     * @param EntrepriseRepository $entrepriseRepository
+     * @param Mailer $mailer
+     * @return Response
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws TransportExceptionInterface
      */
     #[Route('/new', name: 'entreprise_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, ModeleOffreCommercialeRepository $modeleOffreCommercialeRepository, EntrepriseRepository $entrepriseRepository): Response
+    public function new(Request $request, ModeleOffreCommercialeRepository $modeleOffreCommercialeRepository, EntrepriseRepository $entrepriseRepository, Mailer $mailer): Response
     {
         $user = $this->getUser();
 
@@ -79,12 +88,34 @@ class EntrepriseController extends AbstractController
                 $entreprise->setModeration(1);
             }
             $entreprise->setRefClient($ref);
+
             $entityManager = $this->getDoctrine()->getManager();
+
             $entityManager->persist($entreprise);
             $entityManager->flush();
 
             $modele = $modeleOffreCommercialeRepository->findOneBy(['prix' => '0']);
             $this->saveOffreModele($entreprise->getId(), $modele->getId());
+
+            $email = $entityManager->getRepository('App:Email')->findOneBy(['code' => 'EMAIL_ENREGISTREMENT_ENTREPRISE']);
+
+            $loader = new ArrayLoader([
+                'email' => $email->getContent(),
+            ]);
+
+            $twig = new Environment($loader);
+            $message = $twig->render('email',['user' => $this->getUser(), 'entreprise' => $entreprise ]);
+
+            $this->addFlash('success', 'Ajout réussi');
+
+            $mailer->send([
+                'recipient_email' => 'contact@talents-handicap.com',
+                'subject'         => $email->getSubject(),
+                'html_template'   => 'emails/email_vide.html.twig',
+                'context'         => [
+                    'message' => $message
+                ]
+            ]);
 
             $this->addFlash('success', 'Ajout réussi');
 
@@ -508,13 +539,33 @@ class EntrepriseController extends AbstractController
     }
 
     #[Route('/{id}/accepter', name: 'entreprise_accepter', methods: ['GET'])]
-    public function accepter($id, Request $request, Entreprise $entreprise): Response
+    public function accepter($id, Request $request, Entreprise $entreprise, Mailer $mailer): Response
     {
         $entityManager = $this->getDoctrine()->getManager();
         $entreprise = $entityManager->getRepository('App:Entreprise')->find($id);
         $entreprise->setModeration('1');
         $entityManager->persist($entreprise);
         $entityManager->flush();
+
+        $email = $entityManager->getRepository('App:Email')->findOneBy(['code' => 'EMAIL_VALIDATION_ENTREPRISE']);
+
+        $loader = new ArrayLoader([
+            'email' => $email->getContent(),
+        ]);
+
+        $twig = new Environment($loader);
+        $message = $twig->render('email',['user' => $this->getUser(), 'entreprise' => $entreprise ]);
+
+        $this->addFlash('success', 'Ajout réussi');
+
+        $mailer->send([
+            'recipient_email' => 'contact@talents-handicap.com',
+            'subject'         => $email->getSubject(),
+            'html_template'   => 'emails/email_vide.html.twig',
+            'context'         => [
+                'message' => $message
+            ]
+        ]);
 
         $this->addFlash('success', 'Acceptation validée');
 
