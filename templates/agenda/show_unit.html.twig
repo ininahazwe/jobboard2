@@ -9,6 +9,7 @@
             <div class="container">
                 <ol>
                     <li><a href="{{ path('app_home') }}">Home</a></li>
+                    <li><a href="{{ path('agenda_show_all') }}">Tous les événements</a></li>
                 </ol>
                 <h1>{{ agenda.title }}</h1>
             </div>
@@ -33,7 +34,7 @@
                         </div>
                         <div class="col-8 section-bg p-4">
                             <h5><a href="{{ path('agenda_show_unit', {id:agenda.id, slug:agenda.slug}) }}">{{ agenda.title }}</a></h5>
-                            {{ agenda.description }}
+                            {{ agenda.description|raw }}
                         </div>
                     </div>
                 </div>

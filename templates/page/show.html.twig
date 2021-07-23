@@ -31,11 +31,11 @@
                     {{ page.content|raw }}
                 </div>
                 <div class="col-lg-4">
-                    <div class="portfolio-info">
-                        {% if page.files|length %}
+                    {% if page.files|length %}
+                        <div class="portfolio-info">
                             <img class="card-img-top mx-auto" src="{{ asset(page.getUrlLastFile()) }}" alt="{{ page.getNameLastFile() }}">
-                        {% endif %}
-                    </div>
+                        </div>
+                    {% endif %}
                     <div class="portfolio-description">
 
                     </div>
