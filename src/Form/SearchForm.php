@@ -15,13 +15,17 @@ class SearchForm extends AbstractType
         $builder
             ->add('mots', SearchType::class,[
                 'label' => false,
-                'required' => false,
                 'attr' => [
                     'class' => 'form-control',
-                    'placeholder' => 'Rechercher'
+                    'placeholder' => 'Entrez un ou plusieurs mots-clés'
+                ],
+                'required' => false
+            ])
+            ->add('Rechercher', SubmitType::class, [
+                'attr' => [
+                    'class' => 'btn-sm btn-primary',
                 ]
             ])
-            ->add('Rechercher', SubmitType::class)
        ;
     }
 

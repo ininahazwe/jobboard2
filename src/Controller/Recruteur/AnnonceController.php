@@ -6,6 +6,7 @@ use App\Entity\Annonce;
 use App\Entity\Entreprise;
 use App\Entity\Offre;
 use App\Form\AnnonceType;
+use App\Form\SearchForm;
 use App\Repository\AnnonceRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,9 +17,10 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/cms/annonce')]
 class AnnonceController extends AbstractController
 {
-    #[Route('/index', name: 'annonce_index', methods: ['GET'])]
+    #[Route('/index', name: 'annonce_index')]
     public function index(Request $request, AnnonceRepository $annonceRepository, PaginatorInterface $paginator): Response
     {
+        // Pagination
         $data = $annonceRepository->findAllActiveQuery($this->getUser());
 
         $annonces = $paginator->paginate(
@@ -27,8 +29,20 @@ class AnnonceController extends AbstractController
             10
         );
 
+        //Formulaire de recherche
+        $form = $this->createForm(SearchForm::class);
+        $search = $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()){
+            $annonces = $annonceRepository->search(
+                $search->get('mots')->getData()
+            );
+        }
+
+
         return $this->render('annonce/index.html.twig', [
             'annonces' => $annonces,
+            'form' => $form->createView()
             //'entreprises' => $this->getUser()->getEntrepriseAll(),
         ]);
     }
@@ -49,6 +63,7 @@ class AnnonceController extends AbstractController
             $entreprise = $entityManager->getRepository(Entreprise::class)->find($form->get('entreprise')->getData());
 
             if ($entreprise->canCreateAnnonce()){
+
                 $entityManager->persist($annonce);
                 $entityManager->flush();
 

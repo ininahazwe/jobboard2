@@ -7,10 +7,10 @@
             {{ form_row(form.name) }}
             {{ form_row(form.description) }}
             {{ form_row(form.reference) }}
+            <i class="fas fa-info"></i><b> Si candidature externe</b>
             {{ form_row(form.lien) }}
             {{ form_row(form.dateLimiteCandidature) }}
             {{ form_row(form.location) }}
-            {{ form_row(form.isActive) }}
         </div>
         <div class="col-md-6">
             <b>Profil du candidat</b>
@@ -20,10 +20,12 @@
             <br>
             <b>Recruteur</b>
             {{ form_row(form.auteur) }}
+            <i class="fas fa-info"></i><b> Si candidature par mail</b>
             {{ form_row(form.adresse_email) }}
             <br>
             <b>Entreprise</b>
             {{ form_row(form.entreprise) }}
+            {{ form_row(form.isActive) }}
         </div>
     </div>
     <button class="btn btn-primary mt-3">{{ button_label|default('Enregistrer') }}</button>

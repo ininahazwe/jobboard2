@@ -67,7 +67,7 @@
                         </div>
 
                         <b class="p-1">{{ app.user.getFullname()|upper }}</b>
-                        <a href="{{ path('app_profile', {id: user.id}) }}" class="btn btn-primary px-4 ms-3 m-3">Voir mon profile complet</a>
+                        <a href="{{ path('user_data', {id: user.id}) }}" class="btn btn-primary px-4 ms-3 m-3">Voir mon profile complet</a>
                         <a href="{{ path('app_profile_edit') }}" class="btn btn-primary px-4 ms-3 m-3">Mettre à jour mes infos de connexion</a>
                         {% if app.user.profile is empty %}
                             <a href="{{ path('profile_new', {id: user.id}) }}" class="btn btn-primary px-4 ms-3 m-3">Compléter mon profile</a>

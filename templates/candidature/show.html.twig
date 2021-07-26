@@ -12,7 +12,7 @@
                 <li><a href="{{ path('app_profile') }}">Dashboard</a></li>
                 <li>Lecture</li>
             </ol>
-            <h2>Fiche de candidature</h2>
+            <h2>Résumé de la candidature</h2>
         </div>
     </section><!-- End Breadcrumbs -->
     <section class="inner-page">
@@ -21,16 +21,29 @@
                 <table class="table">
                     <tbody>
                         <tr>
-                            <th>Name</th>
-                            <td>{{ candidature.name }}</td>
+                            <th>L'offre</th>
+                            <td>
+                            {% for annonce in candidature.annonces %}
+                                <a href="{{ path('annonce_show_unit', {id: annonce.id, slug: annonce.slug})}}">{{ annonce.name }}</a>
+                            {% endfor %}
+                            </td>
                         </tr>
                         <tr>
-                            <th>Motivation</th>
+                            <th>Nom de l'entreprise</th>
+                            <td><a href="{{ path('entreprise_show_unit', {id: candidature.entreprise.id, slug: candidature.entreprise.slug})}}">{{ candidature.entreprise }}</a></td>
+                        </tr>
+                        <tr>
+                            <th>Lettre de motivation</th>
                             <td>{{ candidature.motivation }}</td>
                         </tr>
                         <tr>
                             <th>Envoyé le</th>
-                            <td>{{ candidature.createdAt ? candidature.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                            <td>{{ candidature.createdAt ? candidature.createdAt|date('d-m-Y') : '' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Statut</th>
+                            <td>En cours de traitement...
+                            </td>
                         </tr>
                     </tbody>
                 </table>

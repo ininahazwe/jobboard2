@@ -79,6 +79,34 @@ class AnnonceRepository extends ServiceEntityRepository
     public function findActiveQuery(): QueryBuilder
     {
         return $this->createQueryBuilder('a')
-            ->where('a.isActive = true');
+            ->where('a.isActive = 1');
+    }
+
+    /**
+     * @param null $mots
+     * @return mixed
+     */
+    public function search($mots = null): mixed
+    {
+        $query = $this->createQueryBuilder('a');
+        $query->where('a.isActive = 1');
+        if($mots != null){
+            $query->andWhere('MATCH_AGAINST(a.name, a.description) AGAINST (:mots boolean)>0')
+                ->setParameter('mots', $mots);
+        }
+        return $query->getQuery()->getResult();
+    }
+
+    public function searchAnnoncesAdvanced(mixed $criteria)
+    {
+        return $this->createQueryBuilder('c')
+            ->leftJoin('c.entreprise', 'entreprise')
+            ->where('entreprise.name = :entreprise')
+            ->setParameter("entreprise", $criteria['entreprise']->getName())
+            /*->andWhere('c.type_contrat = :type_contrat')
+            ->setParameter('type_contrat', $criteria['type_contrat'])
+            ->andWhere('c.diplome = :diplome')
+            ->setParameter('diplome', $criteria['diplome'])*/
+            ->getQuery()->getResult();
     }
 }

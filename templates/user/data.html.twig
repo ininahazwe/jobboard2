@@ -3,30 +3,43 @@
 {% block title %}Données personnelles de {{ app.user.firstname }} {{ app.user.lastname }}{% endblock %}
 
 {% block body %}
-    <div class="container">
-        {% for message in app.flashes('message') %}
-            <div class="col-xs4">
-                <div class="p-3 my-2 rounded-2 success">{{message}}</div>
+    <main id="main">
+        <!-- ======= Breadcrumbs ======= -->
+        <section id="breadcrumbs" class="breadcrumbs">
+            <div class="container">
+                <ol>
+                    <li><a href="{{ path('app_home') }}">Home</a></li>
+                    <li>Dashboard</li>
+                </ol>
+                <h1>Données personnelles de {{ app.user.firstname }} {{ app.user.lastname }}</h1>
             </div>
-        {% endfor %}
-        <h1>Données personnelles de {{ app.user.firstname }} {{ app.user.lastname }}</h1>
-        <h2>Identité</h2>
-            Nom: {{ app.user.lastname }}<br>
-            Prénom: {{ app.user.firstname }}<br>
-            Email: {{ app.user.email }}<br>
-        {% if app.user.profile is not empty %}
-        <h3>Détails</h3>
-            Description: {{ app.user.profile.description }}<br>
-            Date de naissance: {{ app.user.profile.description }}<br>
-            Ville: {{ app.user.profile.city }}<br>
-            Code postal: {{ app.user.profile.zipcode }}<br>
-            Diplôme: {{ app.user.profile.diplome }}<br>
-            Expériences: {{ app.user.profile.experiences }}<br>
-            Métiers: {{ app.user.profile.metiers }}<br>
-        {% endif %}
+        </section><!-- End Breadcrumbs -->
+        <section class="inner-page">
+            <div class="container">
+                {% for message in app.flashes('message') %}
+                    <div class="col-xs4">
+                        <div class="p-3 my-2 rounded-2 success">{{ message }}</div>
+                    </div>
+                {% endfor %}
+                <h2>Identité</h2>
+                Nom: {{ app.user.lastname }}<br>
+                Prénom: {{ app.user.firstname }}<br>
+                Email: {{ app.user.email }}<br>
+                {% if app.user.profile is not empty %}
+                    <h3>Détails</h3>
+                    Description: {{ app.user.profile.description }}<br>
+                    Date de naissance: {{ app.user.profile.description }}<br>
+                    Ville: {{ app.user.profile.city }}<br>
+                    Code postal: {{ app.user.profile.zipcode }}<br>
+                    Diplôme: {{ app.user.profile.diplome }}<br>
+                    Expériences: {{ app.user.profile.experiences }}<br>
+                    Métiers: {{ app.user.profile.metiers }}<br>
+                {% endif %}
 
-        <div class="col-md-4">
-            <a href="{{ path('data_download') }}" class="btn btn-primary">Télécharger les données</a>
-        </div>
-    </div>
+                <div class="col-md-4">
+                    <a href="{{ path('data_download') }}" class="btn btn-primary">Télécharger les données</a>
+                </div>
+            </div>
+        </section>
+    </main>
 {% endblock %}

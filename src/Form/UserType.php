@@ -19,7 +19,9 @@ class UserType extends AbstractType
             ->add('email', EmailType::class)
             ->add('firstname', TextType::class)
             ->add('lastname', TextType::class)
-            ->add('telephone', NumberType::class)
+            ->add('telephone', NumberType::class, [
+                'required' => false,
+            ])
             ->add('files', FileType::class, [
                 'attr' => [
                     'placeholder' => 'Choisir une image'

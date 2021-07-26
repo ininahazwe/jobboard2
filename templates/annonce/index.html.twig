@@ -45,6 +45,7 @@
                     <br>
                 </div>
                 <div class="col-md-9">
+                    {#{{ form(form) }}#}
                     <table class="table">
                         <thead>
                         <tr>
@@ -61,7 +62,7 @@
                         {% for annonce in annonces %}
                             <tr>
                                 <td><a href="{{ path('annonce_show_unit', {id: annonce.id, slug: annonce.slug})}}">{{ annonce.name }}</a></td>
-                                <td>{{ annonce.description|slice(0, 250) }}...</td>
+                                <td>{{ annonce.description|raw|slice(0, 250) }}...</td>
                                 <td>{{ annonce.entreprise }}</td>
                                 <td>{{ annonce.createdAt|date('d/m/Y') }}</td>
                                 <td>

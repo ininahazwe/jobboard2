@@ -54,7 +54,7 @@ class MatchAgainst extends FunctionNode
         $parser->match(Lexer::T_CLOSE_PARENTHESIS);
     }
 
-    public function getSql(SqlWalker $walker): string
+    public function getSql(SqlWalker $walker)
     {
         $fields = [];
         foreach ($this->pathExp as $pathExp) {

@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+{% block title %}Offres d'emploi | Recherche avancée{% endblock %}
+
+{% block body %}
+<main id="main">
+    <!-- ======= Breadcrumbs ======= -->
+    <section id="breadcrumbs" class="breadcrumbs">
+        <div class="container">
+            <ol>
+                <li><a href="{{ path('app_home') }}">Home</a></li>
+                <li>Offres d'emploi</li>
+            </ol>
+            <h1>Recherche avancée</h1>
+        </div>
+    </section><!-- End Breadcrumbs -->
+
+    <section class="inner-page">
+        <div class="container">
+            {{ form(search_form) }}
+            {% if app.request.method == 'POST'%}
+                {% if annonces|length == 0 %}
+                Aucun résultat disponible
+                {% else %}
+                    {% for annonce in annonces %}
+                        <div class="row section-bg mb-1 p-3">
+                            <div class="col-6">
+                                <h5><a href="{{ path('annonce_show_unit', {id:annonce.id, slug:annonce.slug}) }}">{{ annonce.name }}</a></h5>
+                                {% if annonce.experience %}
+                                    <span class="btn-secondary btn-sm">{{ annonce.experience }}</span>
+                                {% endif %}
+                            </div>
+                            <div class="col-2">
+                                Date limite de candidature <br>
+                                <b>{{ annonce.dateLimiteCandidature|date('d-m-Y') }}</b>
+                            </div>
+                            <div class="col-4">
+                                <a href="{{ path('entreprise_show_unit', {id:annonce.entreprise.id, slug:annonce.entreprise.slug}) }}">{{ annonce.entreprise.name }}</a><br>
+                                <span>{{ annonce.entreprise.city }}</span><br>
+                                {% for typ in annonce.typeContrat %}
+                                    <span class="btn-secondary btn-sm">{{ typ.value }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endif %}
+        </div>
+    </section>
+</main>
+{% endblock %}

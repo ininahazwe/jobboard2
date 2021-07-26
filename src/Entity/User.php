@@ -431,72 +431,6 @@ class User implements UserInterface
     }
 
     /**
-     * @return string
-     */
-    public function getFullname(): string
-    {
-        return $this->getFirstName().' '.$this->getLastName();
-    }
-
-    public function isCandidat(): bool
-    {
-        $role = "ROLE_CANDIDAT";
-        return $this->checkRoles($role);
-    }
-
-    public function isRecruteur(): bool
-    {
-        $role = "ROLE_RECRUTEUR";
-        return $this->checkRoles($role);
-    }
-
-    public function isSuperRecruteur(): bool
-    {
-        $role = "ROLE_SUPER_RECRUTEUR";
-        return $this->checkRoles($role);
-    }
-
-    public function isCommunicant(): bool
-    {
-        $role = "ROLE_COMMUNICANT";
-        return $this->checkRoles($role);
-    }
-
-    public function isSuperAdmin(): bool
-    {
-        $role = "ROLE_SUPER_ADMIN_HANDICV";
-        return $this->checkRoles($role);
-    }
-
-    public function getRoleName():string
-    {
-        if ($this->isSuperAdmin()){
-            return 'Super Administrateur';
-        }else if($this->isSuperRecruteur()){
-            return 'Super Recruteur';
-        }else if($this->isRecruteur()){
-            return 'Recruteur';
-        }else if($this->isCandidat()){
-            return 'Candidat';
-        }else if($this->isCommunicant()){
-            return 'Communicant';
-        }else{
-            return 'Non renseigné';
-        }
-    }
-    public function checkRoles($role): bool
-    {
-        foreach($this->roles as $item)
-        {
-            if($item == $role)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
      * @return Collection
      */
     public function getCandidatures(): Collection
@@ -913,5 +847,74 @@ class User implements UserInterface
         }
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+
+
+    public function getRoleName():string
+    {
+        if ($this->isSuperAdmin()){
+            return 'Super Administrateur';
+        }else if($this->isSuperRecruteur()){
+            return 'Super Recruteur';
+        }else if($this->isRecruteur()){
+            return 'Recruteur';
+        }else if($this->isCandidat()){
+            return 'Candidat';
+        }else if($this->isCommunicant()){
+            return 'Communicant';
+        }else{
+            return 'Non renseigné';
+        }
+    }
+
+    public function checkRoles($role): bool
+    {
+        foreach($this->roles as $item)
+        {
+            if($item == $role)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function getFullname(): string
+    {
+        return $this->getFirstName().' '.$this->getLastName();
+    }
+
+    public function isCandidat(): bool
+    {
+        $role = "ROLE_CANDIDAT";
+        return $this->checkRoles($role);
+    }
+
+    public function isRecruteur(): bool
+    {
+        $role = "ROLE_RECRUTEUR";
+        return $this->checkRoles($role);
+    }
+
+    public function isSuperRecruteur(): bool
+    {
+        $role = "ROLE_SUPER_RECRUTEUR";
+        return $this->checkRoles($role);
+    }
+
+    public function isCommunicant(): bool
+    {
+        $role = "ROLE_COMMUNICANT";
+        return $this->checkRoles($role);
+    }
+
+    public function isSuperAdmin(): bool
+    {
+        $role = "ROLE_SUPER_ADMIN_HANDICV";
+        return $this->checkRoles($role);
     }
 }

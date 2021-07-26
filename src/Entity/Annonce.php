@@ -10,6 +10,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity(repositoryClass=AnnonceRepository::class)
+ * @ORM\Table(name="annonce", indexes={@ORM\Index(columns={"name", "description"}, flags={"fulltext"})})
  * @ORM\HasLifecycleCallbacks
  */
 class Annonce
