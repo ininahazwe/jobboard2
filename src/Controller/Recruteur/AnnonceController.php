@@ -26,7 +26,7 @@ class AnnonceController extends AbstractController
         $annonces = $paginator->paginate(
             $data,
             $request->query->getInt('page', 1),
-            10
+            8
         );
 
         //Formulaire de recherche

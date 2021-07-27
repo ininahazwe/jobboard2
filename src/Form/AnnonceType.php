@@ -113,7 +113,9 @@ class AnnonceType extends AbstractType
             ->add('adresse_email', EmailType::class, [
                 'required' => false,
             ])
-            ->add('lien', UrlType::class)
+            ->add('lien', UrlType::class, [
+                'required' => false
+            ])
             ;
     }
 

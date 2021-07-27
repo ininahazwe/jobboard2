@@ -5,10 +5,10 @@ namespace App\Repository;
 use App\Data\SearchData;
 use App\Entity\Entreprise;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Knp\Component\Pager\PaginatorInterface;
-use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * @method Entreprise|null find($id, $lockMode = null, $lockVersion = null)
@@ -237,7 +237,10 @@ class EntrepriseRepository extends ServiceEntityRepository
         return $query->getQuery()->getResult();
     }
 
-    public function getEntreprisesEnAttente()
+    /**
+     * @return mixed
+     */
+    public function getEntreprisesEnAttente(): mixed
     {
         $query = $this->createQueryBuilder('e')
             ->andWhere('e.moderation = 0')
@@ -245,7 +248,10 @@ class EntrepriseRepository extends ServiceEntityRepository
         return $query->getQuery()->getResult();
     }
 
-    public function getEntreprisesAcceptees()
+    /**
+     * @return mixed
+     */
+    public function getEntreprisesAcceptees(): mixed
     {
         $query = $this->createQueryBuilder('e')
             ->andWhere('e.moderation = 1')
@@ -253,11 +259,29 @@ class EntrepriseRepository extends ServiceEntityRepository
         return $query->getQuery()->getResult();
     }
 
-    public function getEntreprisesRefusees()
+    /**
+     * @return mixed
+     */
+    public function getEntreprisesRefusees(): mixed
     {
         $query = $this->createQueryBuilder('e')
             ->andWhere('e.moderation = 2')
         ;
+        return $query->getQuery()->getResult();
+    }
+
+    /**
+     * @param null $mots
+     * @return mixed
+     */
+    public function search($mots = null): mixed
+    {
+        $query = $this->createQueryBuilder('e');
+
+        if($mots != null){
+            $query->andWhere('MATCH_AGAINST(e.name, e.description) AGAINST (:mots boolean)>0')
+                ->setParameter('mots', $mots);
+        }
         return $query->getQuery()->getResult();
     }
 }

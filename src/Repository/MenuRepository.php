@@ -20,6 +20,7 @@ class MenuRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param null $type
      * @return array
      */
     public function getAllMenus($type = null):array

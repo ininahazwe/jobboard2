@@ -24,7 +24,7 @@ class AnnonceRepository extends ServiceEntityRepository
         parent::__construct($registry, Annonce::class);
     }
 
-    public function findAllActiveQuery($user)
+    public function findAllActiveQuery($user): QueryBuilder
     {
         $query = $this->createQueryBuilder('a');
         if ($user->isSuperAdmin()) {

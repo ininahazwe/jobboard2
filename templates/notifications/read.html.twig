@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Messagerie{% endblock %}
+
+{% block body %}
+    <main id="main">
+        <!-- ======= Breadcrumbs ======= -->
+        <section id="breadcrumbs" class="breadcrumbs">
+            <div class="container">
+                <ol>
+                    <li><a href="{{ path('app_home') }}">Home</a></li>
+                    <li><a href="{{ path('app_profile') }}">Dashboard</a></li>
+                    <li><a href="{{ path('notifications_index') }}">Notifications</a></li>
+                    <li>Lecture</li>
+                </ol>
+                <h1>Notification</h1>
+            </div>
+        </section><!-- End Breadcrumbs -->
+        <section class="inner-page">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-2">
+                        {{ include('notifications/menu.html.twig')}}
+                    </div>
+                    <div class="col-md-10">
+                        <h2>{{ message.titre }}</h2>
+                        <div>{{ message.message }}</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+
+{% endblock %}

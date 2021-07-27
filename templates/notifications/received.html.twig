@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Messagerie{% endblock %}
+
+{% block body %}
+<main id="main">
+    <!-- ======= Breadcrumbs ======= -->
+    <section id="breadcrumbs" class="breadcrumbs">
+        <div class="container">
+            <ol>
+                <li><a href="{{ path('app_home') }}">Home</a></li>
+                <li><a href="{{ path('app_profile') }}">Dashboard</a></li>
+                <li><a href="{{ path('notifications_index') }}">Notifications</a></li>
+                <li>Lecture</li>
+            </ol>
+            <h1>Notification</h1>
+        </div>
+    </section><!-- End Breadcrumbs -->
+    <section class="inner-page">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="d-flex flex-column">
+                        {{ include('notifications/menu.html.twig') }}
+                    </div>
+                </div>
+                <div class="col-md-10">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>De</th>
+                            <th>Sujet</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        {% for message in app.user.received %}
+                            {% set bold = "" %}
+                            {% if message.isRead == 0 %}
+                                {% set bold = "fw-bold" %}
+                            {% endif %}
+                            <tr>
+                                <td {{ bold }} >
+                                    {% if message.sender %}
+                                        {{ message.sender.fullname }}
+                                    {% endif %}
+                                </td>
+                                <td {{ bold }} ><a
+                                            href="{{ path("notifications_read", {id: message.id}) }}">{{ message.titre }}
+                                </td>
+                                <td {{ bold }} >{{ message.createdAt|date }}</td>
+                                <td>
+                                    <a href="{{ path("notifications_delete", {id: message.id}) }}"><i
+                                                class="fas fa-trash"></i></a>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="12">no records found</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+
+{% endblock %}

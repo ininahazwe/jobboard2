@@ -8,12 +8,12 @@ use App\Entity\Offre;
 use App\Entity\User;
 use App\Form\EntrepriseType;
 use App\Form\OffreType;
+use App\Form\SearchForm;
 use App\Form\UserType;
 use App\Repository\EntrepriseRepository;
 use App\Repository\FactureRepository;
 use App\Repository\ModeleOffreCommercialeRepository;
 use App\Repository\UserRepository;
-use App\Service\HCaptcha;
 use App\Service\Mailer;
 use Exception;
 use Knp\Component\Pager\PaginatorInterface;
@@ -34,7 +34,7 @@ use Twig\Loader\ArrayLoader;
 #[Route('/cms/entreprise')]
 class EntrepriseController extends AbstractController
 {
-    #[Route('/', name: 'entreprise_index', methods: ['GET'])]
+    #[Route('/', name: 'entreprise_index')]
     public function index(Request $request, EntrepriseRepository $entrepriseRepository, PaginatorInterface $paginator): Response
     {
         $data = $entrepriseRepository->findAllEntreprise($this->getUser());
@@ -45,6 +45,17 @@ class EntrepriseController extends AbstractController
             10
         );
 
+        //Formulaire de recherche
+        $form = $this->createForm(SearchForm::class);
+        $search = $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()){
+            $entreprises = $entrepriseRepository->search(
+                $search->get('mots')->getData()
+            );
+        }
+
+
         if($this->getUser()->isSuperRecruteur()){
             if(count($entreprises) == 1 ){
                 $entreprise = $entreprises[0];
@@ -54,6 +65,7 @@ class EntrepriseController extends AbstractController
 
         return $this->render('entreprise/index.html.twig', [
             'entreprises' => $entreprises,
+            'form' => $form->createView()
         ]);
     }
 
@@ -506,8 +518,8 @@ class EntrepriseController extends AbstractController
      * @param EntrepriseRepository $entrepriseRepository
      * @return Response
      */
-    #[Route('/enattente', name: 'entreprise_en_attente', methods: ['GET'])]
-    public function attente(EntrepriseRepository $entrepriseRepository): Response
+    #[Route('/enattente', name: 'attente', methods: ['GET'])]
+    public function entreprisesEnattente(EntrepriseRepository $entrepriseRepository): Response
     {
         return $this->render('entreprise/attente.html.twig', [
             'entreprises' => $entrepriseRepository->getEntreprisesEnAttente(),
@@ -518,8 +530,8 @@ class EntrepriseController extends AbstractController
      * @param EntrepriseRepository $entrepriseRepository
      * @return Response
      */
-    #[Route('/acceptees', name: 'entreprise_acceptees', methods: ['GET'])]
-    public function acceptees(EntrepriseRepository $entrepriseRepository): Response
+    #[Route('/acceptees', name: 'acceptees', methods: ['GET'])]
+    public function entreprisesAcceptees(EntrepriseRepository $entrepriseRepository): Response
     {
         return $this->render('entreprise/acceptees.html.twig', [
             'entreprises' => $entrepriseRepository->getEntreprisesAcceptees(),
@@ -530,8 +542,8 @@ class EntrepriseController extends AbstractController
      * @param EntrepriseRepository $entrepriseRepository
      * @return Response
      */
-    #[Route('/refusees', name: 'entreprise_refusees', methods: ['GET'])]
-    public function refusees(EntrepriseRepository $entrepriseRepository): Response
+    #[Route('/refusees', name: 'refusees', methods: ['GET'])]
+    public function entreprisesRefusees(EntrepriseRepository $entrepriseRepository): Response
     {
         return $this->render('entreprise/refusees.html.twig', [
             'entreprises' => $entrepriseRepository->getEntreprisesRefusees(),

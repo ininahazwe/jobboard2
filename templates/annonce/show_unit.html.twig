@@ -23,7 +23,7 @@
                             {% if app.user and hasCandidature %}
                                 <div class="alert-info mt-2 p-3">Vous avez déjà postulé à cette offre! </div>
                             {% else %}
-                                <div><a href="{{ path('candidature_postuler-externe', {id : annonce.id, type : 1}) }}" class="btn btn-primary btn-small mt-2" target="_blank">Postuler (ext)</a></div>
+                                <div><a href="{{ annonce.lien }}" class="btn btn-primary btn-small mt-2" target="_blank">Postuler (ext)</a></div>
                             {% endif %}
                         {% elseif annonce.adresseEmail() %}
                             {% if app.user and hasCandidature %}

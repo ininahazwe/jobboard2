@@ -29,7 +29,7 @@ class CandidatureController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'candidature_new', methods: ['GET', 'POST'])]
+    /*#[Route('/new', name: 'candidature_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
         $candidature = new Candidature();
@@ -48,7 +48,7 @@ class CandidatureController extends AbstractController
             'candidature' => $candidature,
             'form' => $form->createView(),
         ]);
-    }
+    }*/
 
     #[Route('/{id}', name: 'candidature_show', methods: ['GET'])]
     public function show(Candidature $candidature): Response
@@ -58,7 +58,7 @@ class CandidatureController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'candidature_edit', methods: ['GET', 'POST'])]
+    /*#[Route('/{id}/edit', name: 'candidature_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Candidature $candidature): Response
     {
         $form = $this->createForm(CandidatureType::class, $candidature);
@@ -74,7 +74,7 @@ class CandidatureController extends AbstractController
             'candidature' => $candidature,
             'form' => $form->createView(),
         ]);
-    }
+    }*/
 
     #[Route('/{id}', name: 'candidature_delete', methods: ['POST'])]
     public function delete(Request $request, Candidature $candidature): Response
@@ -93,11 +93,8 @@ class CandidatureController extends AbstractController
     {
         $candidature = new Candidature();
 
-        if ($type == Candidature::TYPE_EXTERNE){
-            return $this->redirectToRoute('candidature_postuler_email', ['id'=> $annonce->getId()]);
-        }
-
         $hasCandidature = $candaditureRepository->hasCandidature($this->getUser(), $annonce);
+
         if (!$hasCandidature){
 
             if ($this->getUser()){
@@ -105,6 +102,7 @@ class CandidatureController extends AbstractController
             }
 
             $candidature->addAnnonce($annonce);
+            $candidature->setName($annonce->getName());
             $candidature->setEntreprise($annonce->getEntreprise());
             $candidature->setType($type);
 
@@ -124,9 +122,9 @@ class CandidatureController extends AbstractController
             ]);
         }
 
-        /*if ($type == Candidature::TYPE_EXTERNE){
+        if ($type == Candidature::TYPE_EXTERNE){
              return $this->redirect($annonce->getLien());
-        }*/
+        }
         return $this->redirectToRoute('annonce_show_unit', ['id'=> $annonce->getId(), 'slug'=> $annonce->getSlug()]);
     }
 
@@ -177,8 +175,8 @@ class CandidatureController extends AbstractController
             $this->addFlash('success', 'Candidature réussie');
 
             $mailer->send([
-                'recipient_email' => 'candidatures@talents-handicap.com',
-                'subject'         => 'Candidature sur l\'offre' . '' . $annonce->getName(),
+                'recipient_email' => $annonce->getAdresseEmail(),
+                'subject'         => 'Nouvelle candidature à l\'offre' . '' . $annonce->getName(),
                 'html_template'   => 'emails/nouvelle_candidature.html.twig',
                 'context'         => [
                     'candidature' => $candidature

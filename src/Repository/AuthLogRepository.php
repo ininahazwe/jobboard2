@@ -4,6 +4,10 @@ namespace App\Repository;
 
 use App\Entity\AuthLog;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -29,8 +33,8 @@ class AuthLogRepository extends ServiceEntityRepository
      * @param string $emailEntered
      * @param string|null $userIP
      * @param bool $isBlackListed Set to true if the email/userIP pair must ne blacklisted.
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws ORMException
+     * @throws OptimisticLockException
      */
     public function addFailedAuthAttempt(
         string $emailEntered,
@@ -56,8 +60,8 @@ class AuthLogRepository extends ServiceEntityRepository
      * @param string $emailEntered
      * @param string|null $userIP
      * @param bool $isRememberMeAuth Set to true if the user is authenticated by remember cookie
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws ORMException
+     * @throws OptimisticLockException
      */
     public function addSuccessfulAuthAttempt(
         string $emailEntered,
@@ -82,8 +86,8 @@ class AuthLogRepository extends ServiceEntityRepository
      * @param string $emailEntered
      * @param string|null $userIP
      * @return int
-     * @throws \Doctrine\ORM\NoResultException
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NoResultException
+     * @throws NonUniqueResultException
      */
     public function getRecentAuthAttemptFailure(
         string $emailEntered,
@@ -110,8 +114,8 @@ class AuthLogRepository extends ServiceEntityRepository
      * @param string $emailEntered
      * @param string|null $userIP
      * @return bool
-     * @throws \Doctrine\ORM\NoResultException
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NoResultException
+     * @throws NonUniqueResultException
      */
     public function isBlackListedWithThisAttemptFailure(
         string $emailEntered,
@@ -127,7 +131,7 @@ class AuthLogRepository extends ServiceEntityRepository
      * @param string $emailEntered
      * @param string|null $userIP
      * @return AuthLog|null
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NonUniqueResultException
      */
     public function getEmailAndUserIpPairBlackListedIfExists(
         string $emailEntered,
@@ -157,7 +161,7 @@ class AuthLogRepository extends ServiceEntityRepository
      * @param string $emailEntered
      * @param string|null $userIP
      * @return string|null
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NonUniqueResultException
      */
     public function getEndOfBlackListing(
         string $emailEntered,

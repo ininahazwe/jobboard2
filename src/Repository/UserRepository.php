@@ -6,6 +6,7 @@ use App\Entity\Entreprise;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\ORMException;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
@@ -106,7 +107,11 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         return $mdp;
     }
 
-    public function getEntreprisesRecruteur($user)
+    /**
+     * @param $user
+     * @return QueryBuilder
+     */
+    public function getEntreprisesRecruteur($user): QueryBuilder
     {
 
         if ($user->isSuperAdmin() ){
