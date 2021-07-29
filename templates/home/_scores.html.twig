@@ -6,11 +6,11 @@
             <h2>Où et Qui recrute le plus</h2>
         </div>
 
-        <div class="row gap-2">
-            <div class="col">
+        <div class="row m-2">
+            <div class="col-md-4">
                 <p><b>Les entreprises qui recrutent le plus</b></p>
                 {% for entreprise in entreprises %}
-                    <div class="row bg-white mb-1 p-1">
+                    <div class="row bg-white m-1 p-1">
                         <div class="col">
                             <h5><a href="{{ path('entreprise_show_unit', {id:entreprise.id, slug:entreprise.slug}) }}">{{ entreprise.name }}</a></h5>
                         </div>
@@ -21,10 +21,10 @@
                 {% endfor %}
             </div>
 
-            <div class="col">
+            <div class="col-md-4">
                 <p><b>Les secteurs qui recrutent le plus</b></p>
                 {% for entreprise in entreprises%}
-                    <div class="row bg-white mb-1 p-1">
+                    <div class="row bg-white m-1 p-1">
                         <div class="col">
                            {{ entreprise.secteur }}
                         </div>
@@ -35,10 +35,10 @@
                 {% endfor %}
             </div>
 
-            <div class="col">
+            <div class="col-md-4">
                 <p><b>Les villes proposant le plus d'offres</b></p>
                 {% for entreprise in entreprises %}
-                    <div class="row bg-white mb-1 p-1">
+                    <div class="row bg-white m-1 p-1">
                         <div class="col">
                             {{ entreprise.city }}
                         </div>

@@ -125,7 +125,7 @@ class CandidatureController extends AbstractController
         if ($type == Candidature::TYPE_EXTERNE){
              return $this->redirect($annonce->getLien());
         }
-        return $this->redirectToRoute('annonce_show_unit', ['id'=> $annonce->getId(), 'slug'=> $annonce->getSlug()]);
+        return $this->redirectToRoute('annonce_show_unit', ['id'=> $annonce->getId(), 'slug'=> $annonce->getSlug()], Response::HTTP_SEE_OTHER);
     }
 
     #[Route('/email/postuler/{id}', name: 'candidature_postuler_email')]
@@ -183,7 +183,7 @@ class CandidatureController extends AbstractController
                 ]
             ]);
 
-            return $this->redirectToRoute('annonce_show_unit', ['id'=> $annonce->getId(), 'slug'=> $annonce->getSlug()]);
+            return $this->redirectToRoute('annonce_show_unit', ['id'=> $annonce->getId(), 'slug'=> $annonce->getSlug()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('annonce/postuler_email.html.twig', [
@@ -251,6 +251,6 @@ class CandidatureController extends AbstractController
             ]);
         }
 
-        return $this->redirectToRoute('annonce_show_unit', ['id'=> $annonce->getId(), 'slug'=> $annonce->getSlug()]);
+        return $this->redirectToRoute('annonce_show_unit', ['id'=> $annonce->getId(), 'slug'=> $annonce->getSlug()], Response::HTTP_SEE_OTHER);
     }
 }

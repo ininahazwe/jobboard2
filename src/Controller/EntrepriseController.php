@@ -8,7 +8,7 @@ use App\Entity\Offre;
 use App\Entity\User;
 use App\Form\EntrepriseType;
 use App\Form\OffreType;
-use App\Form\SearchForm;
+use App\Form\SearchAnnonceForm;
 use App\Form\UserType;
 use App\Repository\EntrepriseRepository;
 use App\Repository\FactureRepository;
@@ -46,11 +46,11 @@ class EntrepriseController extends AbstractController
         );
 
         //Formulaire de recherche
-        $form = $this->createForm(SearchForm::class);
+        $form = $this->createForm(SearchAnnonceForm::class);
         $search = $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
-            $entreprises = $entrepriseRepository->search(
+            $annonces = $entrepriseRepository->search(
                 $search->get('mots')->getData()
             );
         }
@@ -131,7 +131,7 @@ class EntrepriseController extends AbstractController
 
             $this->addFlash('success', 'Ajout réussi');
 
-            return $this->redirectToRoute('entreprise_show', ['slug' => $entreprise->getSlug()]);
+            return $this->redirectToRoute('entreprise_show', ['slug' => $entreprise->getSlug()], Response::HTTP_SEE_OTHER);
 
         }
 
@@ -170,7 +170,7 @@ class EntrepriseController extends AbstractController
             $entityManager->persist($offre);
             $entityManager->flush();
 
-            return $this->redirect($this->generateUrl('entreprise_offres_commerciales'));
+            return $this->redirect($this->generateUrl('entreprise_offres_commerciales'), Response::HTTP_SEE_OTHER);
         }
 
         $modeles = $modeleOffreCommercialeRepository->findAll();
@@ -189,13 +189,13 @@ class EntrepriseController extends AbstractController
     {
         $modeleId = $request->get('modeleId');
         if (!$modeleId){
-            return $this->redirect($this->generateUrl('entreprise_offres_commerciales', ['id'=>$entreprise->getId()]));
+            return $this->redirect($this->generateUrl('entreprise_offres_commerciales', ['id'=>$entreprise->getId()]), Response::HTTP_SEE_OTHER);
         }
         $this->saveOffreModele($entreprise->getId(), $modeleId);
 
         $this->addFlash('success', 'Ajout réussi');
 
-        return $this->redirect($this->generateUrl('entreprise_offres_commerciales', ['id'=>$entreprise->getId()]));
+        return $this->redirect($this->generateUrl('entreprise_offres_commerciales', ['id'=>$entreprise->getId()]),Response:: HTTP_SEE_OTHER);
     }
 
     #[Route('/{id}/edit', name: 'entreprise_edit', methods: ['GET', 'POST'])]
@@ -216,7 +216,7 @@ class EntrepriseController extends AbstractController
 
             $this->addFlash('success', 'Mise à jour réussie');
 
-            return $this->redirectToRoute('entreprise_index');
+            return $this->redirectToRoute('entreprise_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('entreprise/edit.html.twig', [
@@ -334,7 +334,7 @@ class EntrepriseController extends AbstractController
             $this->addFlash('success', 'Ajout réussi');
 
             if ($anonymous){
-                return $this->redirectToRoute('entreprise_show', ['slug' => $entreprise->getSlug()]);
+                return $this->redirectToRoute('entreprise_show', ['slug' => $entreprise->getSlug()], Response::HTTP_SEE_OTHER);
             } else {
                 return $this->redirectToRoute('entreprise_recruteurs',['id' => $entreprise->getId()], Response::HTTP_SEE_OTHER);
             }
@@ -561,6 +561,6 @@ class EntrepriseController extends AbstractController
 
         $this->addFlash('success', 'Acceptation validée');
 
-        return $this->redirectToRoute('entreprise_show', ['slug' => $entreprise->getSlug()]);
+        return $this->redirectToRoute('entreprise_show', ['slug' => $entreprise->getSlug()], Response::HTTP_SEE_OTHER);
     }
 }

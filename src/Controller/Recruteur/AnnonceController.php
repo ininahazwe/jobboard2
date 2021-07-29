@@ -6,7 +6,7 @@ use App\Entity\Annonce;
 use App\Entity\Entreprise;
 use App\Entity\Offre;
 use App\Form\AnnonceType;
-use App\Form\SearchForm;
+use App\Form\SearchAnnonceForm;
 use App\Repository\AnnonceRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -30,7 +30,7 @@ class AnnonceController extends AbstractController
         );
 
         //Formulaire de recherche
-        $form = $this->createForm(SearchForm::class);
+        $form = $this->createForm(SearchAnnonceForm::class);
         $search = $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
@@ -69,10 +69,10 @@ class AnnonceController extends AbstractController
 
                 $this->addFlash('success', 'Publication réussie');
 
-                return $this->redirectToRoute('annonce_index', []);
+                return $this->redirectToRoute('annonce_index', [], Response::HTTP_SEE_OTHER);
             }else{
                 $this->addFlash('warning', 'Vous avez atteint le nombre maximum d\'annonces à publier');
-                return $this->redirectToRoute('annonce_index', []);
+                return $this->redirectToRoute('annonce_index', [], Response::HTTP_SEE_OTHER);
             }
 
         }
@@ -97,7 +97,7 @@ class AnnonceController extends AbstractController
             $this->getDoctrine()->getManager()->flush();
 
             $this->addFlash('success', 'Mise à jour réussie');
-            return $this->redirectToRoute('annonce_index');
+            return $this->redirectToRoute('annonce_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('annonce/edit.html.twig', [

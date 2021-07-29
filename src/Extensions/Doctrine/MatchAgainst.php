@@ -4,23 +4,19 @@ namespace App\Extensions\Doctrine;
 use Doctrine\ORM\Query\AST\Functions\FunctionNode;
 use Doctrine\ORM\Query\Lexer;
 use Doctrine\ORM\Query\Parser;
-use Doctrine\ORM\Query\QueryException;
 use Doctrine\ORM\Query\SqlWalker;
 
 class MatchAgainst extends FunctionNode
 {
-    /** @var array|null list of \Doctrine\ORM\Query\AST\PathExpression */
-    protected ?array $pathExp = null;
-    /** @var string|null */
-    protected ?string $against = null;
+    /** @var array list of \Doctrine\ORM\Query\AST\PathExpression */
+    protected $pathExp = null;
+    /** @var string */
+    protected $against = null;
     /** @var bool */
-    protected bool $booleanMode = false;
+    protected $booleanMode = false;
     /** @var bool */
-    protected bool $queryExpansion = false;
+    protected $queryExpansion = false;
 
-    /**
-     * @throws QueryException
-     */
     public function parse(Parser $parser)
     {
         // match

@@ -4,7 +4,7 @@
         <div class="row" data-aos="zoom-in">
             {% for entreprise in entreprises %}
                 {% if entreprise.logo|length %}
-                    <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center">
+                    <div class="col-lg-2 col-md-4 col-4 d-flex align-items-center justify-content-center">
                         <a href="{{ path('entreprise_show_unit', {id:entreprise.id, slug:entreprise.slug}) }}"><img class="img-fluid" src="{{ asset(entreprise.getUrlLastLogo()) }}" alt="{{entreprise.getNameLastLogo()}}"></a>
                     </div>
                 {% endif %}

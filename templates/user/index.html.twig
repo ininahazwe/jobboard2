@@ -32,7 +32,6 @@
                             <div class="col"><div class="p-3 border bg-light"><a href="{{ path('annuaire_index') }}">Annuaire</a></div></div>
                             <div class="col"><div class="p-3 border bg-light"><a href="{{ path('agenda_index') }}">Agenda</a></div></div>
                             <div class="col"><div class="p-3 border bg-light"><a href="{{ path('email_index') }}">Emails</a></div></div>
-                            <div class="col"><div class="p-3 border bg-light"><a href="{{ path('notifications_received') }}">Notifications</a></div></div>
                         </div>
                         {% endif %}
                         {% if app.user.isSuperRecruteur() %}
@@ -40,14 +39,12 @@
                             <div class="col"><div class="p-3 border bg-light"><a href="{{ path('annonce_index') }}">Annonces</a></div></div>
                             <div class="col"><div class="p-3 border bg-light"><a href="{{ path('candidature_index') }}">Candidatures</a></div></div>
                             <div class="col"><div class="p-3 border bg-light"><a href="{{ path('entreprise_index') }}">Entreprises</a></div></div>
-                            <div class="col"><div class="p-3 border bg-light"><a href="{{ path('notifications_received') }}">Notifications</a></div></div>
                         </div>
                         {% endif %}
                         {% if app.user.isRecruteur() %}
                         <div class="row row-cols-3 g-lg-3">
                             <div class="col"><div class="p-3 border bg-light"><a href="{{ path('annonce_index') }}">Annonces</a></div></div>
                             <div class="col"><div class="p-3 border bg-light"><a href="{{ path('candidature_index') }}">Candidatures</a></div></div>
-                            <div class="col"><div class="p-3 border bg-light"><a href="{{ path('notifications_received') }}">Notifications</a></div></div>
                         </div>
                         {% endif %}
                         {% if app.user.isCandidat() %}

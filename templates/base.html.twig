@@ -9,6 +9,7 @@
         <meta charset="utf-8">
         <meta content="" name="description">
         <meta content="" name="keywords">
+        <meta name="turbo-visit-control" content="reload">
 
         <!-- Favicons -->
         <link href="{{ asset('assets/img/favicon.png') }}" rel="icon">
@@ -17,6 +18,10 @@
         <!-- Google Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Jost:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/fontawesome.min.css">
+
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
+        <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
 
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}

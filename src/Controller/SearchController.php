@@ -22,9 +22,11 @@ class SearchController extends AbstractController
             $annonces = $annonceRepository->searchAnnoncesAdvanced($criteria);
         }
 
+        $response = new Response(null, $searchAnnonceForm->isSubmitted() ? 422 : 200);
+
         return $this->render('annonce/search.html.twig', [
             'search_form'=> $searchAnnonceForm->createView(),
             'annonces' => $annonces
-        ]);
+        ], $response);
     }
 }

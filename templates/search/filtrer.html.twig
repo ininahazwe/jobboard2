@@ -1,4 +1,6 @@
-{{ form_start(form, {attr: {class: 'filter-custom'}}) }}
+<div data-turbo="false">
+    {{ form_start(form, {attr: {'data-turbo': 'false'}}) }}
     {{ form_row(form.mots) }}
     <button type="submit" class="btn btn-primary w-100 mt-2">Filtrer</button>
-{{ form_end(form) }}
+    {{ form_end(form) }}
+</div>

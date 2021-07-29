@@ -1,13 +1,8 @@
-<div class="">
-    <nav class="navbar navbar-light bg-light d-flex flex-column" data-aos="fade-up" data-aos-delay="100">
-        <form class="form-inline">
-            <div class="d-flex p-10">
-                <input class="form-control mr-sm-2" type="search" placeholder="Saisissez vos mots clés(cvthèque)" aria-label="Search">
-                <input class="form-control mr-sm-2" type="search" placeholder="Ville" aria-label="Search">
-                <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Rechercher</button>
-                <a href="{{ path('search_annonce')}}" class="text-black-50">Recherche avancée</a>
-            </div>
-        </form>
-    </nav>
+<div class="row justify-content-center col-lg-6 mx-auto">
+    <div class="row m-2">
+        <input type="search" class="form-control rounded" placeholder="Saisissez vos mots clés(cvthèque)" aria-label="Search" aria-describedby="search-addon" />
+        <input type="search" class="form-control rounded" placeholder="Ville" aria-label="Search" aria-describedby="search-addon" />
+        <button type="button" class="btn btn-outline-primary">search</button>
+        <a href="{{ path('search_annonce')}}" class="form-control rounded mt-3">Recherche avancée</a>
+    </div>
 </div>
-

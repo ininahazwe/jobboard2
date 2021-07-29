@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Entity\File;
 use App\Entity\Page;
 use App\Form\PageType;
-use App\Form\SearchForm;
+use App\Form\SearchAnnonceForm;
 use App\Repository\PageRepository;
 use DateTime;
 use Knp\Component\Pager\PaginatorInterface;
@@ -28,7 +28,7 @@ class PageController extends AbstractController
             10
         );
 
-        $form = $this->createForm(SearchForm::class);
+        $form = $this->createForm(SearchAnnonceForm::class);
 
         $search = $form->handleRequest($request);
 

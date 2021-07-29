@@ -17,7 +17,7 @@
 
         <section class="inner-page">
             <div class="container">
-                <form action="{{ path('app_login') }}" method="post" class="">
+                <form action="{{ path('app_login') }}" method="post" class="" data-turbo="false">
                 {% if error %}
                     <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
                 {% endif %}
