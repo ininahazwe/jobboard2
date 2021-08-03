@@ -43,7 +43,10 @@
                         <td>{{ modele_offre_commerciale.dureeContrat }}</td>
                         <td>{{ modele_offre_commerciale.prix }}</td>
                         <td>
-                            <a href="{{ path('modele_offre_commerciale_edit', {'id': modele_offre_commerciale.id}) }}"><i class="fas fa-edit"></i></a>
+                            <div class="d-flex justify-content-around">
+                                <a href="{{ path('modele_offre_commerciale_edit', {'id': modele_offre_commerciale.id}) }}" class="d-flex align-items-center"><i class="fas fa-edit"></i></a>
+                                {{ include('modele_offre_commerciale/_delete_form.html.twig') }}
+                            </div>
                         </td>
                     </tr>
                 {% else %}
@@ -53,7 +56,6 @@
                 {% endfor %}
                 </tbody>
             </table>
-            {{ knp_pagination_render(modele_offre_commerciales, 'Pagination/twitter_bootstrap_v4_pagination.html.twig') }}
         </div>
     </section>
 </main>

@@ -34,11 +34,7 @@
                         </div>
                         <div class="p-3 border bg-light">
                             {% for entreprise in app.user.getEntrepriseAll() %}
-                                <b>{{ entreprise.name }} : </b>{{ entreprise.getNumberAnnonces() }}/{{ entreprise.getMaxAnnonces() }} Annonces
-
-                                {#{% if entreprise.canCreateAnnonce() %}
-                                    <a class="btn btn-primary btn-sm mb-1" href="{{ path('annonce_new') }}">Créer une offre d'emploi</a><br/>
-                                {% endif %}#}
+                                <b>{{ entreprise.name }} : </b>{{ entreprise.getNumberAnnonces() }}/{{ entreprise.getMaxAnnonces() }} annonces<br>
                             {% endfor %}
                         </div>
                     {% endif %}
@@ -78,8 +74,10 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <a href="{{ path('annonce_edit', {'id': annonce.id}) }}"><i class="fas fa-edit"></i></a>
-                                    {{ include('annonce/_delete_form.html.twig') }}
+                                    <div class="d-flex justify-content-around">
+                                        <a href="{{ path('annonce_edit', {'id': annonce.id}) }}" class="d-flex align-items-center"><i class="fas fa-edit"></i></a>
+                                        {{ include('annonce/_delete_form.html.twig') }}
+                                    </div>
                                 </td>
                             </tr>
                         {% else %}

@@ -23,13 +23,13 @@
 
             <div class="col-md-4">
                 <p><b>Les secteurs qui recrutent le plus</b></p>
-                {% for entreprise in entreprises%}
+                {% for entreprise in entreprises %}
                     <div class="row bg-white m-1 p-1">
                         <div class="col">
                            {{ entreprise.secteur }}
                         </div>
                         <div class="col text-end">
-                            {{ entreprise.annoncesEntreprise|length }}
+
                         </div>
                     </div>
                 {% endfor %}
@@ -40,10 +40,13 @@
                 {% for entreprise in entreprises %}
                     <div class="row bg-white m-1 p-1">
                         <div class="col">
-                            {{ entreprise.city }}
+                            {% if entreprise.city not in entreprises %}
+                                {{ entreprise.city }}
+                                {% set entreprises = entreprises|merge([entreprise.city]) %}
+                            {% endif %}
                         </div>
                         <div class="col text-end">
-                            {{ entreprise.annoncesEntreprise|length }}
+
                         </div>
                     </div>
                 {% endfor %}

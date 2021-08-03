@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Entreprise index{% endblock %}
+{% block title %}Entreprises{% endblock %}
 
 {% block body %}
 <main id="main">
@@ -65,12 +65,12 @@
                                 </td>
                                 {% endif %}
                                 <td>
-                                    <a href="{{ path('entreprise_edit', {'id': entreprise.id}) }}">
-                                        <a href="{{ path('entreprise_edit', {'id': entreprise.id}) }}"><i class="fas fa-edit"></i></a>
-                                    </a>
-                                    {% if app.user.isSuperAdmin() %}
-                                        {{ include('entreprise/_delete_form.html.twig') }}
-                                    {% endif %}
+                                    <div class="d-flex justify-content-around">
+                                        <a href="{{ path('entreprise_edit', {'id': entreprise.id}) }}" class="d-flex align-items-center"><i class="fas fa-edit"></i></a>
+                                        {% if app.user.isSuperAdmin() %}
+                                            {{ include('entreprise/_delete_form.html.twig') }}
+                                        {% endif %}
+                                    </div>
                                 </td>
                             </tr>
                         {% else %}

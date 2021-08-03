@@ -243,7 +243,7 @@ class EntrepriseRepository extends ServiceEntityRepository
     public function getEntreprisesEnAttente(): mixed
     {
         $query = $this->createQueryBuilder('e')
-            ->andWhere('e.moderation = 0')
+            ->where('e.moderation = 0')
         ;
         return $query->getQuery()->getResult();
     }
@@ -254,7 +254,7 @@ class EntrepriseRepository extends ServiceEntityRepository
     public function getEntreprisesAcceptees(): mixed
     {
         $query = $this->createQueryBuilder('e')
-            ->andWhere('e.moderation = 1')
+            ->where('e.moderation = 1')
         ;
         return $query->getQuery()->getResult();
     }
@@ -265,7 +265,7 @@ class EntrepriseRepository extends ServiceEntityRepository
     public function getEntreprisesRefusees(): mixed
     {
         $query = $this->createQueryBuilder('e')
-            ->andWhere('e.moderation = 2')
+            ->where('e.moderation = 2')
         ;
         return $query->getQuery()->getResult();
     }
@@ -277,6 +277,8 @@ class EntrepriseRepository extends ServiceEntityRepository
     public function search($mots = null): mixed
     {
         $query = $this->createQueryBuilder('e');
+
+        $query->where('e.moderation = 1');
 
         if($mots != null){
             $query->andWhere('MATCH_AGAINST(e.name, e.description) AGAINST (:mots boolean)>0')

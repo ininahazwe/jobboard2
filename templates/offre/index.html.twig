@@ -41,10 +41,11 @@
                         <td>{{ offre.finContratAt ? offre.finContratAt|date('d-m-Y') : '' }}</td>
                         <td>{{ offre.isCvTheque ? 'Yes' : 'No' }}</td>
                         <td>{{ offre.prix }}$</td>
-
                         <td>
-                            <a href="{{ path('offre_show', {'id': offre.id}) }}"><i class="fas fa-eye"></i></a>
-                            <a href="{{ path('offre_edit', {'id': offre.id}) }}"><i class="fas fa-edit"></i></a>
+                            <div class="d-flex justify-content-around">
+                                <a class="d-flex align-items-center" href="{{ path('offre_show', {'id': offre.id}) }}"><i class="fas fa-eye"></i></a>
+                                <a class="d-flex align-items-center" href="{{ path('offre_edit', {'id': offre.id}) }}"><i class="fas fa-edit"></i></a>
+                            </div>
                         </td>
                     </tr>
                 {% else %}

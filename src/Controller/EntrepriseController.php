@@ -45,17 +45,6 @@ class EntrepriseController extends AbstractController
             10
         );
 
-        //Formulaire de recherche
-        $form = $this->createForm(SearchAnnonceForm::class);
-        $search = $form->handleRequest($request);
-
-        if($form->isSubmitted() && $form->isValid()){
-            $annonces = $entrepriseRepository->search(
-                $search->get('mots')->getData()
-            );
-        }
-
-
         if($this->getUser()->isSuperRecruteur()){
             if(count($entreprises) == 1 ){
                 $entreprise = $entreprises[0];
@@ -65,7 +54,6 @@ class EntrepriseController extends AbstractController
 
         return $this->render('entreprise/index.html.twig', [
             'entreprises' => $entreprises,
-            'form' => $form->createView()
         ]);
     }
 
@@ -514,23 +502,15 @@ class EntrepriseController extends AbstractController
         $entreprise->addLogo($img);
     }
 
-    /**
-     * @param EntrepriseRepository $entrepriseRepository
-     * @return Response
-     */
-    #[Route('/enattente', name: 'attente', methods: ['GET'])]
-    public function entreprisesEnattente(EntrepriseRepository $entrepriseRepository): Response
+    #[Route('/attente', name: 'attente', methods: ['GET'])]
+    public function candidats(EntrepriseRepository $entrepriseRepository): Response
     {
         return $this->render('entreprise/attente.html.twig', [
-            'entreprises' => $entrepriseRepository->getEntreprisesEnAttente(),
+            'entreprises' => $entrepriseRepository->findAll(),
         ]);
     }
 
-    /**
-     * @param EntrepriseRepository $entrepriseRepository
-     * @return Response
-     */
-    #[Route('/acceptees', name: 'acceptees', methods: ['GET'])]
+    #[Route('/acceptees', name: 'entreprise_acceptees', methods: ['GET'])]
     public function entreprisesAcceptees(EntrepriseRepository $entrepriseRepository): Response
     {
         return $this->render('entreprise/acceptees.html.twig', [
@@ -538,11 +518,7 @@ class EntrepriseController extends AbstractController
         ]);
     }
 
-    /**
-     * @param EntrepriseRepository $entrepriseRepository
-     * @return Response
-     */
-    #[Route('/refusees', name: 'refusees', methods: ['GET'])]
+    #[Route('/refusees', name: 'entreprise_refusees', methods: ['GET'])]
     public function entreprisesRefusees(EntrepriseRepository $entrepriseRepository): Response
     {
         return $this->render('entreprise/refusees.html.twig', [

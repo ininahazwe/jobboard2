@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Factures à régler{% endblock %}
+{% block title %}Profiles des utilisateurs{% endblock %}
 
 {% block body %}
     <main id="main">
@@ -10,45 +10,47 @@
                 <ol>
                     <li><a href="{{ path('app_home') }}">Home</a></li>
                     <li><a href="{{ path('app_profile') }}">Dashboard</a></li>
-                    <li><a href="{{ path('facture_index') }}">Factures</a></li>
-                    <li>Lecture</li>
+                    <li><a href="{{ path('page_index') }}">Utilisateurs</a></li>
+                    <li>Répértoire</li>
                 </ol>
-                <h1>Factures à payer</h1>
+                <h1>Gestion des recruteurs</h1>
             </div>
         </section><!-- End Breadcrumbs -->
         <section class="inner-page">
             <div class="container">
                 <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <div class="d-flex flex-column">
-                            {{ include('facture/menu.html.twig') }}
+                            {{ include('user/menu_all.html.twig') }}
                         </div>
                     </div>
-                    <div class="col-md-9 text-center d-flex flex-column">
+                    <div class="col-md-10">
                         <table class="table table-striped table-bordered" id="datatable">
                             <thead>
                             <tr>
-                                <th>Entreprise</th>
-                                <th>PrixTTC</th>
-                                <th>Date limite de paiement</th>
-                                <th>Référence</th>
-                                <th>actions</th>
+                                <th>Name</th>
+                                <th>Role</th>
+                                <th>Email</th>
+                                <th>Entreprises</th>
                             </tr>
                             </thead>
                             <tbody>
-                            {% for facture in factures %}
+                            {% for user in users %}
                                 <tr>
-                                    <td>{{ facture.entreprise }}</td>
-                                    <td>{{ facture.prixTTC }}</td>
-                                    <td>{{ facture.limiteDatePaid ? facture.limiteDatePaid|date('Y-m-d H:i:s') : '' }}</td>
-                                    <td>{{ facture }}</td>
                                     <td>
-                                        <a href="{{ path('facture_download', {'id': facture.id}) }}"><i class="fas fa-download"></i></a>
+                                        {{ user.fullname|capitalize }}
+                                    </td>
+                                    <td>{{ user.roleName|capitalize }}</td>
+                                    <td>{{ user.email }}</td>
+                                    <td>
+                                        {% for entreprise in user.entreprises %}
+                                            <a href="{{ path('entreprise_show', {id: entreprise.id, slug: entreprise.slug}) }}">{{ entreprise.name }}</a>
+                                        {% endfor %}
                                     </td>
                                 </tr>
                             {% else %}
                                 <tr>
-                                    <td colspan="11">no records found</td>
+                                    <td colspan="16">no records found</td>
                                 </tr>
                             {% endfor %}
                             </tbody>
@@ -58,5 +60,4 @@
             </div>
         </section>
     </main>
-    {#<a href="{{ path('facture_new') }}">Ajouter</a>#}
 {% endblock %}

@@ -32,6 +32,7 @@
                             <div class="col"><div class="p-3 border bg-light"><a href="{{ path('annuaire_index') }}">Annuaire</a></div></div>
                             <div class="col"><div class="p-3 border bg-light"><a href="{{ path('agenda_index') }}">Agenda</a></div></div>
                             <div class="col"><div class="p-3 border bg-light"><a href="{{ path('email_index') }}">Emails</a></div></div>
+                            <div class="col"><div class="p-3 border bg-light"><a href="{{ path('profile_index') }}">Utilisateurs</a></div></div>
                         </div>
                         {% endif %}
                         {% if app.user.isSuperRecruteur() %}
@@ -74,7 +75,7 @@
                         {% else %}
                             <a href="{{ path('profile_edit', {id: user.id}) }}" class="btn btn-primary px-4 ms-3 m-3">Mettre à jour mon profile</a>
                         {% endif %}
-                        <a class="btn btn-primary px-4 ms-3 m-3" href="{{ path('pass_modifier', {id: user.id}) }}">Changer le mot de passe</a></>
+                        <a class="btn btn-primary px-4 ms-3 m-3" href="{{ path('pass_modifier', {id: user.id}) }}">Changer le mot de passe</a>
 
                         {#{% if not app.user.isCandidat() %}
                             <div>

@@ -1,6 +1,6 @@
 <div class="list-group"><a class="list-group-item list-group-item-action active" href="{{ path('entreprise_index') }}">Entreprises (toutes)</a></div>
 {% if app.user.isSuperAdmin() %}
     <div class="list-group"><a class="list-group-item list-group-item-action" href="{{ path('attente') }}">Entreprises en attente </a></div>
-    <div class="list-group"><a class="list-group-item list-group-item-action" href="{{ path('acceptees') }}">Entreprises acceptées</a></div>
-    <div class="list-group"><a class="list-group-item list-group-item-action" href="{{ path('refusees') }}">Entreprises refusées</a></div>
+    <div class="list-group"><a class="list-group-item list-group-item-action" href="{{ path('entreprise_acceptees') }}">Entreprises acceptées</a></div>
+    <div class="list-group"><a class="list-group-item list-group-item-action" href="{{ path('entreprise_refusees') }}">Entreprises refusées</a></div>
 {% endif %}

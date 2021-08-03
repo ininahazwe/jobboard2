@@ -5,20 +5,22 @@ namespace App\Controller;
 use App\Entity\Profile;
 use App\Form\ProfileType;
 use App\Repository\ProfileRepository;
+use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\DateTime;
 
-#[Route('/cms/profile')]
+#[Route('/cms/utilisateurs')]
 class ProfileController extends AbstractController
 {
     #[Route('/', name: 'profile_index', methods: ['GET'])]
-    public function index(ProfileRepository $profileRepository): Response
+    public function index(ProfileRepository $profileRepository, UserRepository $userRepository): Response
     {
         return $this->render('profile/index.html.twig', [
             'profiles' => $profileRepository->findAll(),
+            'users' => $userRepository->findAll(),
         ]);
     }
 

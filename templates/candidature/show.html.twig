@@ -10,6 +10,7 @@
             <ol>
                 <li><a href="{{ path('app_home') }}">Home</a></li>
                 <li><a href="{{ path('app_profile') }}">Dashboard</a></li>
+                <li><a href="{{ path('candidature_index') }}">Candidatures</a></li>
                 <li>Lecture</li>
             </ol>
             <h2>Résumé de la candidature</h2>
@@ -31,6 +32,14 @@
                         <tr>
                             <th>Nom de l'entreprise</th>
                             <td><a href="{{ path('entreprise_show_unit', {id: candidature.entreprise.id, slug: candidature.entreprise.slug})}}">{{ candidature.entreprise }}</a></td>
+                        </tr>
+                        <tr>
+                            <th>Recruteur</th>
+                            <td>{{ candidature.recruteur.fullname }}</a></td>
+                        </tr>
+                        <tr>
+                            <th>Candidat</th>
+                            <td><a href="{{ path('profile_show', {id: candidature.candidat.id}) }}">{{ candidature.candidat.fullname }}</a></td>
                         </tr>
                         <tr>
                             <th>Lettre de motivation</th>

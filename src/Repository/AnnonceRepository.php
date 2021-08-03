@@ -2,14 +2,14 @@
 
 namespace App\Repository;
 
+use App\Data\SearchData;
 use App\Entity\Annonce;
-use App\Entity\User;
-use App\Form\AnnonceType;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use Knp\Component\Pager\Pagination\PaginationInterface;
+use Knp\Component\Pager\PaginatorInterface;
 
 /**
  * @method Annonce|null find($id, $lockMode = null, $lockVersion = null)
@@ -19,9 +19,12 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class AnnonceRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private PaginatorInterface $paginator;
+
+    public function __construct(ManagerRegistry $registry, PaginatorInterface $paginator)
     {
         parent::__construct($registry, Annonce::class);
+        $this->paginator = $paginator;
     }
 
     public function findAllActiveQuery($user): QueryBuilder
@@ -83,30 +86,33 @@ class AnnonceRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param null $mots
-     * @return mixed
+     * @param SearchData $search
+     * @return PaginationInterface
      */
-    public function search($mots = null): mixed
+    public function findSearch(SearchData $search): PaginationInterface
     {
-        $query = $this->createQueryBuilder('a');
-        $query->where('a.isActive = 1');
-        if($mots != null){
-            $query->andWhere('MATCH_AGAINST(a.name, a.description) AGAINST (:mots boolean)>0')
-                ->setParameter('mots', $mots);
-        }
-        return $query->getQuery()->getResult();
-    }
+        $query = $this
+            ->createQueryBuilder('a')
+            ->select('e', 'a')
+            ->join('a.entreprise', 'e')
+        ;
 
-    public function searchAnnoncesAdvanced(mixed $criteria)
-    {
-        return $this->createQueryBuilder('c')
-            ->leftJoin('c.entreprise', 'entreprise')
-            ->where('entreprise.name = :entreprise')
-            ->setParameter("entreprise", $criteria['entreprise']->getName())
-            /*->andWhere('c.type_contrat = :type_contrat')
-            ->setParameter('type_contrat', $criteria['type_contrat'])
-            ->andWhere('c.diplome = :diplome')
-            ->setParameter('diplome', $criteria['diplome'])*/
-            ->getQuery()->getResult();
+        if(!empty($search->q)){
+            $query = $query
+                ->andWhere('MATCH_AGAINST(a.name, a.description) AGAINST (:q boolean)>0')
+                ->setParameter('q', "%{$search->q}%");
+        }
+        if(!empty($search->entreprise)){
+            $query = $query
+                ->andWhere('e.id IN (:entreprise)')
+                ->setParameter('entreprise', $search->entreprise);
+        }
+
+        $query = $query->getQuery();
+        return $this->paginator->paginate(
+            $query,
+            $search->page,
+            6
+        );
     }
 }

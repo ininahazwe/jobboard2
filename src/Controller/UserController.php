@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\File;
 use App\Form\UserType;
 use App\Repository\EntrepriseRepository;
+use App\Repository\UserRepository;
 use App\Service\Mailer;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -194,5 +195,29 @@ class UserController extends AbstractController
         $img->setName($fichier);
         $img->setNameFile($name);
         $user->addFiles($img);
+    }
+
+    #[Route('/candidats', name: 'candidats', methods: ['GET'])]
+    public function candidats(UserRepository $userRepository): Response
+    {
+        return $this->render('user/candidats.html.twig', [
+            'users' => $userRepository->findAll(),
+        ]);
+    }
+
+    #[Route('/recruteurs', name: 'recruteurs', methods: ['GET'])]
+    public function recruteurs(UserRepository $userRepository): Response
+    {
+        return $this->render('user/recruteurs.html.twig', [
+            'users' => $userRepository->findAll(),
+        ]);
+    }
+
+    #[Route('/super-recruteurs', name: 'super-recruteurs', methods: ['GET'])]
+    public function superRecruteurs(UserRepository $userRepository): Response
+    {
+        return $this->render('user/super_recruteurs.html.twig', [
+            'users' => $userRepository->findAll(),
+        ]);
     }
 }

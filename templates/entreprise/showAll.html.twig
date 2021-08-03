@@ -15,7 +15,8 @@
         </section><!-- End Breadcrumbs -->
 
         <section class="inner-page">
-            <div class="container">
+            <div class="container" id="datatables">
+                {{ form(search_form) }}
                 {% for entreprise in entreprises %}
                     <div class="row mb-1 p-3 border">
                         <div class="col-6">

@@ -20,7 +20,6 @@ class AnnonceController extends AbstractController
     #[Route('/index', name: 'annonce_index')]
     public function index(Request $request, AnnonceRepository $annonceRepository, PaginatorInterface $paginator): Response
     {
-        // Pagination
         $data = $annonceRepository->findAllActiveQuery($this->getUser());
 
         $annonces = $paginator->paginate(
@@ -29,21 +28,8 @@ class AnnonceController extends AbstractController
             8
         );
 
-        //Formulaire de recherche
-        $form = $this->createForm(SearchAnnonceForm::class);
-        $search = $form->handleRequest($request);
-
-        if($form->isSubmitted() && $form->isValid()){
-            $annonces = $annonceRepository->search(
-                $search->get('mots')->getData()
-            );
-        }
-
-
         return $this->render('annonce/index.html.twig', [
             'annonces' => $annonces,
-            'form' => $form->createView()
-            //'entreprises' => $this->getUser()->getEntrepriseAll(),
         ]);
     }
 

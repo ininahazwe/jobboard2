@@ -2,10 +2,12 @@
 
 namespace App\Controller;
 
+use App\Data\SearchData;
 use App\Entity\Annuaire;
 use App\Entity\Entreprise;
 use App\Entity\Menu;
 use App\Entity\Page;
+use App\Form\SearchAnnonceForm;
 use App\Repository\AgendaRepository;
 use App\Repository\AnnonceRepository;
 use App\Repository\AnnuaireRepository;
@@ -13,7 +15,6 @@ use App\Repository\CandaditureRepository;
 use App\Repository\EntrepriseRepository;
 use App\Repository\MenuRepository;
 use App\Repository\ModeleOffreCommercialeRepository;
-use App\Repository\OffreRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,6 +36,7 @@ class HomeController extends AbstractController
             'entreprises' => $entreprises
         ]);
     }
+
     #[Route('/recruteur', name:'app_home_recruteur')]
     public function indexRecruteur(AnnonceRepository $annoncesRepo, Request $request, ModeleOffreCommercialeRepository $modeleOffreCommercialeRepository, EntrepriseRepository $entrepriseRepository): Response
     {
@@ -48,8 +50,8 @@ class HomeController extends AbstractController
             'entreprises' => $entreprises
         ]);
     }
-    #[Route('/view/recruteur/menus', name:'app_view_recruteur_menus')]
 
+    #[Route('/view/recruteur/menus', name:'app_view_recruteur_menus')]
     public function menuRecruteurIndex(MenuRepository $menuRepository): Response
     {
         $menus = $menuRepository->getAllMenus(Menu::TYPE_MENU_RECRUTEUR);
@@ -58,8 +60,8 @@ class HomeController extends AbstractController
             'menuRepository' => $menuRepository
         ]);
     }
-    #[Route('/view/menus', name:'app_view_menus')]
 
+    #[Route('/view/menus', name:'app_view_menus')]
     public function menuIndex(MenuRepository $menuRepository): Response
     {
         $menus = $menuRepository->getAllMenus();
@@ -91,10 +93,16 @@ class HomeController extends AbstractController
     #[Route('/offres', name: 'annonces_show_all', methods: ['GET'])]
     public function showAllAnnonces(AnnonceRepository $annonceRepository, Request $request): Response
     {
-        $annonces = $annonceRepository->findActiveAndLive();
+        $data = new SearchData();
+        $data->page = $request->get('page', 1);
+        $form = $this->createForm(SearchAnnonceForm::class, $data);
+        $form->handleRequest($request);
+
+        $annonces = $annonceRepository->findSearch($data);
 
         return $this->render('annonce/showAll.html.twig', [
             'annonces' => $annonces,
+            'form' => $form->createView()
         ]);
     }
 
@@ -121,8 +129,19 @@ class HomeController extends AbstractController
     {
         $entreprises = $entrepriseRepository->findAll();
 
+        //Formulaire de recherche
+        $form = $this->createForm(SearchAnnonceForm::class);
+        $search = $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()){
+            $entreprises = $entrepriseRepository->search(
+                $search->get('mots')->getData()
+            );
+        }
+
         return $this->render('entreprise/showAll.html.twig', [
             'entreprises' => $entreprises,
+            'search_form' => $form->createView()
         ]);
     }
 
@@ -188,6 +207,7 @@ class HomeController extends AbstractController
             'page' => $page
         ]);
     }
+
     #[Route('/recruteur/{slug}', name:'page_show_recruteur')]
     public function pageRecruteur($slug): Response
     {
