@@ -575,7 +575,10 @@ class Entreprise
         return $this;
     }
 
-    public static function getModerationName(): string
+    /**
+     * @return string|void
+     */
+    public static function getModerationName()
     {
         if ($moderation = '0'){
             return 'En attente';
@@ -584,5 +587,23 @@ class Entreprise
         }else if($moderation = '2'){
             return 'Refusée';
         }
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getAllRecruteurs(): ArrayCollection
+    {
+        $result = new ArrayCollection();
+
+        foreach($this->getRecruteurs() as $recruteur){
+            $result->add($recruteur);
+        }
+        foreach($this->getSuperRecruteurs() as $recruteur){
+            if (!$result->contains($recruteur)) {
+                $result->add($recruteur);
+            }
+        }
+        return $result;
     }
 }

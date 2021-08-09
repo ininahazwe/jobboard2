@@ -32,7 +32,7 @@
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
     </head>
-    <body>
+    <body data-turbo="false">
         {{ render(controller('App\\Controller\\HomeController::menuIndex')) }}
         {{ include('partials/messages.html.twig') }}
         {% block body %}

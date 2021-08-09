@@ -15,14 +15,10 @@ use Symfony\Component\Routing\Annotation\Route;
 class MenuController extends AbstractController
 {
     #[Route('/', name: 'menu_index', methods: ['GET'])]
-    public function index(Request $request, MenuRepository $menuRepository, PaginatorInterface $paginator): Response
+    public function index(Request $request, MenuRepository $menuRepository): Response
     {
-        $data = $menuRepository->findAll();
-        $menus = $paginator->paginate(
-            $data,
-            $request->query->getInt('page', 1),
-            10
-        );
+        $menus = $menuRepository->findAll();
+
         return $this->render('menu/index.html.twig', [
             'menus' => $menus,
         ]);

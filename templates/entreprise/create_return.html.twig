@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Entreprise | Notification {% endblock %}
+
+{% block body %}
+    <main id="main">
+        <!-- ======= Breadcrumbs ======= -->
+        <section id="breadcrumbs" class="breadcrumbs">
+            <div class="container">
+                <ol>
+                    <li><a href="{{ path('app_home') }}">Home</a></li>
+                </ol>
+                <h1>Création d'une entreprise</h1>
+            </div>
+        </section><!-- End Breadcrumbs -->
+        <section class="inner-page">
+            <div class="container">
+                <div class="row">
+                    <div class="alert alert-success" role="alert">
+                        {{user.firstname}} {{ user.lastname }} vous avez enregistré l'entreprise {{ entreprise.name }} avec succès. Vous revenons vers vous prochainement
+                    </div>
+                </div>
+                <div class="row">
+                    <a href="{{ path('app_home') }}" class="btn-sm btn-primary">Revenir à l'accueil</a>
+                </div>
+            </div>
+        </section>
+    </main>
+{% endblock %}

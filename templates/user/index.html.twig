@@ -21,38 +21,39 @@
                         <h3>Gestion des tâches</h3>
                         {% if app.user.isSuperAdmin() %}
                         <div class="row row-cols-3 g-lg-3">
-                            <div class="col"><div class="p-3 border bg-light"><a href="{{ path('menu_index') }}">Menus</a></div></div>
-                            <div class="col"><div class="p-3 border bg-light"><a href="{{ path('page_index') }}">Pages</a></div></div>
-                            <div class="col"><div class="p-3 border bg-light"><a href="{{ path('entreprise_index') }}">Entreprises</a></div></div>
-                            <div class="col"><div class="p-3 border bg-light"><a href="{{ path('annonce_index') }}">Annonces</a></div></div>
-                            <div class="col"><div class="p-3 border bg-light"><a href="{{ path('candidature_index') }}">Candidatures</a></div></div>
-                            <div class="col"><div class="p-3 border bg-light"><a href="{{ path('modele_offre_commerciale_index') }}">Modèle offres commerciales</a></div></div>
-                            <div class="col"><div class="p-3 border bg-light"><a href="{{ path('facture_index') }}">Factures</a></div></div>
-                            <div class="col"><div class="p-3 border bg-light"><a href="{{ path('dictionnaire_index') }}">Dictionnaire</a></div></div>
-                            <div class="col"><div class="p-3 border bg-light"><a href="{{ path('annuaire_index') }}">Annuaire</a></div></div>
-                            <div class="col"><div class="p-3 border bg-light"><a href="{{ path('agenda_index') }}">Agenda</a></div></div>
-                            <div class="col"><div class="p-3 border bg-light"><a href="{{ path('email_index') }}">Emails</a></div></div>
-                            <div class="col"><div class="p-3 border bg-light"><a href="{{ path('profile_index') }}">Utilisateurs</a></div></div>
+                            <a class="text-white" href="{{ path('menu_index') }}"><div class="col"><div class="p-3 border" style="background-color: #0466c8"><i class="bi bi-menu-app m-2"></i>Menus</div></div></a>
+                            <a class="text-white" href="{{ path('page_index') }}"><div class="col"><div class="p-3 border" style="background-color: #0353a4"><i class="bi bi-file-earmark-break m-2"></i>Pages</div></div></a>
+                            <a class="text-white" href="{{ path('entreprise_index') }}"><div class="col"><div class="p-3 border" style="background-color: #023e7d"><i class="bi bi-building m-2"></i>Entreprises</div></div></a>
+                            <a class="text-white" href="{{ path('annonce_index') }}"><div class="col"><div class="p-3 border" style="background-color: #002855"><i class="bi bi-megaphone m-2"></i>Annonces</div></div></a>
+                            <a class="text-white" href="{{ path('candidature_index') }}"><div class="col"><div class="p-3 border" style="background-color: #001845"><i class="bi bi-person-lines-fill m-2"></i>Candidatures</div></div></a>
+                            <a class="text-white" href="{{ path('modele_offre_commerciale_index') }}"><div class="col"><div class="p-3 border" style="background-color: #001233"><i class="bi bi-clipboard-check m-2"></i>Modèle offres commerciales</div></div></a>
+                            <a class="text-white" href="{{ path('facture_index') }}"><div class="col"><div class="p-3 border" style="background-color: #33415c"><i class="bi bi-file-earmark-spreadsheet m-2"></i>Factures</div></div></a>
+                            <a class="text-white" href="{{ path('dictionnaire_index') }}"><div class="col"><div class="p-3 border" style="background-color: #5c677d"><i class="bi bi-book m-2"></i>Dictionnaire</div></div></a>
+                            <a class="text-white" href="{{ path('annuaire_index') }}"><div class="col"><div class="p-3 borde" style="background-color: #7d8597"><i class="bi bi-collection m-2"></i>Annuaire</div></div></a>
+                            <a class="text-white" href="{{ path('agenda_index') }}"><div class="col"><div class="p-3 border" style="background-color: #979dac"><i class="bi bi-calendar4-event m-2"></i>Agenda</div></div></a>
+                            <a class="text-white" href="{{ path('email_index') }}"><div class="col"><div class="p-3 border" style="background-color: #012a4a"><i class="bi bi-at m-2"></i>Emails</div></div></a>
+                            <a class="text-white" href="{{ path('profile_index') }}"><div class="col"><div class="p-3 border" style="background-color: #013a63"><i class="bi bi-people m-2"></i>Utilisateurs</div></div></a>
+
                         </div>
                         {% endif %}
                         {% if app.user.isSuperRecruteur() %}
                         <div class="row row-cols-3 g-lg-3">
-                            <div class="col"><div class="p-3 border bg-light"><a href="{{ path('annonce_index') }}">Annonces</a></div></div>
-                            <div class="col"><div class="p-3 border bg-light"><a href="{{ path('candidature_index') }}">Candidatures</a></div></div>
-                            <div class="col"><div class="p-3 border bg-light"><a href="{{ path('entreprise_index') }}">Entreprises</a></div></div>
+                            <a class="text-white" href="{{ path('annonce_index') }}"><div class="col"><div class="p-3 border" style="background-color: #014f86"><i class="bi bi-megaphone m-2"></i>Annonces</div></div></a>
+                            <a class="text-white" href="{{ path('candidature_index') }}"><div class="col"><div class="p-3 border" style="background-color: #2a6f97"><i class="bi bi-person-lines-fill m-2"></i>Candidatures</div></div></a>
+                            <a class="text-white" href="{{ path('entreprise_index') }}"><div class="col"><div class="p-3 border" style="background-color: #01497c"><i class="bi bi-building m-2"></i>Entreprises</div></div></a>
                         </div>
                         {% endif %}
                         {% if app.user.isRecruteur() %}
                         <div class="row row-cols-3 g-lg-3">
-                            <div class="col"><div class="p-3 border bg-light"><a href="{{ path('annonce_index') }}">Annonces</a></div></div>
-                            <div class="col"><div class="p-3 border bg-light"><a href="{{ path('candidature_index') }}">Candidatures</a></div></div>
+                            <a class="text-white" href="{{ path('annonce_index') }}"><div class="col"><div class="p-3 border" style="background-color: #014f86"><i class="bi bi-megaphone m-2"></i>Annonces</div></div></a>
+                            <a class="text-white" href="{{ path('candidature_index') }}"><div class="col"><div class="p-3 border" style="background-color: #2a6f97"><i class="bi bi-person-lines-fill m-2"></i>Candidatures</div></div></a>
                         </div>
                         {% endif %}
                         {% if app.user.isCandidat() %}
                         <div class="row row-cols-3 g-lg-3">
-                            <div class="col"><div class="p-3 border bg-light"><a href="{{ path('candidature_index') }}">Mes candidatures</a></div></div>
-                            <div class="col"><div class="p-3 border bg-light"><a href="{{ path('menu_index') }}">Offres en adéquation avec mon profil</a></div></div>
-                            <div class="col"><div class="p-3 border bg-light"><a href="{{ path('menu_index') }}">Offres sélectionnées</a></div></div>
+                            <a class="text-white" href="{{ path('candidature_index') }}"><div class="col"><div class="p-3 border" style="background-color: #2a6f97"><i class="bi bi-person-lines-fill m-2"></i>Mes candidatures</div></div></a>
+                            <a class="text-white" href="{{ path('annonce_index') }}"><div class="col"><div class="p-3 border" style="background-color: #014f86"><i class="bi bi-clipboard-check m-2"></i>Offres en adéquation avec mon profil</div></div></a>
+                            <a class="text-white" href="{{ path('annonce_index') }}"><div class="col"><div class="p-3 border" style="background-color: #014f86"><i class="bi bi-clipboard-check m-2"></i>Offres selectionnées</div></div></a>
                         </div>
                         {% endif %}
                     </div>
@@ -68,14 +69,14 @@
                         </div>
 
                         <b class="p-1">{{ app.user.getFullname()|upper }}</b>
-                        <a href="{{ path('user_data', {id: user.id}) }}" class="btn btn-primary px-4 ms-3 m-3">Voir mon profile complet</a>
-                        <a href="{{ path('app_profile_edit') }}" class="btn btn-primary px-4 ms-3 m-3">Mettre à jour mes infos de connexion</a>
+                        <a href="{{ path('user_data', {id: user.id}) }}" class="btn-sm text-white mb-1" style="background-color: #023047"><i class="bi bi-eye m-2"></i>Voir mon profile complet</a>
+                        <a href="{{ path('app_profile_edit') }}" class="btn-sm text-white mb-1" style="background-color:#219ebc"><i class="bi bi-pencil-square m-2"></i>Mettre à jour mes infos de connexion</a>
                         {% if app.user.profile is empty %}
-                            <a href="{{ path('profile_new', {id: user.id}) }}" class="btn btn-primary px-4 ms-3 m-3">Compléter mon profile</a>
+                            <a href="{{ path('profile_new', {id: user.id}) }}" class="btn-sm text-white mb-1" style="background-color: #023047"><i class="bi bi-file-earmark-person"></i>Compléter mon profile</a>
                         {% else %}
-                            <a href="{{ path('profile_edit', {id: user.id}) }}" class="btn btn-primary px-4 ms-3 m-3">Mettre à jour mon profile</a>
+                            <a href="{{ path('profile_edit', {id: user.id}) }}" class="btn-sm text-white mb-1" style="background-color: #ffb703"><i class="bi bi-pen m-2"></i>Mettre à jour mon profile</a>
                         {% endif %}
-                        <a class="btn btn-primary px-4 ms-3 m-3" href="{{ path('pass_modifier', {id: user.id}) }}">Changer le mot de passe</a>
+                        <a class="btn-sm text-white mb-1" style="background-color: #fb8500" href="{{ path('pass_modifier', {id: user.id}) }}"><i class="bi bi-upc m-2"></i>Changer le mot de passe</a>
 
                         {#{% if not app.user.isCandidat() %}
                             <div>

@@ -196,28 +196,4 @@ class UserController extends AbstractController
         $img->setNameFile($name);
         $user->addFiles($img);
     }
-
-    #[Route('/candidats', name: 'candidats', methods: ['GET'])]
-    public function candidats(UserRepository $userRepository): Response
-    {
-        return $this->render('user/candidats.html.twig', [
-            'users' => $userRepository->findAll(),
-        ]);
-    }
-
-    #[Route('/recruteurs', name: 'recruteurs', methods: ['GET'])]
-    public function recruteurs(UserRepository $userRepository): Response
-    {
-        return $this->render('user/recruteurs.html.twig', [
-            'users' => $userRepository->findAll(),
-        ]);
-    }
-
-    #[Route('/super-recruteurs', name: 'super-recruteurs', methods: ['GET'])]
-    public function superRecruteurs(UserRepository $userRepository): Response
-    {
-        return $this->render('user/super_recruteurs.html.twig', [
-            'users' => $userRepository->findAll(),
-        ]);
-    }
 }

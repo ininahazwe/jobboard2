@@ -15,25 +15,33 @@
         </section><!-- End Breadcrumbs -->
 
         <section class="inner-page">
-            <div class="container" id="datatables">
-                {{ form(search_form) }}
-                {% for entreprise in entreprises %}
-                    <div class="row mb-1 p-3 border">
-                        <div class="col-6">
-                            <h4><a href="{{ path('entreprise_show_unit', {id:entreprise.id, slug:entreprise.slug}) }}">{{ entreprise.name }}</a></h4>
-                        </div>
-                        <div class="col-4">
-                            {% if entreprise.annoncesEntreprise|length >= 1 %}
-                                <span class="btn-secondary btn-sm">{{ pluralize(entreprise.annoncesEntreprise|length, 'annonce') }}</span>
-                            {% endif %}
-                        </div>
-                        <div class="col-2">
-                            {% if entreprise.logo|length %}
-                                <img class="card-img-top mx-auto" style="width:100px" src="{{ asset(entreprise.getUrlLastLogo()) }}" alt="{{ entreprise.getNameLastLogo() }}">
-                            {% endif %}
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-outline">
+                            <input type="search" id="form1" class="form-control" placeholder="Rechercher" aria-label="Search" />
                         </div>
                     </div>
-                {% endfor %}
+                    <div class="col-md-9">
+                        {% for entreprise in entreprises %}
+                            <div class="row mb-1 p-3 border">
+                                <div class="col-6">
+                                    <h4><a href="{{ path('entreprise_show_unit', {id:entreprise.id, slug:entreprise.slug}) }}">{{ entreprise.name }}</a></h4>
+                                </div>
+                                <div class="col-4">
+                                    {% if entreprise.annoncesEntreprise|length >= 1 %}
+                                        <span class="btn-secondary btn-sm">{{ pluralize(entreprise.annoncesEntreprise|length, 'annonce') }}</span>
+                                    {% endif %}
+                                </div>
+                                <div class="col-2">
+                                    {% if entreprise.logo|length %}
+                                        <img class="card-img-top mx-auto" style="width:100px" src="{{ asset(entreprise.getUrlLastLogo()) }}" alt="{{ entreprise.getNameLastLogo() }}">
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
             </div>
         </section>
     </main>

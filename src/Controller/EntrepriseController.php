@@ -42,7 +42,7 @@ class EntrepriseController extends AbstractController
         $entreprises = $paginator->paginate(
             $data,
             $request->query->getInt('page', 1),
-            10
+            100
         );
 
         if($this->getUser()->isSuperRecruteur()){
@@ -54,6 +54,33 @@ class EntrepriseController extends AbstractController
 
         return $this->render('entreprise/index.html.twig', [
             'entreprises' => $entreprises,
+        ]);
+    }
+
+    #[Route('/attente', name: 'entreprise_attente', methods: ['GET'])]
+    public function entrepriseEnAttente(EntrepriseRepository $entrepriseRepository, Request $request): Response
+    {
+        return $this->render('entreprise/attente.html.twig', [
+            'entreprises' => $entrepriseRepository->getEntreprisesEnAttente(),
+            'referer' => base64_encode($request->getRequestUri()),
+        ]);
+    }
+
+    #[Route('/acceptees', name: 'entreprise_acceptees', methods: ['GET'])]
+    public function entreprisesAcceptees(EntrepriseRepository $entrepriseRepository, Request $request): Response
+    {
+        return $this->render('entreprise/acceptees.html.twig', [
+            'entreprises' => $entrepriseRepository->getEntreprisesAcceptees(),
+            'referer' => base64_encode($request->getRequestUri()),
+        ]);
+    }
+
+    #[Route('/refusees', name: 'entreprise_refusees', methods: ['GET'])]
+    public function entreprisesRefusees(EntrepriseRepository $entrepriseRepository, Request $request): Response
+    {
+        return $this->render('entreprise/refusees.html.twig', [
+            'entreprises' => $entrepriseRepository->getEntreprisesRefusees(),
+            'referer' => base64_encode($request->getRequestUri()),
         ]);
     }
 
@@ -82,11 +109,6 @@ class EntrepriseController extends AbstractController
             if ($form->get('logo')->getData()){
                 $this->uploadFile($form->get('logo')->getData(), $entreprise);
             }
-            if (!$user){
-                $entreprise->setModeration(0);
-            } else {
-                $entreprise->setModeration(1);
-            }
             $entreprise->setRefClient($ref);
 
             $entityManager = $this->getDoctrine()->getManager();
@@ -106,8 +128,6 @@ class EntrepriseController extends AbstractController
             $twig = new Environment($loader);
             $message = $twig->render('email',['user' => $this->getUser(), 'entreprise' => $entreprise ]);
 
-            $this->addFlash('success', 'Ajout réussi');
-
             $mailer->send([
                 'recipient_email' => 'contact@talents-handicap.com',
                 'subject'         => $email->getSubject(),
@@ -119,7 +139,7 @@ class EntrepriseController extends AbstractController
 
             $this->addFlash('success', 'Ajout réussi');
 
-            return $this->redirectToRoute('entreprise_show', ['slug' => $entreprise->getSlug()], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('entreprise_show', ['slug' => $entreprise->getSlug()]);
 
         }
 
@@ -177,13 +197,13 @@ class EntrepriseController extends AbstractController
     {
         $modeleId = $request->get('modeleId');
         if (!$modeleId){
-            return $this->redirect($this->generateUrl('entreprise_offres_commerciales', ['id'=>$entreprise->getId()]), Response::HTTP_SEE_OTHER);
+            return $this->redirect($this->generateUrl('entreprise_offres_commerciales', ['id'=>$entreprise->getId()]));
         }
         $this->saveOffreModele($entreprise->getId(), $modeleId);
 
         $this->addFlash('success', 'Ajout réussi');
 
-        return $this->redirect($this->generateUrl('entreprise_offres_commerciales', ['id'=>$entreprise->getId()]),Response:: HTTP_SEE_OTHER);
+        return $this->redirect($this->generateUrl('entreprise_offres_commerciales', ['id'=>$entreprise->getId()]));
     }
 
     #[Route('/{id}/edit', name: 'entreprise_edit', methods: ['GET', 'POST'])]
@@ -204,7 +224,7 @@ class EntrepriseController extends AbstractController
 
             $this->addFlash('success', 'Mise à jour réussie');
 
-            return $this->redirectToRoute('entreprise_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('entreprise_index');
         }
 
         return $this->render('entreprise/edit.html.twig', [
@@ -262,7 +282,7 @@ class EntrepriseController extends AbstractController
     {
         $userExist = $userRepository->findOneBy(['email' =>$request->get('user[email]')]);
         $password = $userRepository->genererMDP();
-        $anonymous = !$this->getUser();
+
         if ($userExist){
             $user = $userExist;
         }else{
@@ -283,7 +303,7 @@ class EntrepriseController extends AbstractController
                     )
                 );
             }
-            if ($superRecruteur || $anonymous){
+            if ($superRecruteur){
                 $entreprise->addSuperRecruteur($user);
                 $user->setRoles(['ROLE_SUPER_RECRUTEUR']);
             }else{
@@ -295,11 +315,7 @@ class EntrepriseController extends AbstractController
             $entityManager->persist($entreprise);
             $entityManager->flush();
 
-            if ($anonymous){
-                $email = $entityManager->getRepository('App:Email')->findOneBy(['code' => 'EMAIL_DEMANDE_VALIDATION_ENTREPRISE']);
-            } else {
-                $email = $entityManager->getRepository('App:Email')->findOneBy(['code' => 'EMAIL_CREATION_RECRUTEUR']);
-            }
+            $email = $entityManager->getRepository('App:Email')->findOneBy(['code' => 'EMAIL_CREATION_RECRUTEUR']);
 
             $loader = new ArrayLoader([
                 'email' => $email->getContent(),
@@ -321,11 +337,8 @@ class EntrepriseController extends AbstractController
 
             $this->addFlash('success', 'Ajout réussi');
 
-            if ($anonymous){
-                return $this->redirectToRoute('entreprise_show', ['slug' => $entreprise->getSlug()], Response::HTTP_SEE_OTHER);
-            } else {
-                return $this->redirectToRoute('entreprise_recruteurs',['id' => $entreprise->getId()], Response::HTTP_SEE_OTHER);
-            }
+            return $this->redirectToRoute('entreprise_recruteurs',['id' => $entreprise->getId()]);
+
         }
 
         return $this->render('user_creation/new.html.twig', [
@@ -385,7 +398,7 @@ class EntrepriseController extends AbstractController
 
         $this->addFlash('success', 'Envoi réussi');
 
-        return $this->redirectToRoute('entreprise_recruteurs',['id' => $entreprise->getId()], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('entreprise_recruteurs',['id' => $entreprise->getId()]);
     }
 
     /**
@@ -415,7 +428,7 @@ class EntrepriseController extends AbstractController
 
         $this->addFlash('success', 'La suppression du recruteur '. $user->getFullname() .' est réussie');
 
-        return $this->redirectToRoute('entreprise_recruteurs',['id' => $entreprise->getId()], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('entreprise_recruteurs',['id' => $entreprise->getId()]);
     }
 
     #[Route('/{id}', name: 'entreprise_delete', methods: ['POST'])]
@@ -502,41 +515,84 @@ class EntrepriseController extends AbstractController
         $entreprise->addLogo($img);
     }
 
-    #[Route('/attente', name: 'attente', methods: ['GET'])]
-    public function candidats(EntrepriseRepository $entrepriseRepository): Response
-    {
-        return $this->render('entreprise/attente.html.twig', [
-            'entreprises' => $entrepriseRepository->findAll(),
-        ]);
-    }
-
-    #[Route('/acceptees', name: 'entreprise_acceptees', methods: ['GET'])]
-    public function entreprisesAcceptees(EntrepriseRepository $entrepriseRepository): Response
-    {
-        return $this->render('entreprise/acceptees.html.twig', [
-            'entreprises' => $entrepriseRepository->getEntreprisesAcceptees(),
-        ]);
-    }
-
-    #[Route('/refusees', name: 'entreprise_refusees', methods: ['GET'])]
-    public function entreprisesRefusees(EntrepriseRepository $entrepriseRepository): Response
-    {
-        return $this->render('entreprise/refusees.html.twig', [
-            'entreprises' => $entrepriseRepository->getEntreprisesRefusees(),
-        ]);
-    }
-
-    #[Route('/{id}/accepter', name: 'entreprise_accepter', methods: ['GET'])]
-    public function accepter($id, Request $request, Entreprise $entreprise): Response
+    #[Route('/{id}/accepter', name: 'entreprise_accepter')]
+    public function accepterEntreprise(Entreprise $entreprise,
+                                       $id,
+                                       Request $request,
+                                       UserPasswordEncoderInterface $passwordEncoder,
+                                       UserRepository $userRepository,
+                                       Mailer $mailer,
+                                       ModeleOffreCommercialeRepository $modeleOffreCommercialeRepository
+    ): Response
     {
         $entityManager = $this->getDoctrine()->getManager();
         $entreprise = $entityManager->getRepository('App:Entreprise')->find($id);
         $entreprise->setModeration('1');
         $entityManager->persist($entreprise);
+
+        $recruteurs = $entreprise->getAllRecruteurs();
+
+        foreach($recruteurs as $recruteur){
+            $password = $userRepository->genererMDP();
+            $recruteur->setPassword(
+                $passwordEncoder->encodePassword(
+                    $recruteur,
+                    $password
+                )
+            );
+            $recruteur->setModeration('1');
+            $entityManager->persist($recruteur);
+
+            $email = $entityManager->getRepository('App:Email')->findOneBy(['code' => 'EMAIL_VALIDATION_ENTREPRISE_RECRUTEUR']);
+
+            $loader = new ArrayLoader([
+                'email' => $email->getContent(),
+            ]);
+
+            $twig = new Environment($loader);
+            $message = $twig->render('email',['recruteur' => $recruteur, 'password' => $password, 'entreprise' => $entreprise ]);
+
+            $mailer->send([
+                'recipient_email' => $recruteur->getEmail(),
+                'subject'         => $email->getSubject(),
+                'html_template'   => 'emails/email_vide.html.twig',
+                'context'         => [
+                    'message' => $message
+                ]
+            ]);
+        }
+
         $entityManager->flush();
+
+        $modele = $modeleOffreCommercialeRepository->findOneBy(['prix' => '0']);
+        $this->saveOffreModele($entreprise->getId(), $modele->getId());
 
         $this->addFlash('success', 'Acceptation validée');
 
-        return $this->redirectToRoute('entreprise_show', ['slug' => $entreprise->getSlug()], Response::HTTP_SEE_OTHER);
+        if ($referer = $request->get('referer', false)) {
+            $referer = base64_decode($referer);
+            return $this->redirect(($referer));
+        }else {
+            return $this->redirectToRoute('entreprise_show', ['slug' => $entreprise->getSlug()]);
+        }
+    }
+
+    #[Route('/{id}/rejeter', name: 'entreprise_rejeter', methods: ['GET'])]
+    public function rejeter($id, Request $request, Entreprise $entreprise): Response
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $entreprise = $entityManager->getRepository('App:Entreprise')->find($id);
+        $entreprise->setModeration('2');
+        $entityManager->persist($entreprise);
+        $entityManager->flush();
+
+        $this->addFlash('danger', 'Rejet validé');
+
+        if ($referer = $request->get('referer', false)) {
+            $referer = base64_decode($referer);
+            return $this->redirect(($referer));
+        } else {
+            return $this->redirectToRoute('entreprise_show', ['slug' => $entreprise->getSlug()]);
+        }
     }
 }

@@ -39,7 +39,15 @@
                                 <td><a href="{{ path('page_show', {slug: page.slug})}}">{{ page.title }}</a></td>
                                 <td>{{ page.content|slice(0, 250)|raw }}...</td>
                                 <td>{{ page.style }}</td>
-                                <td>{{ page.type }}</td>
+                                <td>
+                                    {% if page.type  == '1' %}
+                                        Page Candidat
+                                    {% elseif page.type  == '2' %}
+                                        Page Recruteur
+                                    {% elseif page.type  == '3' %}
+                                        Page Autre
+                                    {% endif %}
+                                </td>
                                 <td>{{ page.slug }}</td>
                                 <td>
                                     {% if page.files|length %}

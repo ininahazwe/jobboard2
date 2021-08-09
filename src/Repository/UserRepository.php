@@ -167,4 +167,48 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         }
 
     }
+
+    /**
+     * @return mixed
+     */
+    public function getAllcandidats(): mixed
+    {
+        $query = $this->createQueryBuilder('u')
+            ->where('u.roles = ROLE_CANDIDAT')
+        ;
+        return $query->getQuery()->getResult();
+    }
+    /**
+     * @return mixed
+     */
+    public function getAllRecruteurs(): mixed
+    {
+        $query = $this->createQueryBuilder('u')
+            ->where('u.roles = ROLE_RECRUTEUR')
+        ;
+        return $query->getQuery()->getResult();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAllSuperRecruteurs(): mixed
+    {
+        $query = $this->createQueryBuilder('u')
+            ->where('u.roles = ROLE_SUPER_RECRUTEUR')
+        ;
+        return $query->getQuery()->getResult();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserEnAttente(): mixed
+    {
+        $query = $this->createQueryBuilder('u')
+            ->where('u.moderation = 0')
+        ;
+        return $query->getQuery()->getResult();
+    }
+
 }

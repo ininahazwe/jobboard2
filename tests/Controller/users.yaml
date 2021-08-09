@@ -1,0 +1,5 @@
+App\Entity\User:
+  user_user:
+    email: "momo@gmail.com"
+    roles: "[]"
+    password: "\\$2y\\$10\\$PxzKAsAmgr8.wk4rVvbJB.ZnudGCHBCmjsdoZnL7ibA9F9bBqFQTm"

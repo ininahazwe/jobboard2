@@ -25,10 +25,8 @@ class SearchAnnonceForm extends AbstractType
                 ]
             ])
             ->add('entreprises', EntityType::class, [
-                'label' => false,
-                'required' => false,
                 'class' => Entreprise::class,
-                'expanded' => true,
+                'expanded' => false,
                 'multiple' => true,
             ])
        ;

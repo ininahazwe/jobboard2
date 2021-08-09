@@ -286,4 +286,12 @@ class EntrepriseRepository extends ServiceEntityRepository
         }
         return $query->getQuery()->getResult();
     }
+
+    public function getEntrepriseActive()
+    {
+        $query = $this->createQueryBuilder('e')
+            ->where('e.moderation = 1')
+        ;
+        return $query->getQuery()->getResult();
+    }
 }

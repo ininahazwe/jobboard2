@@ -37,7 +37,29 @@
                         <td>{{ menu.link }}</td>
                         <td>{{ menu.displayOrder }}</td>
                         <td>{{ menu.niveau }}</td>
-                        <td>{{ menu.type }}</td>
+                        <td>{% if menu.type  == '1' %}
+                                Menu Candidat
+                            {% elseif menu.type  == '2' %}
+                                Menu Recruteur
+                            {% elseif menu.type  == '3' %}
+                                Menu Footer
+                            {% elseif menu.type  == '4' %}
+                                Menu Contenu
+                            {% elseif menu.type  == '5' %}
+                                Menu Réseaux sociaux
+                            {% elseif menu.type  == '6' %}
+                                Menu Twitter
+                            {% elseif menu.type  == '7' %}
+                                Menu Facebook
+                            {% elseif menu.type  == '8' %}
+                                Menu Instagram
+                            {% elseif menu.type  == '9' %}
+                                Menu Skype
+                            {% elseif menu.type  == '10' %}
+                                Menu Linkedin
+                            {% elseif menu.type  == '11' %}
+                                Menu Youtube
+                            {% endif %}</td>
                         <td>
                             <div class="d-flex justify-content-around">
                                 <a href="{{ path('menu_edit', {'id': menu.id}) }}" class="d-flex align-items-center"><i class="fas fa-edit"></i></a>

@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Les chiffres du covid-19{% endblock %}
+
+{% block body %}
+    <main id="main">
+        <!-- ======= Breadcrumbs ======= -->
+        <section id="breadcrumbs" class="breadcrumbs">
+            <div class="container">
+                <ol>
+                    <li><a href="{{ path('app_home') }}">Home</a></li>
+                    <li><a href="{{ path('app_profile') }}">Dashboard</a></li>
+                    <li><a href="{{ path('annuaire_index') }}">Annuaire</a></li>
+                    <li>API</li>
+                </ol>
+                <h1>Les chiffres dans le de département '{{ data.LiveDataByDepartement.0.nom }}'</h1>
+            </div>
+        </section><!-- End Breadcrumbs -->
+        <section class="inner-page">
+            <div class="container">
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                    <p class="lead">Source: {{ data.LiveDataByDepartement.0.sourceType }}</p>
+                    <p class="lead">Date d'actualisation: {{ data.LiveDataByDepartement.0.date }}</p>
+                </div>
+                <div class="row text-center">
+                    <div class="col">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title">Hospitalisations</h5>
+                                <p class="card-text">Nombre de personnes actuellement hospitalisées</p>
+                            </div>
+                            <h3 class="card-footer bg-warning text-dark mx-2 rounded-pill">{{ data.LiveDataByDepartement.0.hospitalises}}</h3>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title">Réanimation</h5>
+                                <p class="card-text">Nombre de personnes actuellement en réanimation</p>
+                            </div>
+                            <h3 class="card-footer bg-warning text-dark mx-2 rounded-pill">{{ data.LiveDataByDepartement.0.reanimation}}</h3>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title">Décès</h5>
+                                <p class="card-text">Nombre de personnes décédées</p>
+                            </div>
+                            <h3 class="card-footer bg-warning text-dark mx-2 rounded-pill">{{ data.LiveDataByDepartement.0.deces }}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+{% endblock %}

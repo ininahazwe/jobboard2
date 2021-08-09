@@ -189,6 +189,11 @@ Voici les
    composer require knplabs/knp-paginator-bundle
    ```
 
+14. Tests
+   ```sh
+   symfony console make:test
+   php bin/phpunit
+   ```
 
 <!-- USAGE EXAMPLES -->
 ## Usage

@@ -24,6 +24,38 @@ class ProfileController extends AbstractController
         ]);
     }
 
+    #[Route('/candidats', name: 'candidats', methods: ['GET'])]
+    public function candidats(UserRepository $userRepository): Response
+    {
+        return $this->render('user/candidats.html.twig', [
+            'users' => $userRepository->getAllcandidats(),
+        ]);
+    }
+
+    #[Route('/recruteurs', name: 'recruteurs', methods: ['GET'])]
+    public function recruteurs(UserRepository $userRepository): Response
+    {
+        return $this->render('user/recruteurs.html.twig', [
+            'users' => $userRepository->getAllRecruteurs(),
+        ]);
+    }
+
+    #[Route('/super-recruteurs', name: 'super-recruteurs', methods: ['GET'])]
+    public function superRecruteurs(UserRepository $userRepository): Response
+    {
+        return $this->render('user/super_recruteurs.html.twig', [
+            'users' => $userRepository->getAllSuperRecruteurs(),
+        ]);
+    }
+
+    #[Route('/users-en-attente', name: 'user-attente', methods: ['GET'])]
+    public function usersEnAttente(UserRepository $userRepository): Response
+    {
+        return $this->render('user/super_recruteurs.html.twig', [
+            'users' => $userRepository->getUserEnAttente(),
+        ]);
+    }
+
     #[Route('/new', name: 'profile_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {

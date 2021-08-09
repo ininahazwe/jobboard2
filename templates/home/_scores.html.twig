@@ -40,10 +40,11 @@
                 {% for entreprise in entreprises %}
                     <div class="row bg-white m-1 p-1">
                         <div class="col">
-                            {% if entreprise.city not in entreprises %}
+                            {{ entreprise.city }}
+                            {#{% if entreprise.city not in entreprises %}
                                 {{ entreprise.city }}
                                 {% set entreprises = entreprises|merge([entreprise.city]) %}
-                            {% endif %}
+                            {% endif %}#}
                         </div>
                         <div class="col text-end">
 

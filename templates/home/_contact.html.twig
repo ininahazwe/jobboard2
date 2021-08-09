@@ -6,7 +6,6 @@
             <h2>Contact</h2>
             <p>Pour demander un devis personnalisé ou obtenir des renseignements complémentaires sur nos prestations :</p>
         </div>
-
         <div class="row">
 
             <div class="col-lg-5 d-flex align-items-stretch">
@@ -34,32 +33,38 @@
             </div>
 
             <div class="col-lg-7 mt-5 mt-lg-0 d-flex align-items-stretch">
-                <form action="forms/contact.php" method="post" role="form" class="php-email-form">
+                <div class="php-email-form">
+                    {{ form_start(contactForm) }}
                     <div class="row">
                         <div class="form-group col-md-6">
-                            <label for="name">Nom et Prénom</label>
-                            <input type="text" name="name" class="form-control" id="name" required>
+                            {{ form_row(contactForm.firstname) }}
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="name">Email</label>
-                            <input type="email" class="form-control" name="email" id="email" required>
+                            {{ form_row(contactForm.lastname) }}
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="name">Sujet</label>
-                        <input type="text" class="form-control" name="subject" id="subject" required>
+                        {{ form_row(contactForm.email) }}
                     </div>
                     <div class="form-group">
-                        <label for="name">Message</label>
-                        <textarea class="form-control" name="message" rows="10" required></textarea>
+                        {{ form_row(contactForm.subject) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_row(contactForm.message) }}
                     </div>
                     <div class="my-3">
-                        <div class="loading">Loading</div>
-                        <div class="error-message"></div>
-                        <div class="sent-message">Your message has been sent. Thank you!</div>
+                        {% for message in app.flashes('success') %}
+                            <div class="alert alert-success">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
                     </div>
-                    <div class="text-center"><button type="submit">Envoyer</button></div>
-                </form>
+
+                    {% include 'partials/hcaptcha_submit_button.html.twig' %}
+
+{#                    <div class="text-center"><button type="submit">Envoyer</button></div>#}
+                    {{ form_end(contactForm) }}
+                </div>
             </div>
         </div>
     </div>

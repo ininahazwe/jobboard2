@@ -18,6 +18,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class User implements UserInterface
 {
+    const EN_ATTENTE = 0;
+    const ACCEPTEE = 1;
+    const REFUSEE = 2;
+
     use ResourceId;
     use Timestapable;
 
@@ -163,6 +167,11 @@ class User implements UserInterface
      * @ORM\OneToMany(targetEntity=Annonce::class, mappedBy="current_recruteur")
      */
     private Collection $annonces;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $moderation;
 
     public function __construct()
     {
@@ -916,5 +925,31 @@ class User implements UserInterface
     {
         $role = "ROLE_SUPER_ADMIN_HANDICV";
         return $this->checkRoles($role);
+    }
+
+    public function getModeration(): ?string
+    {
+        return $this->moderation;
+    }
+
+    public function setModeration(?string $moderation): self
+    {
+        $this->moderation = $moderation;
+
+        return $this;
+    }
+
+    /**
+     * @return string|void
+     */
+    public static function getModerationName()
+    {
+        if ($moderation = '0'){
+            return 'En attente';
+        }else if($moderation = '1'){
+            return 'Accepté';
+        }else if($moderation = '2'){
+            return 'Refusé';
+        }
     }
 }

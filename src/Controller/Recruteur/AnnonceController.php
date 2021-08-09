@@ -25,7 +25,7 @@ class AnnonceController extends AbstractController
         $annonces = $paginator->paginate(
             $data,
             $request->query->getInt('page', 1),
-            8
+            50
         );
 
         return $this->render('annonce/index.html.twig', [

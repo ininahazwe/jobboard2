@@ -30,14 +30,10 @@ use Twig\Loader\ArrayLoader;
 class FactureController extends AbstractController
 {
     #[Route('/', name: 'facture_index', methods: ['GET'])]
-    public function index(Request $request, FactureRepository $factureRepository, PaginatorInterface $paginator): Response
+    public function index(Request $request, FactureRepository $factureRepository): Response
     {
-        $data = $factureRepository->findAll();
-        $factures = $paginator->paginate(
-            $data,
-            $request->query->getInt('page', 1),
-            10
-        );
+        $factures = $factureRepository->findAll();
+
         return $this->render('facture/index.html.twig', [
             'factures' => $factures,
         ]);

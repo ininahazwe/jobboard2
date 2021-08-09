@@ -1,6 +1,33 @@
-<div class="list-group"><a class="list-group-item list-group-item-action active" href="{{ path('entreprise_index') }}">Entreprises (toutes)</a></div>
+<div class="list-group"><a
+            {% if app.request.attributes.get('_route') == 'entreprise_index'%}
+            class="list-group-item list-group-item-action active"
+            {% else %}
+            class="list-group-item list-group-item-action"
+            {% endif %}
+            href="{{ path('entreprise_index') }}">Entreprises (toutes)</a></div>
 {% if app.user.isSuperAdmin() %}
-    <div class="list-group"><a class="list-group-item list-group-item-action" href="{{ path('attente') }}">Entreprises en attente </a></div>
-    <div class="list-group"><a class="list-group-item list-group-item-action" href="{{ path('entreprise_acceptees') }}">Entreprises acceptées</a></div>
-    <div class="list-group"><a class="list-group-item list-group-item-action" href="{{ path('entreprise_refusees') }}">Entreprises refusées</a></div>
+    <div class="list-group"><a
+                {% if app.request.attributes.get('_route') == 'entreprise_attente'%}
+                    class="list-group-item list-group-item-action active"
+                {% else %}
+                    class="list-group-item list-group-item-action"
+                {% endif %}
+                href="{{ path('entreprise_attente') }}">Entreprises en attente </a>
+    </div>
+    <div class="list-group"><a
+                {% if app.request.attributes.get('_route') == 'entreprise_acceptees'%}
+                    class="list-group-item list-group-item-action active"
+                {% else %}
+                    class="list-group-item list-group-item-action"
+                {% endif %}
+                href="{{ path('entreprise_acceptees') }}">Entreprises acceptées</a>
+    </div>
+    <div class="list-group"><a
+                {% if app.request.attributes.get('_route') == 'entreprise_refusees'%}
+                    class="list-group-item list-group-item-action active"
+                {% else %}
+                    class="list-group-item list-group-item-action"
+                {% endif %}
+                href="{{ path('entreprise_refusees') }}">Entreprises refusées</a>
+    </div>
 {% endif %}

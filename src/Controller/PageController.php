@@ -18,29 +18,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class PageController extends AbstractController
 {
     #[Route('/', name: 'page_index', methods: ['GET', 'POST'])]
-    public function index(PageRepository $pageRepository, Request $request, PaginatorInterface $paginator): Response
+    public function index(PageRepository $pageRepository, Request $request): Response
     {
-        $data = $pageRepository->findAll();
-
-        $pages = $paginator->paginate(
-            $data,
-            $request->query->getInt('page', 1),
-            10
-        );
-
-        $form = $this->createForm(SearchAnnonceForm::class);
-
-        $search = $form->handleRequest($request);
-
-        if($form->isSubmitted() && $form->isValid()){
-            $pages = $pageRepository->search(
-                $search->get('mots')->getData()
-            );
-        }
+        $pages = $pageRepository->findAll();
 
         return $this->render('page/index.html.twig', [
             'pages' => $pages,
-            'form' => $form->createView()
         ]);
     }
 

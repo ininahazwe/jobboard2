@@ -23,7 +23,7 @@ class MenuRepository extends ServiceEntityRepository
      * @param null $type
      * @return array
      */
-    public function getAllMenus($type = null):array
+    public function getAllMenus($type = null, $niveau = null):array
     {
         $query =  $this->createQueryBuilder('m')
 
@@ -37,8 +37,6 @@ class MenuRepository extends ServiceEntityRepository
         }else{
             $query->setParameter('type', Menu::TYPE_MENU_CANDIDAT);
         }
-
-
             return $query
 
             //->setMaxResults(10)
@@ -46,7 +44,6 @@ class MenuRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
-
 
     /**
      * @return array

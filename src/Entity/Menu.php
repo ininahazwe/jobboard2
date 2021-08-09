@@ -28,6 +28,8 @@ class Menu
     const NIVEAU_MENU_4 = 4;
 
     use ResourceId;
+    use Timestapable;
+
     /**
      * @ORM\Column(type="string", length=255)
      */
@@ -61,7 +63,7 @@ class Menu
     private string $type;
 
     /**
-     * @ORM\OneToOne(targetEntity=Menu::class, cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity=Menu::class, cascade={"persist", "remove"})
      */
     private ?Menu $child_menu;
 
@@ -74,6 +76,10 @@ class Menu
      * @ORM\Column(type="text", nullable=true)
      */
     private ?string $contenu;
+
+    public function __construct(){
+        $this->createdAt = new \DateTimeImmutable('now');
+    }
 
     public function getName(): ?string
     {
@@ -214,8 +220,7 @@ class Menu
     }
     public function __toString(): string
     {
-        // TODO: Implement __toString() method.
-        return $this->name;
+         return $this->name;
     }
     public function getNameNiveau(): string
     {
