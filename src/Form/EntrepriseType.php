@@ -2,8 +2,10 @@
 
 namespace App\Form;
 
+use App\Entity\Dictionnaire;
 use App\Entity\Entreprise;
 use HandiCV\RecaptchaBundle\Type\RecaptchaSubmitType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -73,8 +75,19 @@ class EntrepriseType extends AbstractType
                 'label' => 'Regrouper les candidatures / candidat',
                 'required' => true
             ])
-            ->add('secteur' , TextType::class, [
-                'label' => 'Secteur'
+            ->add('secteur', EntityType::class, [
+                'required'  => false,
+                'label' => 'Secteur',
+                'expanded' => false,
+                'class' => 'App\Entity\Dictionnaire',
+                'query_builder' => function($repository) {
+                    $query = $repository->createQueryBuilder('d')
+                        ->select('d')
+                        ->where('d.type = :type')
+                        ->setParameter('type', Dictionnaire::TYPE_SECTEUR);
+
+                    return $query;
+                }
             ])
             ->add('numeroSiren', IntegerType::class)
             ->add('numeroSiret', IntegerType::class)

@@ -24,8 +24,12 @@ class AnnonceType extends AbstractType
         $user = $options['user'];
 
         $builder
-            ->add('name', TextType::class)
-            ->add('description', CKEditorType::class)
+            ->add('name', TextType::class, [
+                'label' => 'Nom'
+            ])
+            ->add('description', CKEditorType::class, [
+                'label' => 'Description'
+            ])
             ->add('isActive', CheckboxType::class, [
                 'label_attr' => ['class' => 'switch-custom'],
                 'required' => false

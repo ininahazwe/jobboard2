@@ -33,6 +33,8 @@ class AnnuaireController extends AbstractController
             $entityManager->persist($annuaire);
             $entityManager->flush();
 
+            $this->addFlash('success', 'Ajout réussi');
+
             return $this->redirectToRoute('annuaire_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -42,7 +44,7 @@ class AnnuaireController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'annuaire_show', methods: ['GET'])]
+    #[Route('/{slug}', name: 'annuaire_show', methods: ['GET'])]
     public function show(Annuaire $annuaire): Response
     {
         return $this->render('annuaire/show.html.twig', [
@@ -58,6 +60,8 @@ class AnnuaireController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
+
+            $this->addFlash('success', 'Mise à jour réussie');
 
             return $this->redirectToRoute('annuaire_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -75,6 +79,8 @@ class AnnuaireController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($annuaire);
             $entityManager->flush();
+
+            $this->addFlash('success', 'Suppression réussie');
         }
 
         return $this->redirectToRoute('annuaire_index');

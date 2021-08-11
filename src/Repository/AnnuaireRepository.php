@@ -19,6 +19,12 @@ class AnnuaireRepository extends ServiceEntityRepository
         parent::__construct($registry, Annuaire::class);
     }
 
+    public function sortAlphabetically() {
+        $qb = $this->createQueryBuilder('a')
+            ->orderBy('a.title', 'ASC');
+        return $qb->getQuery()->getResult();
+    }
+
     // /**
     //  * @return Annuaire[] Returns an array of Annuaire objects
     //  */

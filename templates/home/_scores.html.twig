@@ -29,7 +29,7 @@
                            {{ entreprise.secteur }}
                         </div>
                         <div class="col text-end">
-
+                            {{ entreprise.getAnnoncesEntreprise()|length }}
                         </div>
                     </div>
                 {% endfor %}

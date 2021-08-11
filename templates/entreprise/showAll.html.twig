@@ -8,9 +8,9 @@
             <div class="container">
                 <ol>
                     <li><a href="{{ path('app_home') }}">Home</a></li>
-                    <li>Offres d'emploi</li>
+                    <li>Entreprises</li>
                 </ol>
-                <h1>Toutes les offres d'emploi</h1>
+                <h1>Annuaire des entreprises</h1>
             </div>
         </section><!-- End Breadcrumbs -->
 
@@ -18,9 +18,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-3">
-                        <div class="form-outline">
-                            <input type="search" id="form1" class="form-control" placeholder="Rechercher" aria-label="Search" />
-                        </div>
+                        {% include('search/filtrer_entreprise.html.twig') %}
                     </div>
                     <div class="col-md-9">
                         {% for entreprise in entreprises %}
@@ -35,7 +33,7 @@
                                 </div>
                                 <div class="col-2">
                                     {% if entreprise.logo|length %}
-                                        <img class="card-img-top mx-auto" style="width:100px" src="{{ asset(entreprise.getUrlLastLogo()) }}" alt="{{ entreprise.getNameLastLogo() }}">
+                                        <img class="card-img-top mx-auto" style="width:70px" src="{{ asset(entreprise.getUrlLastLogo()) }}" alt="{{ entreprise.getNameLastLogo() }}">
                                     {% endif %}
                                 </div>
                             </div>

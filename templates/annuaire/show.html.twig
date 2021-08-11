@@ -3,60 +3,39 @@
 {% block title %}Annuaire | {{ annuaire.title }}{% endblock %}
 
 {% block body %}
-    <h1>Annuaire</h1>
-
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Title</th>
-                <td>{{ annuaire.title }}</td>
-            </tr>
-            <tr>
-                <th>Content</th>
-                <td>{{ annuaire.content }}</td>
-            </tr>
-            <tr>
-                <th>Slug</th>
-                <td>{{ annuaire.slug }}</td>
-            </tr>
-            <tr>
-                <th>Web_link</th>
-                <td>{{ annuaire.webLink }}</td>
-            </tr>
-            <tr>
-                <th>Addresse</th>
-                <td>{{ annuaire.addresse }}</td>
-            </tr>
-            <tr>
-                <th>Code_postal</th>
-                <td>{{ annuaire.codePostal }}</td>
-            </tr>
-            <tr>
-                <th>City</th>
-                <td>{{ annuaire.city }}</td>
-            </tr>
-            <tr>
-                <th>Telephone</th>
-                <td>{{ annuaire.telephone }}</td>
-            </tr>
-            <tr>
-                <th>Id</th>
-                <td>{{ annuaire.id }}</td>
-            </tr>
-            <tr>
-                <th>CreatedAt</th>
-                <td>{{ annuaire.createdAt ? annuaire.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>UpdatedAt</th>
-                <td>{{ annuaire.updatedAt ? annuaire.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <a href="{{ path('annuaire_index') }}">back to list</a>
-
-    <a href="{{ path('annuaire_edit', {'id': annuaire.id}) }}">edit</a>
-
-    {{ include('annuaire/_delete_form.html.twig') }}
+<main id="main">
+    <!-- ======= Breadcrumbs ======= -->
+    <section id="breadcrumbs" class="breadcrumbs">
+        <div class="container">
+            <ol>
+                <li><a href="{{ path('app_home') }}">Home</a></li>
+                <li><a href="{{ path('app_profile') }}">Dashboard</a></li>
+                <li><a href="{{ path('annuaire_index') }}">Annuaire</a></li>
+                <li>Lecture</li>
+            </ol>
+            <h1>{{ annuaire.title }}</h1>
+        </div>
+    </section><!-- End Breadcrumbs -->
+    <section id="portfolio-details" class="portfolio-details">
+        <div class="container">
+            <div class="row gy-4">
+                <div class="col-lg-8">
+                    {{ annuaire.content|raw }}
+                </div>
+                <div class="col-lg-4">
+                    <div class="portfolio-info">
+                        <i class="bi bi-house"></i>
+                        <div>{{ annuaire.addresse }}</div>
+                        <div>{{ annuaire.city }}</div>
+                        <div>{{ annuaire.codePostal }}</div>
+                        <hr>
+                        <i class="bi bi-link-45deg"></i>
+                        <div><a href="{{ annuaire.webLink }}" target="_blank">{{ annuaire.webLink }}</a></div>
+                        <div><a href="mailto:{{ annuaire.email }}"><i class="bi bi-envelope"></i></a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section><!-- End Portfolio Details Section -->
+</main>
 {% endblock %}

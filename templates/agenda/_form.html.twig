@@ -6,6 +6,7 @@
             <b>Description de l'événement</b>
             {{ form_row(form.title) }}
             {{ form_row(form.description) }}
+            {{ form_row(form.categorie) }}
             {{ form_row(form.dateDebut) }}
             {{ form_row(form.dateFin) }}
             {{ form_row(form.allDay) }}
@@ -13,6 +14,7 @@
         </div>
         <div class="col-md-6">
             <b>Organisateur</b>
+            {{ form_row(form.virtuel) }}
             {{ form_row(form.organizer) }}
             {{ form_row(form.address) }}
             {{ form_row(form.city) }}
@@ -25,10 +27,5 @@
 {{ form_end(form) }}
 
 <style>
-    #agenda_dateFin_time_hour, #agenda_dateDebut_time_hour{
-        display: none;
-    }
-    div.sr-only{
-        display: none;
-    }
+
 </style>

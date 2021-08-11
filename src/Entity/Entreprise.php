@@ -49,9 +49,9 @@ class Entreprise
     private string $zipcode;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\ManyToOne(targetEntity=Dictionnaire::class, inversedBy="entreprises_secteur")
      */
-    private string $secteur;
+    private ?Dictionnaire $secteur;
 
     /**
      * @Gedmo\Slug(fields={"name"})
@@ -208,12 +208,12 @@ class Entreprise
         return $this;
     }
 
-    public function getSecteur(): ?string
+    public function getSecteur(): ?Dictionnaire
     {
         return $this->secteur;
     }
 
-    public function setSecteur(string $secteur): self
+    public function setSecteur(?Dictionnaire $secteur): self
     {
         $this->secteur = $secteur;
 

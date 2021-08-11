@@ -15,15 +15,10 @@ use Symfony\Component\Routing\Annotation\Route;
 class DictionnaireController extends AbstractController
 {
     #[Route('/', name: 'dictionnaire_index', methods: ['GET'])]
-    public function index(DictionnaireRepository $dictionnaireRepository, PaginatorInterface $paginator, Request $request): Response
+    public function index(DictionnaireRepository $dictionnaireRepository, Request $request): Response
     {
-        $data = $dictionnaireRepository->findAll();
+        $dictionnaire = $dictionnaireRepository->findAll();
 
-        $dictionnaire = $paginator->paginate(
-            $data,
-            $request->query->getInt('page', 1),
-            10
-        );
         return $this->render('dictionnaire/index.html.twig', [
             'dictionnaires' => $dictionnaire,
         ]);
@@ -40,6 +35,8 @@ class DictionnaireController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($dictionnaire);
             $entityManager->flush();
+
+            $this->addFlash('success', 'Ajout réussi');
 
             return $this->redirectToRoute('dictionnaire_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -67,6 +64,8 @@ class DictionnaireController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
+            $this->addFlash('success', 'Mise à jour réussie');
+
             return $this->redirectToRoute('dictionnaire_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -83,6 +82,8 @@ class DictionnaireController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($dictionnaire);
             $entityManager->flush();
+
+            $this->addFlash('success', 'Suppression réussie');
         }
 
         return $this->redirectToRoute('dictionnaire_index');

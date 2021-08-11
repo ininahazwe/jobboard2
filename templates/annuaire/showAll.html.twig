@@ -16,11 +16,16 @@
 
         <section class="inner-page">
             <div class="container">
+                <div class="row">
                 {% for annuaire in annuaires %}
-                    <div class="border mb-2 p-2">
-                        <h2><a href="{{ path('annuaire_show_unit', {id:annuaire.id, slug:annuaire.slug}) }}">{{ annuaire.title }}</a></h2>
+                    <div class="col-3">
+                        <div class="d-flex justify-content-between section-bg p-2 m-1">
+                            <a href="{{ path('annuaire_show_unit', {slug:annuaire.slug}) }}">{{ annuaire.title }}</a>
+                            <p style="font-size: 10px"> {{ annuaire.categorie}} </p>
+                        </div>
                     </div>
                 {% endfor %}
+                </div>
             </div>
         </section>
     </main>

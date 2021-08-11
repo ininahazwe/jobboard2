@@ -67,6 +67,11 @@ class Annuaire
      */
     private ?Dictionnaire $categorie;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $email;
+
     public function __construct()
     {
         $this->image = new ArrayCollection();
@@ -200,6 +205,18 @@ class Annuaire
     public function setCategorie(?Dictionnaire $categorie): self
     {
         $this->categorie = $categorie;
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(?string $email): self
+    {
+        $this->email = $email;
 
         return $this;
     }

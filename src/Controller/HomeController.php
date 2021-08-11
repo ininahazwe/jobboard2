@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Data\SearchData;
+use App\Entity\Annuaire;
 use App\Entity\Email;
 use App\Entity\Entreprise;
 use App\Entity\Menu;
@@ -12,6 +13,7 @@ use App\Form\ContactType;
 use App\Form\CreationEntrepriseType;
 use App\Form\EntrepriseType;
 use App\Form\SearchAnnonceForm;
+use App\Form\SearchEntrepriseForm;
 use App\Form\UserType;
 use App\Repository\AgendaRepository;
 use App\Repository\AnnonceRepository;
@@ -183,7 +185,7 @@ class HomeController extends AbstractController
         $entreprises = $entrepriseRepository->getEntrepriseActive();
 
         //Formulaire de recherche
-        $form = $this->createForm(SearchAnnonceForm::class);
+        $form = $this->createForm(SearchEntrepriseForm::class);
         $search = $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
@@ -194,7 +196,7 @@ class HomeController extends AbstractController
 
         return $this->render('entreprise/showAll.html.twig', [
             'entreprises' => $entreprises,
-            'search_form' => $form->createView()
+            'form' => $form->createView()
         ]);
     }
 
@@ -233,15 +235,13 @@ class HomeController extends AbstractController
     public function showAllAnnuaire(AnnuaireRepository $annuaireRepository): Response
     {
         return $this->render('annuaire/showAll.html.twig', [
-            'annuaires' => $annuaireRepository->findAll(),
+            'annuaires' => $annuaireRepository->sortAlphabetically(),
         ]);
     }
 
-    #[Route('/annuaire/{id}-{slug}', name: 'annuaire_show_unit', methods: ['GET'])]
-    public function showAnnuaire($id, $slug, AnnuaireRepository $annuaireRepository): Response
+    #[Route('/annuaire/{slug}', name: 'annuaire_show_unit', methods: ['GET'])]
+    public function showAnnuaire(Annuaire $annuaire): Response
     {
-        $annuaire = $annuaireRepository->findOneBy(['slug' => $slug, 'id' => $id]);
-
         return $this->render('annuaire/show_unit.html.twig', [
             'annuaire' => $annuaire,
         ]);

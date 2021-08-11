@@ -3,17 +3,14 @@
 namespace App\Form;
 
 use App\Data\SearchData;
-use App\Entity\Annonce;
 use App\Entity\Dictionnaire;
-use App\Entity\Entreprise;
-use App\Entity\Menu;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class SearchAnnonceForm extends AbstractType
+class SearchEntrepriseForm extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -25,11 +22,21 @@ class SearchAnnonceForm extends AbstractType
                     'placeholder' => 'Rechercher'
                 ]
             ])
-            ->add('entreprises', EntityType::class, [
-                'class' => Entreprise::class,
+            ->add('secteur', EntityType::class, [
+                'required'  => false,
+                'label' => 'Secteur',
                 'expanded' => false,
-                'multiple' => true,
+                'class' => 'App\Entity\Dictionnaire',
+                'query_builder' => function($repository) {
+                    $query = $repository->createQueryBuilder('d')
+                        ->select('d')
+                        ->where('d.type = :type')
+                        ->setParameter('type', Dictionnaire::TYPE_SECTEUR);
+
+                    return $query;
+                }
             ])
+
        ;
     }
 

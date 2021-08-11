@@ -2,6 +2,8 @@
 
 namespace App\Form;
 
+use App\Entity\Dictionnaire;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
@@ -71,12 +73,17 @@ class CreationEntrepriseType extends AbstractType
                 ],
                 'required' => true
             ])
-            ->add('secteur', TextType::class, [
+            ->add('secteur', EntityType::class, [
                 'label' => 'Secteur',
-                'attr' => [
-                    'class' => 'form-control'
-                ],
-                'required' => true
+                'class' => Dictionnaire::class,
+                'query_builder' => function($repository) {
+                    $query = $repository->createQueryBuilder('d')
+                        ->select('d')
+                        ->where('d.type = :type')
+                        ->setParameter('type', Dictionnaire::TYPE_SECTEUR);
+
+                    return $query;
+                }
             ])
             ->add('siret', NumberType::class, [
                 'label' => 'Numéro de siret',

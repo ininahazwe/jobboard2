@@ -24,28 +24,28 @@
                     <table class="table table-striped table-bordered" id="datatable">
                         <thead>
                             <tr>
-                                <th>Title</th>
-                                <th>Content</th>
-                                <th>Slug</th>
-                                <th>Web_link</th>
-                                <th>Addresse</th>
-                                <th>Code_postal</th>
-                                <th>City</th>
+                                <th>Nom</th>
+                                <th>Description</th>
+                                <th>Url</th>
+                                <th>Adresse</th>
+                                <th>Code postal</th>
+                                <th>Ville</th>
                                 <th>Telephone</th>
+                                <th>Catégorie</th>
                                 <th>actions</th>
                             </tr>
                         </thead>
                         <tbody>
                         {% for annuaire in annuaires %}
                             <tr>
-                                <td><a href="{{ path('annuaire_show', {'id': annuaire.id}) }}">{{ annuaire.title }}</a></td>
-                                <td>{{ annuaire.content }}</td>
-                                <td>{{ annuaire.slug }}</td>
+                                <td><a href="{{ path('annuaire_show', {'slug': annuaire.slug}) }}">{{ annuaire.title }}</a></td>
+                                <td>{{ annuaire.content|slice(0, 120)|raw }}</td>
                                 <td>{{ annuaire.webLink }}</td>
                                 <td>{{ annuaire.addresse }}</td>
                                 <td>{{ annuaire.codePostal }}</td>
                                 <td>{{ annuaire.city }}</td>
                                 <td>{{ annuaire.telephone }}</td>
+                                <td>{{ annuaire.categorie }}</td>
                                 <td>
                                     <div class="d-flex justify-content-around">
                                         <a href="{{ path('annuaire_edit', {'id': annuaire.id}) }}" class="d-flex align-items-center"><i class="fas fa-edit"></i></a>

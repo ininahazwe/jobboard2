@@ -44,6 +44,7 @@ class Dictionnaire
     const TYPE_FORMATION4 = 'formation4';
     const TYPE_FORMATION5 = 'formation5';
     const TYPE_CATEGORIE_ANNUAIRE = 'categorie_annuaire';
+    const TYPE_CATEGORIE_AGENDA = 'categorie_agenda';
 
     use ResourceId;
 
@@ -286,7 +287,7 @@ class Dictionnaire
      */
     public static function getExperienceName($value): string
     {
-        switch($value) {
+        switch ($value) {
             case 1:
                 return 'Expérience non précisée';
             case 2:
@@ -350,7 +351,7 @@ class Dictionnaire
             return '';
         }
 
-        switch($value) {
+        switch ($value) {
             case 1:
                 return 'CDI';
             case 2:
@@ -385,7 +386,7 @@ class Dictionnaire
 
         $result = array();
         foreach ($value as $_value) {
-            switch($_value) {
+            switch ($_value) {
                 case 1:
                     $result[] = 'CDI';
                 case 2:
@@ -410,6 +411,7 @@ class Dictionnaire
         }
 
     }
+
 
     public function __toString()
     {
@@ -449,7 +451,8 @@ class Dictionnaire
             Dictionnaire::TYPE_FORMATION3  => 'Formation3',
             Dictionnaire::TYPE_FORMATION4  => 'Formation4',
             Dictionnaire::TYPE_FORMATION5  => 'Formation5',
-            Dictionnaire::TYPE_CATEGORIE_ANNUAIRE  => 'Catégorie annuaire',
+            Dictionnaire::TYPE_CATEGORIE_ANNUAIRE  => 'categorie_annuaire',
+            Dictionnaire::TYPE_CATEGORIE_AGENDA  => 'categorie_agenda',
         );
     }
 }
