@@ -6,7 +6,7 @@
 
 {% extends url %}
 
-{% block title %}Page{% endblock %}
+{% block title %}{{ page.title }}{% endblock %}
 
 {% block body %}
 <main id="main">
@@ -36,10 +36,30 @@
                             <img class="card-img-top mx-auto" src="{{ asset(page.getUrlLastFile()) }}" alt="{{ page.getNameLastFile() }}">
                         </div>
                     {% endif %}
-                    <div class="portfolio-description">
-
-                    </div>
                 </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row g-3">
+                {% if articles|length %}
+                    {% for article in articles %}
+                        <div class="col-3">
+                            {% if article.images|length %}
+                                <img class="w-100" style="width:auto" height="150px" src="{{ asset(article.getUrlLastFile()) }}" alt="{{ article.getNameLastFile() }}">
+                            {% endif %}
+                            <div class="row">
+                                <div class="col-2 d-flex flex-column">
+                                    <i class="bi bi-calendar-event"></i>
+                                    <p style="font-size: small">{{ article.createdAt|date('d-m-Y') }}</p>
+                                </div>
+                                <div class="col-8">
+                                    <a href="{{ path('article_show', {'slug': article.slug}) }}">{{ article.title }}</a>
+                                </div>
+                                <div class="col-2 badge-primary">{{ article.categorie }}</div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
             </div>
         </div>
     </section><!-- End Portfolio Details Section -->

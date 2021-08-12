@@ -19,25 +19,56 @@
                 <div class="row gy-4">
 
                     <div class="col-lg-8">
-                        <p>{{ entreprise.description }}</p>
+                        <h2>Ses offres d'emploi</h2>
+                        {% if entreprise.annoncesEntreprise|length < 1 %}
+                            <p>(Aucune offre n'est disponible pour le moment)</p>
+                        {% endif %}
 
-                        {% if entreprise.secteur %}<b>Secteur:</b> {{ entreprise.secteur }}{% endif %}<br>
-                        {% if entreprise.numeroSiren %}<b>Siren:</b> {{ entreprise.numeroSiren }}{% endif %}<br>
-                        {% if entreprise.numeroSiret %}<b>Siret:</b> {{ entreprise.numeroSiret }}{% endif %}<br>
+                        {% for offre in entreprise.annoncesEntreprise %}
+                            {% if "now"|date('Y-m-d') < offre.dateLimiteCandidature|date('Y-m-d') %}
+                                {#<a href="{{ path('annonce_show_unit', {id:offre.id, slug:offre.slug}) }}">{{ offre.name }}</a><br>#}
+                                <div class="row section-bg p-3 m-1">
+                                    <div class="col-md-4">
+                                        <h5>
+                                            <a href="{{ path('annonce_show_unit', {id:offre.id, slug:offre.slug}) }}">{{ offre.name }}</a>
+                                        </h5>
+                                    </div>
+                                    <div class="col-md-4">
+                                        {% if offre.experience %}
+                                            <span class="btn-secondary btn-sm">{{ offre.experience }}</span>
+                                        {% endif %}
+                                        {% if offre.entreprise.secteur %}
+                                            <span class="btn-secondary btn-sm">{{ offre.entreprise.secteur }}</span>
+                                        {% endif %}
+                                        {% for typ in offre.typeContrat %}
+                                            <span class="btn-secondary btn-sm">{{ typ.value }}</span>
+                                        {% endfor %}
+                                        {% if offre.entreprise.city %}
+                                            <span class="btn-secondary btn-sm">{{ offre.entreprise.city }}</span>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-md-2">
+                                        Date limite de candidature <br>
+                                        <b>{{ offre.dateLimiteCandidature|date('d-m-Y') }}</b>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <i class="bi bi-geo-alt"></i>  <span>{{ offre.entreprise.city }}</span><br>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
                     </div>
 
                     <div class="col-lg-4">
                         <div class="portfolio-info">
-                            <h2>Ses offres d'emploi</h2>
-                                {% if entreprise.annoncesEntreprise|length < 1 %}
-                                   <p>(Aucune offre n'est disponible pour le moment)</p>
-                                {% endif %}
+                            {% if entreprise.logo|length %}
+                                <img class="card-img-top mx-auto" style="width:70px" src="{{ asset(entreprise.getUrlLastLogo()) }}" alt="{{ entreprise.getNameLastLogo() }}">
+                            {% endif %}
+                            <p class="mt-3">{{ entreprise.description }}</p>
 
-                            {% for offre in entreprise.annoncesEntreprise %}
-                                {% if "now"|date('Y-m-d') < offre.dateLimiteCandidature|date('Y-m-d') %}
-                                    <a href="{{ path('annonce_show_unit', {id:offre.id, slug:offre.slug}) }}">{{ offre.name }}</a><br>
-                                {% endif %}
-                            {% endfor %}
+                            {% if entreprise.secteur %}<b>Secteur:</b> {{ entreprise.secteur }}{% endif %}<br>
+                            {% if entreprise.numeroSiren %}<b>Siren:</b> {{ entreprise.numeroSiren }}{% endif %}<br>
+                            {% if entreprise.numeroSiret %}<b>Siret:</b> {{ entreprise.numeroSiret }}{% endif %}<br>
                         </div>
                         <div class="portfolio-description">
 

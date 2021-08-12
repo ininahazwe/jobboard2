@@ -5,10 +5,7 @@ namespace App\Controller;
 use App\Entity\File;
 use App\Entity\Page;
 use App\Form\PageType;
-use App\Form\SearchAnnonceForm;
 use App\Repository\PageRepository;
-use DateTime;
-use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -38,7 +35,6 @@ class PageController extends AbstractController
             if($form->get('files')->getData()){
                 $this->uploadFile($form->get('files')->getData(), $page);
             }
-
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($page);

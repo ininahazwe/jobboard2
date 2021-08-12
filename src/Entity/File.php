@@ -55,12 +55,17 @@ class File
     /**
      * @ORM\ManyToOne(targetEntity=Candidature::class, inversedBy="cv")
      */
-    private $candidature;
+    private ?Candidature $candidature;
 
     /**
      * @ORM\ManyToOne(targetEntity=Candidature::class, inversedBy="lettre_motivation")
      */
-    private $candidature_motivation;
+    private ?Candidature $candidature_motivation;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Blog::class, inversedBy="Images")
+     */
+    private ?Blog $blog;
 
     public function getName(): ?string
     {
@@ -166,6 +171,18 @@ class File
     public function setCandidatureMotivation(?Candidature $candidature_motivation): self
     {
         $this->candidature_motivation = $candidature_motivation;
+
+        return $this;
+    }
+
+    public function getBlog(): ?Blog
+    {
+        return $this->blog;
+    }
+
+    public function setBlog(?Blog $blog): self
+    {
+        $this->blog = $blog;
 
         return $this;
     }

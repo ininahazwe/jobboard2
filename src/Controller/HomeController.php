@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Data\SearchData;
 use App\Entity\Annuaire;
+use App\Entity\Blog;
 use App\Entity\Email;
 use App\Entity\Entreprise;
 use App\Entity\Menu;
@@ -256,8 +257,28 @@ class HomeController extends AbstractController
             return $this->redirect($this->generateUrl('app_home'));
         }
 
+        $articles = null;
+        if($slug == 'actualites-du-handicap'){
+            $articles = $entityManager->getRepository(Blog::class)->findAll();
+        }
+
         return $this->render('page/show.html.twig', [
-            'page' => $page
+            'page' => $page,
+            'articles' => $articles
+        ]);
+    }
+
+    #[Route('/actualites-du-handicap/articles/{slug}', name:'article_show')]
+    public function article($slug): Response
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $articles = $entityManager->getRepository(Blog::class)->findOneBy(['slug' => $slug]);
+        if(!$articles){
+            return $this->redirect($this->generateUrl('app_home'));
+        }
+
+        return $this->render('blog/show_unit.html.twig', [
+            'blog' => $articles,
         ]);
     }
 

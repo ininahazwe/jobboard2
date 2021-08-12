@@ -89,9 +89,15 @@ class EntrepriseType extends AbstractType
                     return $query;
                 }
             ])
-            ->add('numeroSiren', IntegerType::class)
-            ->add('numeroSiret', IntegerType::class)
-            ->add('taille', IntegerType::class)
+            ->add('numeroSiren', IntegerType::class, [
+                'required' => false
+            ])
+            ->add('numeroSiret', IntegerType::class, [
+                'required' => false
+            ])
+            ->add('taille', IntegerType::class, [
+                'required' => false
+            ])
         ;
     }
 

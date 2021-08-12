@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Blog{% endblock %}
+
+{% block body %}
+<main id="main">
+    <!-- ======= Breadcrumbs ======= -->
+    <section id="breadcrumbs" class="breadcrumbs">
+        <div class="container">
+            <ol>
+                <li><a href="{{ path('app_home') }}">Home</a></li>
+                <li><a href="{{ path('app_profile') }}">Dashboard</a></li>
+                <li><a href="{{ path('blog_index') }}">Actualités</a></li>
+                <li>Lecture</li>
+            </ol>
+            <h1>{{blog.title}}</h1>
+        </div>
+    </section><!-- End Breadcrumbs -->
+    <section id="portfolio-details" class="portfolio-details">
+        <div class="container">
+            <div class="row gy-4">
+                <div class="col-lg-8">
+                    {{ blog.content|raw }}
+                </div>
+                <div class="col-lg-4">
+                    {% if blog.images|length %}
+                        <div class="portfolio-description mb-5">
+                            <img class="card-img-top mx-auto" src="{{ asset(blog.getUrlLastFile()) }}" alt="{{ blog.getNameLastFile() }}">
+                        </div>
+                        <div class="portfolio-info">
+                            Ressources: <a href="{{ blog.link }}">{{ blog.link }}</a>
+                            Catégorie: <span>{{ blog.categorie }}</span>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </section><!-- End Portfolio Details Section -->
+    <section class="inner-page">
+        <div class="container">
+
+
+        </div>
+    </section>
+</main>
+{% endblock %}

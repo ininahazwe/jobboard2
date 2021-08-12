@@ -171,7 +171,12 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $moderation;
+    private ?string $moderation;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Blog::class, mappedBy="Auteur")
+     */
+    private Collection $blogs;
 
     public function __construct()
     {
@@ -188,6 +193,7 @@ class User implements UserInterface
         $this->received = new ArrayCollection();
         $this->annonces = new ArrayCollection();
         $this->createdAt = new \DateTimeImmutable('now');
+        $this->blogs = new ArrayCollection();
     }
 
     public function getEmail(): string
@@ -951,5 +957,35 @@ class User implements UserInterface
         }else if($moderation = '2'){
             return 'Refusé';
         }
+    }
+
+    /**
+     * @return Collection|Blog[]
+     */
+    public function getBlogs(): Collection
+    {
+        return $this->blogs;
+    }
+
+    public function addBlog(Blog $blog): self
+    {
+        if (!$this->blogs->contains($blog)) {
+            $this->blogs[] = $blog;
+            $blog->setAuteur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBlog(Blog $blog): self
+    {
+        if ($this->blogs->removeElement($blog)) {
+            // set the owning side to null (unless already changed)
+            if ($blog->getAuteur() === $this) {
+                $blog->setAuteur(null);
+            }
+        }
+
+        return $this;
     }
 }
