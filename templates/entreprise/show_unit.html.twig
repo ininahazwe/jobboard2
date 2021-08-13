@@ -20,14 +20,12 @@
 
                     <div class="col-lg-8">
                         <h2>Ses offres d'emploi</h2>
-                        {% if entreprise.annoncesEntreprise|length < 1 %}
+                        {% if annonces|length < 1 %}
                             <p>(Aucune offre n'est disponible pour le moment)</p>
                         {% endif %}
 
-                        {% for offre in entreprise.annoncesEntreprise %}
-                            {% if "now"|date('Y-m-d') < offre.dateLimiteCandidature|date('Y-m-d') %}
-                                {#<a href="{{ path('annonce_show_unit', {id:offre.id, slug:offre.slug}) }}">{{ offre.name }}</a><br>#}
-                                <div class="row section-bg p-3 m-1">
+                        {% for offre in annonces %}
+                                  <div class="row section-bg p-3 m-1">
                                     <div class="col-md-4">
                                         <h5>
                                             <a href="{{ path('annonce_show_unit', {id:offre.id, slug:offre.slug}) }}">{{ offre.name }}</a>
@@ -55,7 +53,6 @@
                                         <i class="bi bi-geo-alt"></i>  <span>{{ offre.entreprise.city }}</span><br>
                                     </div>
                                 </div>
-                            {% endif %}
                         {% endfor %}
                     </div>
 

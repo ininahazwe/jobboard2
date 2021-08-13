@@ -465,7 +465,7 @@ class Dictionnaire
     }
 
     /**
-     * @return Collection|Blog[]
+     * @return Collection
      */
     public function getBlogs(): Collection
     {

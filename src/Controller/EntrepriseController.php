@@ -10,6 +10,7 @@ use App\Form\EntrepriseType;
 use App\Form\OffreType;
 use App\Form\SearchAnnonceForm;
 use App\Form\UserType;
+use App\Repository\AnnonceRepository;
 use App\Repository\EntrepriseRepository;
 use App\Repository\FactureRepository;
 use App\Repository\ModeleOffreCommercialeRepository;
@@ -152,15 +153,12 @@ class EntrepriseController extends AbstractController
     #[Route('/{slug}', name: 'entreprise_show', methods: ['GET'])]
     public function show($slug, EntrepriseRepository $entrepriseRepository): Response
     {
-        $user = new User();
-        $entityManager = $this->getDoctrine()->getManager();
-        $form = $this->createForm(UserType::class, $user);
+        $user = $this->getUser();
 
         $entreprise = $entrepriseRepository->findOneBy(['slug' => $slug]);
         return $this->render('entreprise/show.html.twig', [
             'user' => $user,
             'entreprise' => $entreprise,
-            'form' => $form->createView(),
         ]);
     }
 
@@ -186,6 +184,19 @@ class EntrepriseController extends AbstractController
             'entreprise' =>$entreprise,
             'modeles' => $modeles,
             'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/{id}/annonces', name: 'entreprise_annonces', methods: ['GET', 'POST'])]
+    public function AnnoncesShowByEntreprise(Request $request, Entreprise $entreprise, AnnonceRepository $annonceRepository): Response
+    {
+        $annonces = $annonceRepository->findBy([
+            'entreprise' => $entreprise,
+        ]);
+
+        return $this->render('entreprise/annonces_par_entreprise.html.twig', [
+            'entreprise' =>$entreprise,
+            'annonces' => $annonces,
         ]);
     }
 

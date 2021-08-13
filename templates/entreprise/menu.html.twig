@@ -1,8 +1,43 @@
-<div class="list-group"><a class="list-group-item list-group-item-action active" href="{{ path('entreprise_show', {slug: entreprise.slug}) }}">Informations générales</a></div>
-{% if is_granted('ROLE_SUPER_RECRUTEUR') %}
-    <div class="list-group"><a class="list-group-item list-group-item-action" href="{{ path('entreprise_recruteurs', {id: entreprise.id}) }}">Recruteurs</a></div>
-{% endif %}
-<div class="list-group"><a class="list-group-item list-group-item-action" href="{{ path('entreprise_offres_commerciales', {id: entreprise.id}) }}">Offres commerciales</a></div>
-{% if is_granted('ROLE_SUPER_RECRUTEUR') %}
-    <div class="list-group"><a class="list-group-item list-group-item-action" href="{{ path('entreprise_factures', {id: entreprise.id}) }}">Factures</a></div>
+<div class="list-group"><a
+            {% if app.request.attributes.get('_route') == 'entreprise_show'%}
+                class="list-group-item list-group-item-action active"
+            {% else %}
+                class="list-group-item list-group-item-action"
+            {% endif %}
+            href="{{ path('entreprise_show', {slug: entreprise.slug}) }}">Informations générales</a>
+</div>
+<div class="list-group"><a
+            {% if app.request.attributes.get('_route') == 'entreprise_offres_commerciales'%}
+                class="list-group-item list-group-item-action active"
+            {% else %}
+                class="list-group-item list-group-item-action"
+            {% endif %}
+            href="{{ path('entreprise_offres_commerciales', {id: entreprise.id}) }}">Offres commerciales</a>
+</div>
+
+{% if app.user.isSuperAdmin() %}
+    <div class="list-group"><a
+                {% if app.request.attributes.get('_route') == 'entreprise_recruteurs'%}
+                    class="list-group-item list-group-item-action active"
+                {% else %}
+                    class="list-group-item list-group-item-action"
+                {% endif %}
+                href="{{ path('entreprise_recruteurs', {id: entreprise.id}) }}">Recruteurs</a>
+    </div>
+    <div class="list-group"><a
+                {% if app.request.attributes.get('_route') == 'entreprise_factures'%}
+                    class="list-group-item list-group-item-action active"
+                {% else %}
+                    class="list-group-item list-group-item-action"
+                {% endif %}
+                href="{{ path('entreprise_factures', {id: entreprise.id}) }}">Factures</a>
+    </div>
+    <div class="list-group"><a
+                {% if app.request.attributes.get('_route') == 'entreprise_annonces'%}
+                    class="list-group-item list-group-item-action active"
+                {% else %}
+                    class="list-group-item list-group-item-action"
+                {% endif %}
+                href="{{ path('entreprise_annonces', {id: entreprise.id}) }}">Annonces</a>
+    </div>
 {% endif %}

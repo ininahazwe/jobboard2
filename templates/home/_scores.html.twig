@@ -15,7 +15,7 @@
                             <h5><a href="{{ path('entreprise_show_unit', {id:entreprise.id, slug:entreprise.slug}) }}">{{ entreprise.name }}</a></h5>
                         </div>
                         <div class="col text-end">
-                            {{ entreprise.annoncesEntreprise|length }}
+                            {{ entreprise.getNumberAnnoncesActive() }}
                         </div>
                     </div>
                 {% endfor %}

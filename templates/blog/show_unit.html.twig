@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Blog{% endblock %}
+{% block title %}{{ blog.title }}{% endblock %}
 
 {% block body %}
 <main id="main">
@@ -8,10 +8,7 @@
     <section id="breadcrumbs" class="breadcrumbs">
         <div class="container">
             <ol>
-                <li><a href="{{ path('app_home') }}">Home</a></li>
-                <li><a href="{{ path('app_profile') }}">Dashboard</a></li>
-                <li><a href="{{ path('blog_index') }}">Actualités</a></li>
-                <li>Lecture</li>
+                <li><i class="bi bi-house"></i><a href="{{ path('app_home') }}"> Home</a></li>
             </ol>
             <h1>{{blog.title}}</h1>
         </div>
@@ -28,8 +25,10 @@
                             <img class="card-img-top mx-auto" src="{{ asset(blog.getUrlLastFile()) }}" alt="{{ blog.getNameLastFile() }}">
                         </div>
                         <div class="portfolio-info">
-                            Ressources: <a href="{{ blog.link }}">{{ blog.link }}</a>
-                            Catégorie: <span>{{ blog.categorie }}</span>
+                            <i class="bi bi-hdd-network"></i> <b>Ressources:</b> <a href="{{ blog.link }}">{{ blog.link }}</a>
+                            {% if blog.categorie %}
+                                <i class="bi bi-list-nested"></i> <b>Catégorie:</b> <span>{{ blog.categorie }}</span>
+                            {% endif %}
                         </div>
                     {% endif %}
                 </div>

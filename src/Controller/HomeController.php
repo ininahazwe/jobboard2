@@ -202,12 +202,14 @@ class HomeController extends AbstractController
     }
 
     #[Route('/entreprises/{id}-{slug}', name: 'entreprise_show_unit', methods: ['GET'])]
-    public function showEntreprise($id, $slug, EntrepriseRepository $entrepriseRepository, Request $request): Response
+    public function showEntreprise($id, $slug, EntrepriseRepository $entrepriseRepository, Request $request, AnnonceRepository $annonceRepository): Response
     {
         $entreprise = $entrepriseRepository->findOneBy(['slug' => $slug, 'id' => $id]);
+        $annonces = $annonceRepository->getAnnoncesEntreprise($entreprise);
 
         return $this->render('entreprise/show_unit.html.twig', [
             'entreprise' => $entreprise,
+            'annonces' => $annonces
         ]);
     }
 
@@ -252,7 +254,9 @@ class HomeController extends AbstractController
     public function page($slug): Response
     {
         $entityManager = $this->getDoctrine()->getManager();
+
         $page = $entityManager->getRepository(Page::class)->findOneBy(['slug' => $slug]);
+
         if(!$page){
             return $this->redirect($this->generateUrl('app_home'));
         }
@@ -262,9 +266,15 @@ class HomeController extends AbstractController
             $articles = $entityManager->getRepository(Blog::class)->findAll();
         }
 
+        $conseils = null;
+        if($slug == 'conseils-carriere'){
+            $conseils = $entityManager->getRepository(Blog::class)->getConseilsCarriereBlog();
+        }
+
         return $this->render('page/show.html.twig', [
             'page' => $page,
-            'articles' => $articles
+            'articles' => $articles,
+            'conseils' => $conseils
         ]);
     }
 

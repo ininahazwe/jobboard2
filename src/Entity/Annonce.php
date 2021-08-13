@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * @ORM\Entity(repositoryClass=AnnonceRepository::class)
@@ -409,4 +410,14 @@ class Annonce
         return $this;
     }
 
+    public function getCurrentJob(): bool
+    {
+        $now = new \DateTime('now');
+        $result = false;
+
+        if($now < $this->getDateLimiteCandidature()){
+            $result = true;
+        }
+        return $result;
+    }
 }

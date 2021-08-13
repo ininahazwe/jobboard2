@@ -64,7 +64,7 @@ class AnnonceRepository extends ServiceEntityRepository
      */
     public function findActiveAndLive($limite=null): array
     {
-        $now = new DateTime('now');
+        $now = new \DateTime('now');
         $query = $this->createQueryBuilder('a')
             ->andWhere('a.isActive = 1')
             ->andWhere('a.dateLimiteCandidature > :date')
@@ -73,6 +73,24 @@ class AnnonceRepository extends ServiceEntityRepository
         if($limite){
             $query->setMaxResults($limite);
         }
+        return $query->getQuery()->getResult();
+    }
+
+    /**
+     * @param $entreprise
+     * @return mixed
+     */
+    public function getAnnoncesEntreprise($entreprise): mixed
+    {
+        $now = new \DateTime('now');
+        $query = $this->createQueryBuilder('a')
+            ->andWhere('a.isActive = 1')
+            ->andWhere('a.entreprise = :entreprise')
+            ->andWhere('a.dateLimiteCandidature > :date')
+            ->setParameter('date', $now)
+            ->setParameter('entreprise', $entreprise)
+        ;
+
         return $query->getQuery()->getResult();
     }
 

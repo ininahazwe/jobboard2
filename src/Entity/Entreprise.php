@@ -493,6 +493,21 @@ class Entreprise
         return $nombre;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getNumberAnnoncesActive(): mixed
+    {
+        $nombre = 0;
+        foreach($this->getAnnoncesEntreprise() as $annonce){
+            if ($annonce->isActive() || $annonce->getCurrentJob()){
+                $nombre = $nombre + 1;
+            }
+        }
+        return $nombre;
+    }
+
+
     public function canCreateAnnonce(): bool
     {
         if (($this->getNumberAnnonces() < $this->getMaxAnnonces()) || ($this->getMaxAnnonces() == 0)){
