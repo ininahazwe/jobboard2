@@ -5,7 +5,6 @@ namespace App\Repository;
 use App\Data\SearchData;
 use App\Entity\Entreprise;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -266,6 +265,15 @@ class EntrepriseRepository extends ServiceEntityRepository
     {
         $query = $this->createQueryBuilder('e')
             ->where('e.moderation = 2')
+        ;
+        return $query->getQuery()->getResult();
+    }
+
+    public function getEntreprisesAccepteesAvecAnnonces()
+    {
+        $query = $this->createQueryBuilder('e')
+            ->where('e.moderation = 1')
+            //->andWhere("COUNT(e.annonces) > 0")
         ;
         return $query->getQuery()->getResult();
     }

@@ -2,14 +2,12 @@
 
 namespace App\Repository;
 
-use App\Data\SearchData;
 use App\Entity\Annonce;
-use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
-use Knp\Component\Pager\Pagination\PaginationInterface;
-use Knp\Component\Pager\PaginatorInterface;
 
 /**
  * @method Annonce|null find($id, $lockMode = null, $lockVersion = null)
@@ -19,12 +17,9 @@ use Knp\Component\Pager\PaginatorInterface;
  */
 class AnnonceRepository extends ServiceEntityRepository
 {
-    private PaginatorInterface $paginator;
-
-    public function __construct(ManagerRegistry $registry, PaginatorInterface $paginator)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Annonce::class);
-        $this->paginator = $paginator;
     }
 
     public function findAllActiveQuery($user): QueryBuilder
@@ -103,11 +98,7 @@ class AnnonceRepository extends ServiceEntityRepository
             ->where('a.isActive = 1');
     }
 
-    /**
-     * @param SearchData $search
-     * @return PaginationInterface
-     */
-    public function findSearch(SearchData $search): PaginationInterface
+    /*public function findSearch(SearchData $search): PaginationInterface
     {
         $query = $this
             ->createQueryBuilder('a')
@@ -132,5 +123,71 @@ class AnnonceRepository extends ServiceEntityRepository
             $search->page,
             6
         );
+    }*/
+
+    /*Search Engine*/
+
+    public function search($mots = null, $entreprises = null)
+    {
+        $query = $this->createQueryBuilder('a');
+        $query->where('a.isActive = 1');
+
+        if($mots != null){
+            $query->andWhere('MATCH_AGAINST(a.name, a.description) AGAINST (:mots boolean)>0')
+                ->setParameter('mots', $mots);
+        }
+
+        if($entreprises != null){
+            $query->leftJoin('a.entreprise', 'e');
+            $query->andWhere('e.id = :id')
+                ->setParameter('id', $entreprises);
+        }
+
+        return $query->getQuery()->getResult();
+    }
+
+    /**
+     * @param $page
+     * @param $limit
+     * @param null $filters
+     * @return mixed
+     */
+    public function getPaginatedAnnonces($page, $limit, $filters = null): mixed
+    {
+        $query = $this->createQueryBuilder('a')
+            ->where('a.isActive = 1');
+
+        // filtre des données
+        if($filters != null){
+            $query->andWhere('a.entreprise IN(:entreprise)')
+                ->setParameter(':entreprise', array_values($filters));
+        }
+
+        $query->orderBy('a.createdAt')
+            ->setFirstResult(($page * $limit) - $limit)
+            ->setMaxResults($limit)
+        ;
+        return $query->getQuery()->getResult();
+    }
+
+
+    /**
+     * @param null $filters
+     * @return mixed
+     * @throws NoResultException
+     * @throws NonUniqueResultException
+     */
+    public function getTotalAnnonces($filters = null): mixed
+    {
+        $query = $this->createQueryBuilder('a')
+            ->select('COUNT(a)')
+            ->where('a.isActive = 1');
+        // filtre des données
+        if($filters != null){
+            $query->andWhere('a.entreprise IN(:entreprise)')
+                ->setParameter(':entreprise', array_values($filters));
+        }
+
+        return $query->getQuery()->getSingleScalarResult();
     }
 }

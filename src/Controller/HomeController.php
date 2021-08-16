@@ -2,35 +2,32 @@
 
 namespace App\Controller;
 
-use App\Data\SearchData;
 use App\Entity\Annuaire;
 use App\Entity\Blog;
-use App\Entity\Email;
 use App\Entity\Entreprise;
 use App\Entity\Menu;
 use App\Entity\Page;
 use App\Entity\User;
 use App\Form\ContactType;
 use App\Form\CreationEntrepriseType;
-use App\Form\EntrepriseType;
-use App\Form\SearchAnnonceForm;
 use App\Form\SearchEntrepriseForm;
-use App\Form\UserType;
 use App\Repository\AgendaRepository;
 use App\Repository\AnnonceRepository;
 use App\Repository\AnnuaireRepository;
+use App\Repository\BlogRepository;
 use App\Repository\CandaditureRepository;
 use App\Repository\EntrepriseRepository;
 use App\Repository\MenuRepository;
 use App\Repository\ModeleOffreCommercialeRepository;
 use App\Repository\UserRepository;
 use App\Service\Mailer;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
-use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Twig\Environment;
@@ -43,16 +40,23 @@ use Twig\Loader\ArrayLoader;
 class HomeController extends AbstractController
 {
     #[Route('/', name:'app_home')]
-    public function index(AnnonceRepository $annoncesRepo, Request $request, ModeleOffreCommercialeRepository $modeleOffreCommercialeRepository, EntrepriseRepository $entrepriseRepository): Response
+    public function index(AnnonceRepository $annoncesRepo,
+                          Request $request,
+                          ModeleOffreCommercialeRepository $modeleOffreCommercialeRepository,
+                          EntrepriseRepository $entrepriseRepository,
+                          BlogRepository $blogRepository,
+    ): Response
     {
         $annonces = $annoncesRepo->findActiveAndLive(5);
         $offres = $modeleOffreCommercialeRepository->findAll();
         $entreprises = $entrepriseRepository->getEntrepriseHome(6);
+        $actualites = $blogRepository->getActuHandicapeBlog(4);
 
         return $this->render('home/index.html.twig', [
             'annonces' => $annonces,
             'modeles' => $offres,
-            'entreprises' => $entreprises
+            'entreprises' => $entreprises,
+            'actualites' => $actualites
         ]);
     }
 
@@ -146,22 +150,35 @@ class HomeController extends AbstractController
     }
 
     /*Affichage des offres d'emploi*/
+    /**
+     * @throws NonUniqueResultException
+     * @throws NoResultException
+     */
     #[Route('/offres', name: 'annonces_show_all', methods: ['GET'])]
-    public function showAllAnnonces(AnnonceRepository $annonceRepository, Request $request): Response
+    public function showAllAnnonces(AnnonceRepository $annonceRepository, EntrepriseRepository $entrepriseRepository, Request $request): Response
     {
-        $data = new SearchData();
-        $data->page = $request->get('page', 1);
-        $form = $this->createForm(SearchAnnonceForm::class, $data);
-        $form->handleRequest($request);
+       $limit = 10;
 
-        $annonces = $annonceRepository->findSearch($data);
+       $page = (int)$request->request->get("page", 1);
 
-        return $this->render('annonce/showAll.html.twig', [
-            'annonces' => $annonces,
-            'form' => $form->createView()
-        ]);
+       $filters = $request->get('entreprises');
+
+       $annonces = $annonceRepository->getPaginatedAnnonces($page, $limit, $filters);
+
+       $total = $annonceRepository->getTotalAnnonces($filters);
+
+        if($request->get('ajax')){
+            return new JsonResponse([
+                'content' => $this->renderView('annonce/search_result.html.twig', compact('annonces', 'total', 'limit', 'page'))
+            ]);
+        }
+
+       $entreprises = $entrepriseRepository->getEntreprisesAccepteesAvecAnnonces();
+
+        return $this->render('annonce/showAll.html.twig', compact('annonces', 'total', 'limit', 'page', 'entreprises'));
     }
 
+    /*Affichage d'une offres d'emploi*/
     #[Route('/offres/{id}-{slug}', name: 'annonce_show_unit', methods: ['GET'])]
     public function showAnnonce($slug, $id, AnnonceRepository $annonceRepository, CandaditureRepository $candaditureRepository, Request $request): Response
     {
@@ -331,9 +348,10 @@ class HomeController extends AbstractController
 
     /**
      * @param Request $request
-     * @param ModeleOffreCommercialeRepository $modeleOffreCommercialeRepository
      * @param EntrepriseRepository $entrepriseRepository
      * @param Mailer $mailer
+     * @param UserPasswordEncoderInterface $passwordEncoder
+     * @param UserRepository $userRepository
      * @return Response
      * @throws LoaderError
      * @throws RuntimeError

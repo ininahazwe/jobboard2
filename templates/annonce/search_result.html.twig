@@ -1,0 +1,36 @@
+{% set queryParams = app.request.query.all %}
+{% set queryString = queryParams|filter((v, k) => k != "page" and k != "ajax")|url_encode %}
+{% for annonce in annonces %}
+    <div class="row section-bg p-3 m-1">
+        <div class="col-md-4">
+            <h5>
+                <a href="{{ path('annonce_show_unit', {id:annonce.id, slug:annonce.slug}) }}">{{ annonce.name }}</a>
+            </h5>
+        </div>
+        <div class="col-md-4">
+            {% if annonce.experience %}
+                <span class="btn-secondary btn-sm">{{ annonce.experience }}</span>
+            {% endif %}
+            {% if annonce.entreprise.secteur %}
+                <span class="btn-secondary btn-sm">{{ annonce.entreprise.secteur }}</span>
+            {% endif %}
+            {% for typ in annonce.typeContrat %}
+                <span class="btn-secondary btn-sm">{{ typ.value }}</span>
+            {% endfor %}
+            {% if annonce.entreprise.city %}
+                <span class="btn-secondary btn-sm">{{ annonce.entreprise.city }}</span>
+            {% endif %}
+        </div>
+        <div class="col-md-2">
+            Date limite de candidature <br>
+            <b>{{ annonce.dateLimiteCandidature|date('d-m-Y') }}</b>
+        </div>
+        <div class="col-md-2">
+            <a href="{{ path('entreprise_show_unit', {id:annonce.entreprise.id, slug:annonce.entreprise.slug}) }}">{{ annonce.entreprise.name }}</a><br>
+            <span>{{ annonce.entreprise.city }}</span><br>
+        </div>
+    </div>
+    <div class="mt-3">
+    {#{{ knp_pagination_render(annonces) }}#}
+    </div>
+{% endfor %}

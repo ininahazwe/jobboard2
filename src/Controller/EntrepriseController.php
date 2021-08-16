@@ -8,7 +8,6 @@ use App\Entity\Offre;
 use App\Entity\User;
 use App\Form\EntrepriseType;
 use App\Form\OffreType;
-use App\Form\SearchAnnonceForm;
 use App\Form\UserType;
 use App\Repository\AnnonceRepository;
 use App\Repository\EntrepriseRepository;

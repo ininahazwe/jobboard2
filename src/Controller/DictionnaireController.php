@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\Dictionnaire;
 use App\Form\DictionnaireType;
 use App\Repository\DictionnaireRepository;
-use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

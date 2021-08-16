@@ -2,14 +2,11 @@
 
 namespace App\Form;
 
-use App\Data\SearchData;
-use App\Entity\Annonce;
-use App\Entity\Dictionnaire;
 use App\Entity\Entreprise;
-use App\Entity\Menu;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SearchType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -18,7 +15,7 @@ class SearchAnnonceForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('q', TextType::class, [
+            /*->add('q', TextType::class, [
                 'label' => false,
                 'required' => false,
                 'attr' => [
@@ -29,6 +26,28 @@ class SearchAnnonceForm extends AbstractType
                 'class' => Entreprise::class,
                 'expanded' => false,
                 'multiple' => true,
+            ])*/
+            ->add('mots', SearchType::class, [
+                'label' => false,
+                'attr' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Entrer un ou plusieurs mots-clés'
+                ],
+                'required' => false
+            ])
+            ->add('entreprise', EntityType::class, [
+                'class' => Entreprise::class,
+                'label' => false,
+                'attr' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Entrer un ou plusieurs mots-clés'
+                ],
+                'required' => false
+            ])
+            ->add('Rechercher', SubmitType::class, [
+                'attr' => [
+                    'class' => 'btn primary'
+                ]
             ])
        ;
     }
@@ -36,14 +55,14 @@ class SearchAnnonceForm extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => SearchData::class,
+    /*        'data_class' => SearchData::class,
             'method' => 'GET',
-            'csrf_protection' => false
+            'csrf_protection' => false*/
         ]);
     }
 
-    public function getBlockPrefix(): string
+    /*public function getBlockPrefix(): string
     {
         return '';
-    }
+    }*/
 }

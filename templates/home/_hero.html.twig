@@ -5,12 +5,12 @@
             <div class="col-lg-6 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up" data-aos-delay="200">
                 <h1>Emploi et handicap dans votre région</h1>
                 <h2>Le plus court chemin entre l'employeur et le travailleur handicapé</h2>
-                <div class="d-flex justify-content-around">
+                <div class="d-flex justify-content-between">
+                    <a href="https://www.youtube.com/watch?v=jDDaplaOz7Q" target="_blank" class="col-md-4 glightbox btn-watch-video"><i class="bi bi-play-circle"></i><span>Vidéo de présentation</span></a>
                     {% if not app.user %}
                     <a href="{{ path('app_register') }}" class="col-md-4 btn-get-started scrollto">Créer un compte</a>
                     <a href="{{ path('entreprise_creation') }}" class="col-md-4 btn-get-started scrollto">Créer une entreprise</a>
                     {% endif %}
-                    <a href="https://www.youtube.com/watch?v=jDDaplaOz7Q" target="_blank" class="col-md-4 glightbox btn-watch-video"><i class="bi bi-play-circle"></i><span>Vidéo de présentation</span></a>
                 </div>
             </div>
             <div class="col-lg-6 order-1 order-lg-2 hero-img" data-aos="zoom-in" data-aos-delay="200">
