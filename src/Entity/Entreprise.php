@@ -500,8 +500,10 @@ class Entreprise
     {
         $nombre = 0;
         foreach($this->getAnnoncesEntreprise() as $annonce){
-            if ($annonce->isActive() || $annonce->getCurrentJob()){
-                $nombre = $nombre + 1;
+            if ($annonce->isActive()){
+                if($annonce->getCurrentJob()){
+                    $nombre = $nombre + 1;
+                }
             }
         }
         return $nombre;

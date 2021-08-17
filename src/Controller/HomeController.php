@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Annuaire;
 use App\Entity\Blog;
+use App\Entity\Contact;
 use App\Entity\Entreprise;
 use App\Entity\Menu;
 use App\Entity\Page;
@@ -11,6 +12,7 @@ use App\Entity\User;
 use App\Form\ContactType;
 use App\Form\CreationEntrepriseType;
 use App\Form\SearchEntrepriseForm;
+use App\Notification\ContactNotification;
 use App\Repository\AgendaRepository;
 use App\Repository\AnnonceRepository;
 use App\Repository\AnnuaireRepository;
@@ -65,18 +67,20 @@ class HomeController extends AbstractController
                                    Request $request,
                                    ModeleOffreCommercialeRepository $modeleOffreCommercialeRepository,
                                    EntrepriseRepository $entrepriseRepository,
-                                   Mailer $mailer): Response
+                                   Mailer $mailer,
+                                   ContactNotification $notification): Response
     {
         $annonces = $annoncesRepo->findActiveAndLive(5);
         $offres = $modeleOffreCommercialeRepository->findAll();
         $entreprises = $entrepriseRepository->getEntrepriseHome(6);
 
         //formulaire de contact
-        $form = $this->createForm(ContactType::class);
+        $contact = new Contact();
+        $form = $this->createForm(ContactType::class, $contact);
         $form->handleRequest($request);
 
-
         if ($form->isSubmitted() && $form->isValid()) {
+            $notification->notify($contact);
             $contact = $form->getData();
             $entityManager = $this->getDoctrine()->getManager();
 

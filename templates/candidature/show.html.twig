@@ -35,7 +35,11 @@
                         </tr>
                         <tr>
                             <th>Recruteur</th>
-                            <td>{{ candidature.recruteur.fullname }}</a></td>
+                            <td>
+                                {% if candidature.recruteur %}
+                                {{ candidature.recruteur.fullname }}
+                                {% endif %}
+                            </td>
                         </tr>
                         <tr>
                             <th>Candidat</th>

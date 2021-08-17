@@ -154,8 +154,12 @@ class AnnonceRepository extends ServiceEntityRepository
      */
     public function getPaginatedAnnonces($page, $limit, $filters = null): mixed
     {
+        $now = new \DateTime('now');
         $query = $this->createQueryBuilder('a')
-            ->where('a.isActive = 1');
+            ->where('a.isActive = 1')
+            ->andWhere('a.dateLimiteCandidature > :date')
+            ->setParameter('date', $now)
+        ;
 
         // filtre des données
         if($filters != null){

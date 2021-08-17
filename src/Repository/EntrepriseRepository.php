@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Data\SearchData;
 use App\Entity\Entreprise;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -269,13 +270,22 @@ class EntrepriseRepository extends ServiceEntityRepository
         return $query->getQuery()->getResult();
     }
 
-    public function getEntreprisesAccepteesAvecAnnonces()
+    public function getEntreprisesAccepteesAvecAnnonces(): ArrayCollection
     {
         $query = $this->createQueryBuilder('e')
             ->where('e.moderation = 1')
             //->andWhere("COUNT(e.annonces) > 0")
+
         ;
-        return $query->getQuery()->getResult();
+        $result = $query->getQuery()->getResult();
+        $entreprises = new ArrayCollection();
+        foreach($result as $entreprise){
+            if($entreprise->getNumberAnnoncesActive() > 0){
+                $entreprises->add($entreprise);
+            }
+        }
+
+        return $entreprises;
     }
 
     /**
