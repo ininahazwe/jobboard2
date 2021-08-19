@@ -2,12 +2,14 @@
 
 namespace App\Repository;
 
+use App\Data\SearchData;
+use App\Data\SearchDataAnnonces;
 use App\Entity\Annonce;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\NonUniqueResultException;
-use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use Knp\Component\Pager\Pagination\PaginationInterface;
+use Knp\Component\Pager\PaginatorInterface;
 
 /**
  * @method Annonce|null find($id, $lockMode = null, $lockVersion = null)
@@ -17,9 +19,12 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class AnnonceRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private PaginatorInterface $paginator;
+
+    public function __construct(ManagerRegistry $registry, PaginatorInterface $paginator)
     {
         parent::__construct($registry, Annonce::class);
+        $this->paginator = $paginator;
     }
 
     public function findAllActiveQuery($user): QueryBuilder
@@ -98,71 +103,41 @@ class AnnonceRepository extends ServiceEntityRepository
             ->where('a.isActive = 1');
     }
 
-    public function search($mots = null, $entreprises = null)
+    /**
+     * @param SearchDataAnnonces $search
+     * @return PaginationInterface
+     */
+    public function findSearch(SearchDataAnnonces $search): PaginationInterface
     {
-        $query = $this->createQueryBuilder('a');
-        $query->where('a.isActive = 1');
+        $query = $this->getSearchQuery($search)->getQuery();
 
-        if($mots != null){
-            $query->andWhere('MATCH_AGAINST(a.name, a.description) AGAINST (:mots boolean)>0')
-                ->setParameter('mots', $mots);
-        }
-
-        if($entreprises != null){
-            $query->leftJoin('a.entreprise', 'e');
-            $query->andWhere('e.id = :id')
-                ->setParameter('id', $entreprises);
-        }
-
-        return $query->getQuery()->getResult();
+        return $this->paginator->paginate(
+            $query,
+            $search->page,
+            10
+        );
     }
 
-    /**
-     * @param $page
-     * @param $limit
-     * @param null $filters
-     * @return mixed
-     */
-    public function getPaginatedAnnonces($page, $limit, $filters = null): mixed
+    public function getSearchQuery (SearchDataAnnonces $search): QueryBuilder
     {
-        $now = new \DateTime('now');
-        $query = $this->createQueryBuilder('a')
-            ->where('a.isActive = 1')
-            ->andWhere('a.dateLimiteCandidature > :date')
-            ->setParameter('date', $now)
-        ;
+        $query = $this
+            ->createQueryBuilder('a')
+            ->andWhere('a.isActive = 1')
+            //->select('e', 's')
+            ->join('a.entreprise', 'e');
 
-        // filtre des données
-        if($filters != null){
-            $query->andWhere('a.entreprise IN(:entreprise)')
-                ->setParameter(':entreprise', array_values($filters));
+        if(!empty($search->q)){
+            $query = $query
+                ->andWhere('a.name LIKE :q')
+                ->setParameter('q', "%{$search->q}%");
         }
 
-        $query->orderBy('a.createdAt')
-            ->setFirstResult(($page * $limit) - $limit)
-            ->setMaxResults($limit)
-        ;
-        return $query->getQuery()->getResult();
-    }
-
-
-    /**
-     * @param null $filters
-     * @return mixed
-     * @throws NoResultException
-     * @throws NonUniqueResultException
-     */
-    public function getTotalAnnonces($filters = null): mixed
-    {
-        $query = $this->createQueryBuilder('a')
-            ->select('COUNT(a)')
-            ->where('a.isActive = 1');
-        // filtre des données
-        if($filters != null){
-            $query->andWhere('a.entreprise IN(:entreprise)')
-                ->setParameter(':entreprise', array_values($filters));
+        if(!empty($search->entreprises)){
+            $query = $query
+                ->andWhere('e.id IN (:entreprises)')
+                ->setParameter('entreprises', $search->entreprises);
         }
 
-        return $query->getQuery()->getSingleScalarResult();
+        return $query;
     }
 }

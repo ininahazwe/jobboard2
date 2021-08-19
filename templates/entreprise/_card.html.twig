@@ -1,10 +1,10 @@
 <div class="card" id="entreprise-{{ entreprise.id }}">
     {% if entreprise.logo|length %}
-        <img class="card-img-top mx-auto" style="width:70px" src="{{ asset(entreprise.getUrlLastLogo()) }}" alt="{{ entreprise.getNameLastLogo() }}">
+        <img class="card-img-top mx-auto pt-1" style="width:70px" src="{{ asset(entreprise.getUrlLastLogo()) }}" alt="{{ entreprise.getNameLastLogo() }}">
     {% endif %}
     <div class="card-body">
-        <h5 class="card-title"><a href="{{ path('entreprise_show_unit', {id:entreprise.id, slug:entreprise.slug}) }}">{{ entreprise.name }}</a></h5>
-        <div class="card-title">
+        <h5 class="card-title text-center"><a href="{{ path('entreprise_show_unit', {id:entreprise.id, slug:entreprise.slug}) }}">{{ entreprise.name }}</a></h5>
+        <div class="card-title text-center">
             {% if entreprise.annoncesEntreprise|length >= 1 %}
                 <span class="btn-secondary btn-sm">{{ pluralize(entreprise.annoncesEntreprise|length, 'annonce') }}</span>
             {% endif %}

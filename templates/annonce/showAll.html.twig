@@ -1,7 +1,5 @@
 {% extends 'base.html.twig' %}
-{% set queryParams = app.request.query.all %}
 {% block title %}Offres d'emploi | Recherche avancée{% endblock %}
-
 {% block body %}
     <main id="main">
         <!-- ======= Breadcrumbs ======= -->
@@ -16,37 +14,36 @@
         </section><!-- End Breadcrumbs -->
 
         <section class="inner-page">
-            <div class="container">
+            <div class="container js-filter">
                 <div class="row">
                     <div class="col-md-3">
-                        <p>Filtrer</p>
-                        <form id="filters">
-                            {% for entreprise in entreprises %}
-                                {% if queryParams is not empty and queryParams.entreprises is not empty %}
-                                    {% set checked = (entreprise.id in queryParams.entreprises) ? "checked" : "" %}
-                                {% else %}
-                                    {% set checked = "" %}
-                                {% endif %}
-                                <p>
-                                    <input type="checkbox" name="entreprises[]" id="entreprise{{ entreprise.id }}" value="{{ entreprise.id }}"
-                                           {{ checked }}>
-                                    <label for="entreprise{{ entreprise.id }}">{{ entreprise.name }}</label>
-                                </p>
-                            {% endfor %}
-                        </form>
+                        {% include 'search/filtrer_annonce.html.twig' with {form: form} only %}
                     </div>
-                    <div class="col-md-9" id="content">
-                        {% include('annonce/search_result.html.twig') %}
+                    <div class="col-md-9">
+                        <div class="grid js-filter-content">
+                            {% include 'annonce/_annonces.html.twig' %}
+                        </div>
+                        <div class="mt-4 js-filter-pagination">
+                            {% include 'annonce/_pagination.html.twig' %}
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
     </main>
+    <style>
+        .grid{
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-gap: 20px;
+        }
+        .filter{
+            display: block;
+            position: sticky;
+            top: 20px;
+        }
+    </style>
 {% endblock %}
-{% block javascripts %}
-    <script src="{{ asset('js/filters.js') }}"></script>
-{% endblock %}
-
 
 
 

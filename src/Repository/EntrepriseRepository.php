@@ -259,6 +259,7 @@ class EntrepriseRepository extends ServiceEntityRepository
     {
         $query = $this
             ->createQueryBuilder('e')
+            ->where('e.moderation = 1')
             //->select('e', 's')
             ->join('e.secteur', 's');
 

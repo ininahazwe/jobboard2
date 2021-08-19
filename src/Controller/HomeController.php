@@ -3,15 +3,16 @@
 namespace App\Controller;
 
 use App\Data\SearchData;
+use App\Data\SearchDataAnnonces;
 use App\Entity\Annuaire;
 use App\Entity\Blog;
-use App\Entity\Contact;
 use App\Entity\Entreprise;
 use App\Entity\Menu;
 use App\Entity\Page;
 use App\Entity\User;
 use App\Form\ContactType;
 use App\Form\CreationEntrepriseType;
+use App\Form\SearchAnnonceForm;
 use App\Form\SearchEntrepriseForm;
 use App\Repository\AgendaRepository;
 use App\Repository\AnnonceRepository;
@@ -23,8 +24,6 @@ use App\Repository\MenuRepository;
 use App\Repository\ModeleOffreCommercialeRepository;
 use App\Repository\UserRepository;
 use App\Service\Mailer;
-use Doctrine\ORM\NonUniqueResultException;
-use Doctrine\ORM\NoResultException;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -148,31 +147,32 @@ class HomeController extends AbstractController
 
     /*Affichage des offres d'emploi*/
     /**
-     * @throws NonUniqueResultException
-     * @throws NoResultException
+     * @param AnnonceRepository $annonceRepository
+     * @param Request $request
+     * @return Response
      */
     #[Route('/offres', name: 'annonces_show_all', methods: ['GET'])]
-    public function showAllAnnonces(AnnonceRepository $annonceRepository, EntrepriseRepository $entrepriseRepository, Request $request): Response
+    public function showAllAnnonces(AnnonceRepository $annonceRepository, Request $request): Response
     {
-       $limit = 10;
+        $data = new SearchDataAnnonces();
+        $data->page = $request->get('page', 1);
+        $form = $this->createForm(SearchAnnonceForm::class, $data);
+        $form->handleRequest($request);
 
-       $page = (int)$request->request->get("page", 1);
-
-       $filters = $request->get('entreprises');
-
-       $annonces = $annonceRepository->getPaginatedAnnonces($page, $limit, $filters);
-
-       $total = $annonceRepository->getTotalAnnonces($filters);
+        $annonces = $annonceRepository->findSearch($data);
 
         if($request->get('ajax')){
             return new JsonResponse([
-                'content' => $this->renderView('annonce/search_result.html.twig', compact('annonces', 'total', 'limit', 'page'))
+                'content' => $this->renderView('annonce/_annonces.html.twig', ['annonces' => $annonces]),
+                'pagination' => $this->renderView('annonce/_pagination.html.twig', ['annonces' => $annonces]),
+                'pages' => ceil($annonces->getTotalItemCount() / $annonces->getItemNumberPerPage())
             ]);
         }
 
-       $entreprises = $entrepriseRepository->getEntreprisesAccepteesAvecAnnonces();
-
-        return $this->render('annonce/showAll.html.twig', compact('annonces', 'total', 'limit', 'page', 'entreprises'));
+        return $this->render('annonce/showAll.html.twig', [
+            'annonces' => $annonces,
+            'form' => $form->createView()
+        ]);
     }
 
     /*Affichage d'une offres d'emploi*/
