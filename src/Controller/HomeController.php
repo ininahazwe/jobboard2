@@ -204,18 +204,11 @@ class HomeController extends AbstractController
 
         $entreprises = $entrepriseRepository->findSearch($data);
 
-        /*if($request->get('ajax')){
-            return new JsonResponse([
-                'content' => $this->renderView('entreprise/boucleAll.html.twig', ['entreprises' => $entreprises]),
-                'pagination' => $this->renderView('entreprise/_pagination.html.twig', ['entreprises' => $entreprises]),
-                'pages' => ceil($entreprises->getTotalItemCount() / $entreprises->getItemNumberPerPage())
-            ]);
-        }*/
-
         if($request->get('ajax')){
             return new JsonResponse([
                 'content' => $this->renderView('entreprise/_entreprises.html.twig', ['entreprises' => $entreprises]),
                 'pagination' => $this->renderView('entreprise/_pagination.html.twig', ['entreprises' => $entreprises]),
+                'pages' => ceil($entreprises->getTotalItemCount() / $entreprises->getItemNumberPerPage())
             ]);
         }
 
