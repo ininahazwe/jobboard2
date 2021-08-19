@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Data\SearchData;
 use App\Entity\Annuaire;
 use App\Entity\Blog;
 use App\Entity\Contact;
@@ -12,7 +13,6 @@ use App\Entity\User;
 use App\Form\ContactType;
 use App\Form\CreationEntrepriseType;
 use App\Form\SearchEntrepriseForm;
-use App\Notification\ContactNotification;
 use App\Repository\AgendaRepository;
 use App\Repository\AnnonceRepository;
 use App\Repository\AnnuaireRepository;
@@ -25,11 +25,13 @@ use App\Repository\UserRepository;
 use App\Service\Mailer;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Twig\Environment;
@@ -67,40 +69,31 @@ class HomeController extends AbstractController
                                    Request $request,
                                    ModeleOffreCommercialeRepository $modeleOffreCommercialeRepository,
                                    EntrepriseRepository $entrepriseRepository,
-                                   Mailer $mailer,
-                                   ContactNotification $notification): Response
+                                   MailerInterface $mailer
+    ): Response
     {
         $annonces = $annoncesRepo->findActiveAndLive(5);
         $offres = $modeleOffreCommercialeRepository->findAll();
         $entreprises = $entrepriseRepository->getEntrepriseHome(6);
 
-        //formulaire de contact
-        $contact = new Contact();
-        $form = $this->createForm(ContactType::class, $contact);
+        $form = $this->createForm(ContactType::class);
         $form->handleRequest($request);
 
+
         if ($form->isSubmitted() && $form->isValid()) {
-            $notification->notify($contact);
             $contact = $form->getData();
-            $entityManager = $this->getDoctrine()->getManager();
 
-            $email = $entityManager->getRepository('App:Email')->findOneBy(['code' => 'EMAIL_CONTACT']);
+            $email = (new TemplatedEmail())
+                ->from($contact->getEmail())
+                ->to('handicv@gmail.com')
+                ->subject($contact->getSubject())
+                ->text($contact->getMessage())
+                ->htmlTemplate('emails/contact.html.twig')
+                ->context([
+                    'contact' => $contact
+                ]);
 
-            $loader = new ArrayLoader([
-                'email' => $email->getContent(),
-            ]);
-
-            $twig = new Environment($loader);
-            $message = $twig->render('email',['user' => $this->getUser(), 'contact' => $contact ]);
-
-            $mailer->send([
-                'recipient_email' => 'contact@talents-handicap.com',
-                'subject'         => $email->getSubject(),
-                'html_template'   => 'emails/email_vide.html.twig',
-                'context'         => [
-                    'message' => $message
-                ]
-            ]);
+            $mailer->send($email);
 
             $this->addFlash('success', 'Envoi réussi');
 
@@ -202,18 +195,28 @@ class HomeController extends AbstractController
 
     /*Affichage des entreprises*/
     #[Route('/entreprises', name: 'entreprise_show_all', methods: ['GET'])]
-    public function showAllEntreprises(EntrepriseRepository $entrepriseRepository, Request $request, ): Response
+    public function showAllEntreprises(EntrepriseRepository $entrepriseRepository, Request $request): Response
     {
-        $entreprises = $entrepriseRepository->getEntrepriseActive();
+        $data = new SearchData();
+        $data->page = $request->get('page', 1);
+        $form = $this->createForm(SearchEntrepriseForm::class, $data);
+        $form->handleRequest($request);
 
-        //Formulaire de recherche
-        $form = $this->createForm(SearchEntrepriseForm::class);
-        $search = $form->handleRequest($request);
+        $entreprises = $entrepriseRepository->findSearch($data);
 
-        if($form->isSubmitted() && $form->isValid()){
-            $entreprises = $entrepriseRepository->search(
-                $search->get('mots')->getData()
-            );
+        /*if($request->get('ajax')){
+            return new JsonResponse([
+                'content' => $this->renderView('entreprise/boucleAll.html.twig', ['entreprises' => $entreprises]),
+                'pagination' => $this->renderView('entreprise/_pagination.html.twig', ['entreprises' => $entreprises]),
+                'pages' => ceil($entreprises->getTotalItemCount() / $entreprises->getItemNumberPerPage())
+            ]);
+        }*/
+
+        if($request->get('ajax')){
+            return new JsonResponse([
+                'content' => $this->renderView('entreprise/_entreprises.html.twig', ['entreprises' => $entreprises]),
+                'pagination' => $this->renderView('entreprise/_pagination.html.twig', ['entreprises' => $entreprises]),
+            ]);
         }
 
         return $this->render('entreprise/showAll.html.twig', [
@@ -324,29 +327,6 @@ class HomeController extends AbstractController
 
         return $this->render('page/show.html.twig', [
             'page' => $page
-        ]);
-    }
-
-    /**
-     * @Route("/contact", name="contact")
-     */
-    public function contact(Request $request, Mailer $mailer): Response
-    {
-        $form = $this->createForm(ContactType::class);
-        $form->handleRequest($request);
-
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $contact = $form->getData();
-
-
-
-            $this->addFlash('success', 'Your message has been sent');
-
-            $this->redirectToRoute('app_home_recruteur');
-        }
-        return $this->render('home/_contact.html.twig',[
-            'contactForm' => $form->createView()
         ]);
     }
 

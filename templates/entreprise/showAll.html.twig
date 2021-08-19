@@ -1,6 +1,5 @@
 {% extends 'base.html.twig' %}
 {% block title %}Les entreprises qui recrutent{% endblock %}
-
 {% block body %}
     <main id="main">
         <!-- ======= Breadcrumbs ======= -->
@@ -15,34 +14,35 @@
         </section><!-- End Breadcrumbs -->
 
         <section class="inner-page">
-            <div class="container">
+            <div class="container js-filter">
                 <div class="row">
                     <div class="col-md-3">
-                        {% include('search/filtrer_entreprise.html.twig') %}
+                        {% include 'search/filtrer_entreprise.html.twig' with {form: form} only %}
                     </div>
                     <div class="col-md-9">
-                        {% for entreprise in entreprises %}
-                            <div class="row mb-1 p-3 border">
-                                <div class="col-6">
-                                    <h4><a href="{{ path('entreprise_show_unit', {id:entreprise.id, slug:entreprise.slug}) }}">{{ entreprise.name }}</a></h4>
-                                </div>
-                                <div class="col-4">
-                                    {% if entreprise.annoncesEntreprise|length >= 1 %}
-                                        <span class="btn-secondary btn-sm">{{ pluralize(entreprise.annoncesEntreprise|length, 'annonce') }}</span>
-                                    {% endif %}
-                                </div>
-                                <div class="col-2">
-                                    {% if entreprise.logo|length %}
-                                        <img class="card-img-top mx-auto" style="width:70px" src="{{ asset(entreprise.getUrlLastLogo()) }}" alt="{{ entreprise.getNameLastLogo() }}">
-                                    {% endif %}
-                                </div>
-                            </div>
-                        {% endfor %}
+                        <div class="grid js-filter-content">
+                            {% include 'entreprise/_entreprises.html.twig' %}
+                        </div>
+                        <div class="mt-4 js-filter-pagination">
+                            {% include 'entreprise/_pagination.html.twig' %}
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
     </main>
+    <style>
+        .grid{
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-gap: 20px;
+        }
+        .filter{
+            display: block;
+            position: sticky;
+            top: 20px;
+        }
+    </style>
 {% endblock %}
 
 

@@ -29,27 +29,6 @@ class CandidatureController extends AbstractController
         ]);
     }
 
-    /*#[Route('/new', name: 'candidature_new', methods: ['GET', 'POST'])]
-    public function new(Request $request): Response
-    {
-        $candidature = new Candidature();
-        $form = $this->createForm(CandidatureType::class, $candidature);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($candidature);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('candidature_index');
-        }
-
-        return $this->render('candidature/new.html.twig', [
-            'candidature' => $candidature,
-            'form' => $form->createView(),
-        ]);
-    }*/
-
     #[Route('/{id}', name: 'candidature_show', methods: ['GET'])]
     public function show(Candidature $candidature): Response
     {
@@ -57,24 +36,6 @@ class CandidatureController extends AbstractController
             'candidature' => $candidature,
         ]);
     }
-
-    /*#[Route('/{id}/edit', name: 'candidature_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Candidature $candidature): Response
-    {
-        $form = $this->createForm(CandidatureType::class, $candidature);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('candidature_index');
-        }
-
-        return $this->render('candidature/edit.html.twig', [
-            'candidature' => $candidature,
-            'form' => $form->createView(),
-        ]);
-    }*/
 
     #[Route('/{id}', name: 'candidature_delete', methods: ['POST'])]
     public function delete(Request $request, Candidature $candidature): Response

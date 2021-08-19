@@ -98,35 +98,6 @@ class AnnonceRepository extends ServiceEntityRepository
             ->where('a.isActive = 1');
     }
 
-    /*public function findSearch(SearchData $search): PaginationInterface
-    {
-        $query = $this
-            ->createQueryBuilder('a')
-            ->select('e', 'a')
-            ->join('a.entreprise', 'e')
-        ;
-
-        if(!empty($search->q)){
-            $query = $query
-                ->andWhere('MATCH_AGAINST(a.name, a.description) AGAINST (:q boolean)>0')
-                ->setParameter('q', "%{$search->q}%");
-        }
-        if(!empty($search->entreprise)){
-            $query = $query
-                ->andWhere('e.id IN (:entreprise)')
-                ->setParameter('entreprise', $search->entreprise);
-        }
-
-        $query = $query->getQuery();
-        return $this->paginator->paginate(
-            $query,
-            $search->page,
-            6
-        );
-    }*/
-
-    /*Search Engine*/
-
     public function search($mots = null, $entreprises = null)
     {
         $query = $this->createQueryBuilder('a');

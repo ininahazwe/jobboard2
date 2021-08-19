@@ -69,6 +69,11 @@ class Candidature
      */
     private Collection $lettre_motivation;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Messages::class, mappedBy="candidature", cascade={"persist", "remove"})
+     */
+    private $messages;
+
     public function __construct()
     {
         $this->annonces = new ArrayCollection();
@@ -245,5 +250,27 @@ class Candidature
         }else{
             return 'Non renseigné';
         }
+    }
+
+    public function getMessages(): ?Messages
+    {
+        return $this->messages;
+    }
+
+    public function setMessages(?Messages $messages): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($messages === null && $this->messages !== null) {
+            $this->messages->setCandidature(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($messages !== null && $messages->getCandidature() !== $this) {
+            $messages->setCandidature($this);
+        }
+
+        $this->messages = $messages;
+
+        return $this;
     }
 }

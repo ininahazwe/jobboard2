@@ -25,6 +25,7 @@
                         <tr>
                             <th>Infos candidature</th>
                             <th>Infos offre</th>
+                            <th>Statut</th>
                             <th>Suivi</th>
                             <th>Actions</th>
                         </tr>
@@ -46,10 +47,11 @@
                                     <b>Entreprise : </b><a href="{{ path('entreprise_show_unit', {'id': candidature.entreprise.id, 'slug': candidature.entreprise.slug }) }}">{{ candidature.entreprise }}</a> <br>
                                     <b>Recruteur : </b>{{ candidature.recruteur }}
                                 </td>
+                                <td></td>
                                 <td>
                                     <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" />
-                                        <label class="form-check-label" for="flexSwitchCheckDefault">Accepter</label>
+                                        <button class="btn-sm btn-success">Accepter</button>
+                                        <button class="btn-sm btn-danger">Refuser</button>
                                     </div>
                                 </td>
                                 <td>

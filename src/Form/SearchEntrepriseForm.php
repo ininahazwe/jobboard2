@@ -24,9 +24,10 @@ class SearchEntrepriseForm extends AbstractType
             ])
             ->add('secteur', EntityType::class, [
                 'required'  => false,
-                'label' => 'Secteur',
-                'expanded' => false,
-                'class' => 'App\Entity\Dictionnaire',
+                'label' => false,
+                'expanded' => true,
+                'multiple' => true,
+                'class' => Dictionnaire::class,
                 'query_builder' => function($repository) {
                     $query = $repository->createQueryBuilder('d')
                         ->select('d')

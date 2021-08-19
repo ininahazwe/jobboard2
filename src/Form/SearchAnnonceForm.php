@@ -15,18 +15,6 @@ class SearchAnnonceForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            /*->add('q', TextType::class, [
-                'label' => false,
-                'required' => false,
-                'attr' => [
-                    'placeholder' => 'Rechercher'
-                ]
-            ])
-            ->add('entreprises', EntityType::class, [
-                'class' => Entreprise::class,
-                'expanded' => false,
-                'multiple' => true,
-            ])*/
             ->add('mots', SearchType::class, [
                 'label' => false,
                 'attr' => [

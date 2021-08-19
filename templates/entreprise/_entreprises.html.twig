@@ -1,0 +1,3 @@
+{% for entreprise in entreprises %}
+    {% include 'entreprise/_card.html.twig' with {entreprise: entreprise} only %}
+{% endfor %}

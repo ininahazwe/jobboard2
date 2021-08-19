@@ -2,134 +2,99 @@
 
 namespace App\Entity;
 
-use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\ORM\Mapping as ORM;
 
-class Contact {
+class Contact
+{
+    use ResourceId;
 
     /**
-     * @var string|null
-     * @Assert\NotBlank()
-     * @Assert\Length(min=2, max=100)
+     * @ORM\Column(type="string", length=255)
      */
     private ?string $firstname;
 
     /**
-     * @var string|null
-     * @Assert\NotBlank()
-     * @Assert\Length(min=2, max=100)
+     * @ORM\Column(type="string", length=255)
      */
     private ?string $lastname;
 
     /**
-     * @var string|null
-     * @Assert\NotBlank()
-     * @Assert\Email
-     */
-    private ?string $email;
-
-
-    /**
-     * @var string|null
-     * @Assert\NotBlank()
-     * @Assert\Length(min=10, max=500)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private ?string $subject;
 
     /**
-     * @var string|null
-     * @Assert\NotBlank()
-     * @Assert\Length(min=10)
+     * @ORM\Column(type="string", length=255)
+     */
+    private ?string $email;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
      */
     private ?string $message;
 
-    /**
-     * @return string|null
-     */
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
     public function getFirstname(): ?string
     {
         return $this->firstname;
     }
 
-    /**
-     * @param string|null $firstname
-     * @return Contact
-     */
-    public function setFirstname(?string $firstname): Contact
+    public function setFirstname(string $firstname): self
     {
         $this->firstname = $firstname;
+
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getLastname(): ?string
     {
         return $this->lastname;
     }
 
-    /**
-     * @param string|null $lastname
-     * @return Contact
-     */
-    public function setLastname(?string $lastname): Contact
+    public function setLastname(string $lastname): self
     {
         $this->lastname = $lastname;
+
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
+    public function setPhone(?string $phone): self
+    {
+        $this->phone = $phone;
+
+        return $this;
+    }
+
     public function getEmail(): ?string
     {
         return $this->email;
     }
 
-    /**
-     * @param string|null $email
-     * @return Contact
-     */
-    public function setEmail(?string $email): Contact
+    public function setEmail(string $email): self
     {
         $this->email = $email;
+
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getSubject(): ?string
-    {
-        return $this->subject;
-    }
-
-    /**
-     * @param string|null $subject
-     * @return Contact
-     */
-    public function setSubject(?string $subject): Contact
-    {
-        $this->subject = $subject;
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     */
     public function getMessage(): ?string
     {
         return $this->message;
     }
 
-    /**
-     * @param string|null $message
-     * @return Contact
-     */
-    public function setMessage(?string $message): Contact
+    public function setMessage(?string $message): self
     {
         $this->message = $message;
+
         return $this;
     }
-
 }

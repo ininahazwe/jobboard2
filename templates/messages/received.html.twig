@@ -10,10 +10,10 @@
             <ol>
                 <li><a href="{{ path('app_home') }}">Home</a></li>
                 <li><a href="{{ path('app_profile') }}">Dashboard</a></li>
-                <li><a href="{{ path('messages_index') }}">Notifications</a></li>
+                <li><a href="{{ path('messages_index') }}">Messages</a></li>
                 <li>Lecture</li>
             </ol>
-            <h1>Notification</h1>
+            <h1>Message</h1>
         </div>
     </section><!-- End Breadcrumbs -->
     <section class="inner-page">
@@ -48,11 +48,11 @@
                                     {% endif %}
                                 </td>
                                 <td {{ bold }} ><a
-                                            href="{{ path("notifications_read", {id: message.id}) }}">{{ message.titre }}
+                                            href="{{ path("messages_read", {id: message.id}) }}">{{ message.titre }}
                                 </td>
                                 <td {{ bold }} >{{ message.createdAt|date }}</td>
                                 <td>
-                                    <a href="{{ path("notifications_delete", {id: message.id}) }}"><i
+                                    <a href="{{ path("messages_delete", {id: message.id}) }}"><i
                                                 class="fas fa-trash"></i></a>
                                 </td>
                             </tr>

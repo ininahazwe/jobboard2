@@ -6,6 +6,7 @@ use App\Data\SearchData;
 use App\Entity\Entreprise;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -87,63 +88,6 @@ class EntrepriseRepository extends ServiceEntityRepository
             }
         }
         return $nombre;
-    }
-
-    /**
-     * @param SearchData $search
-     * @param $userId
-     * @return PaginationInterface
-     */
-    public function getAllEntreprisesAdmin(SearchData $search, $userId): PaginationInterface
-    {
-        $user = $this->_em->getRepository("App:User")->find($userId);
-        if($user->isSuperAdmin()){
-            $query =  $this->createQueryBuilder('e')
-                ->orderBy('e.id', 'ASC')
-                ;
-
-            if(!empty($search->q)){
-                $query
-                    ->andWhere('e.name LIKE :q')
-                    ->setParameter('q', "%{$search->q}%");
-            }
-
-            return $this->paginator->paginate(
-                $query->getQuery(),
-                $search->page,
-                2
-            );
-        }elseif ($user->isSuperRecruteur()) {
-            $query = $this->createQueryBuilder('e');
-
-            $ids = array();
-            if (count($user->getRecruteursEntreprise()) > 0) {
-                foreach ($user->getRecruteursEntreprise() as $item) {
-                    $ids[] = $item->getId();
-                }
-                $query->andWhere('e.id IN (:ids)')
-                    ->setParameter('ids', $ids);
-
-                if (!empty($search->q)) {
-                    $query = $query
-                        ->andWhere('e.name LIKE :q')
-                        ->setParameter('q', "%{$search->q}%");
-                }
-
-                return $this->paginator->paginate(
-                    $query->getQuery(),
-                    $search->page,
-                    2
-                );
-
-
-            } else {
-                //return null;
-            }
-        }else{
-            //return null;
-        }
-
     }
 
     /**
@@ -274,8 +218,6 @@ class EntrepriseRepository extends ServiceEntityRepository
     {
         $query = $this->createQueryBuilder('e')
             ->where('e.moderation = 1')
-            //->andWhere("COUNT(e.annonces) > 0")
-
         ;
         $result = $query->getQuery()->getResult();
         $entreprises = new ArrayCollection();
@@ -288,28 +230,50 @@ class EntrepriseRepository extends ServiceEntityRepository
         return $entreprises;
     }
 
-    /**
-     * @param null $mots
-     * @return mixed
-     */
-    public function search($mots = null): mixed
-    {
-        $query = $this->createQueryBuilder('e');
-
-        $query->where('e.moderation = 1');
-
-        if($mots != null){
-            $query->andWhere('MATCH_AGAINST(e.name, e.description) AGAINST (:mots boolean)>0')
-                ->setParameter('mots', $mots);
-        }
-        return $query->getQuery()->getResult();
-    }
-
     public function getEntrepriseActive()
     {
         $query = $this->createQueryBuilder('e')
             ->where('e.moderation = 1')
         ;
         return $query->getQuery()->getResult();
+    }
+
+    //Recherche méthode GrafikArt
+
+    /**
+     * @param SearchData $search
+     * @return PaginationInterface
+     */
+    public function findSearch(SearchData $search): PaginationInterface
+    {
+        $query = $this->getSearchQuery($search)->getQuery();
+
+        return $this->paginator->paginate(
+            $query,
+            $search->page,
+            10
+        );
+    }
+
+    public function getSearchQuery (SearchData $search): QueryBuilder
+    {
+        $query = $this
+            ->createQueryBuilder('e')
+            //->select('e', 's')
+            ->join('e.secteur', 's');
+
+        if(!empty($search->q)){
+            $query = $query
+                ->andWhere('e.name LIKE :q')
+                ->setParameter('q', "%{$search->q}%");
+        }
+
+        if(!empty($search->secteur)){
+            $query = $query
+                ->andWhere('s.id IN (:secteur)')
+                ->setParameter('secteur', $search->secteur);
+        }
+
+        return $query;
     }
 }
