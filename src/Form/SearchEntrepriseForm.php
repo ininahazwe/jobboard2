@@ -29,15 +29,18 @@ class SearchEntrepriseForm extends AbstractType
                 'multiple' => true,
                 'class' => Dictionnaire::class,
                 'query_builder' => function($repository) {
+                    $ids = $repository->getSecteursEntrepriseActifs();
                     $query = $repository->createQueryBuilder('d')
                         ->select('d')
                         ->where('d.type = :type')
-                        ->setParameter('type', Dictionnaire::TYPE_SECTEUR);
+                        ->andWhere('d.id IN (:ids)')
+                        ->setParameter('type', Dictionnaire::TYPE_SECTEUR)
+                        ->setParameter('ids', $ids)
+                    ;
 
                     return $query;
                 }
             ])
-
        ;
     }
 

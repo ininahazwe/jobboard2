@@ -8,7 +8,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * @ORM\Entity(repositoryClass=AnnonceRepository::class)
@@ -23,12 +22,24 @@ class Annonce
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 50,
+     *      minMessage = "un minimum de {{ limit }} caractères est requis",
+     *      maxMessage = "{{ limit }} caractères sont la limite"
+     * )
      */
     private ?string $name;
 
     /**
      * @ORM\Column(type="text")
      * @Assert\NotBlank()
+     * @Assert\Length(
+     *      min = 50,
+     *      max = 1000,
+     *      minMessage = "un minimum de {{ limit }} caractères est requis",
+     *      maxMessage = "{{ limit }} caractères sont la limite"
+     * )
      */
     private ?string $description;
 
@@ -92,11 +103,15 @@ class Annonce
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\Url
      */
     private ?string $lien;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\Email(
+     *     message = "'{{ value }}' n'est pas valide."
+     * )
      */
     private ?string $adresse_email;
 

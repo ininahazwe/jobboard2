@@ -3,7 +3,9 @@
         <span class="sr-only">Loading...</span>
     </div>
     {{ form_row(form.q) }}
-    <h5 class="mt-1">Trier pars entreprise</h5>
+    <h5 class="mt-1">Trier par entreprise</h5>
     {{ form_row(form.entreprises) }}
+    <h5 class="mt-1">Trier par type de contrat</h5>
+    {{ form_row(form.contrat) }}
     <button type="submit" class="btn-sm btn-primary mt-1">Filter</button>
 {{ form_end(form) }}

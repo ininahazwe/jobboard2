@@ -1,13 +1,17 @@
-<div class="card" id="entreprise-{{ entreprise.id }}">
-    {% if entreprise.logo|length %}
-        <img class="card-img-top mx-auto pt-1" style="width:70px" src="{{ asset(entreprise.getUrlLastLogo()) }}" alt="{{ entreprise.getNameLastLogo() }}">
-    {% endif %}
-    <div class="card-body">
-        <h5 class="card-title text-center"><a href="{{ path('entreprise_show_unit', {id:entreprise.id, slug:entreprise.slug}) }}">{{ entreprise.name }}</a></h5>
-        <div class="card-title text-center">
-            {% if entreprise.annoncesEntreprise|length >= 1 %}
-                <span class="btn-secondary btn-sm">{{ pluralize(entreprise.annoncesEntreprise|length, 'annonce') }}</span>
-            {% endif %}
-        </div>
+<div class="row section-bg p-3 m-1" id="entreprise-{{ entreprise.id }}">
+    <div>
+        <h5>
+            <a href="{{ path('entreprise_show_unit', {id:entreprise.id, slug:entreprise.slug}) }}">{{ entreprise.name }}</a>
+        </h5>
+    </div>
+    <div>
+        {% if entreprise.logo|length %}
+            <img class="card-img-top mx-auto p-1" style="width:70px" src="{{ asset(entreprise.getUrlLastLogo()) }}" alt="{{ entreprise.getNameLastLogo() }}">
+        {% endif %}
+    </div>
+    <div>
+        {% if entreprise.annoncesEntreprise|length >= 1 %}
+            <span class="btn-secondary btn-sm">{{ pluralize(entreprise.annoncesEntreprise|length, 'annonce') }}</span>
+        {% endif %}
     </div>
 </div>

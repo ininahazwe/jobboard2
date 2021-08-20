@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Dictionnaire;
+use App\Entity\Entreprise;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
@@ -47,6 +48,22 @@ class DictionnaireRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('a')
             ->where('a.isActive = true');
+    }
+
+    public function getSecteursEntrepriseActifs(): array
+    {
+        $ids = array();
+        $query = $this->getEntityManager()->getRepository(Entreprise::class)->createQueryBuilder('e')
+            ->where('e.moderation = 1')
+        ;
+
+        $result = $query->getQuery()->getResult();
+        foreach($result as $entreprise){
+            if($entreprise->getSecteur()){
+                $ids[] = $entreprise->getSecteur()->getId();
+            }
+        }
+        return $ids;
     }
 
     // /**

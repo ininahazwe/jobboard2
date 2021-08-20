@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Data\SearchData;
+use App\Entity\Annonce;
 use App\Entity\Entreprise;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -217,6 +218,7 @@ class EntrepriseRepository extends ServiceEntityRepository
     public function getEntreprisesAccepteesAvecAnnonces(): ArrayCollection
     {
         $query = $this->createQueryBuilder('e')
+            ->select('e')
             ->where('e.moderation = 1')
         ;
         $result = $query->getQuery()->getResult();
@@ -228,6 +230,23 @@ class EntrepriseRepository extends ServiceEntityRepository
         }
 
         return $entreprises;
+    }
+
+    public function getEntreprisesAnnoncesPubliees()
+    {
+        $ids = array();
+        $now = new \DateTime('now');
+        $query = $this->getEntityManager()->getRepository(Annonce::class)->createQueryBuilder('a')
+            ->andWhere('a.isActive = 1')
+            ->andWhere('a.dateLimiteCandidature > :date')
+            ->setParameter('date', $now)
+
+        ;
+        $result = $query->getQuery()->getResult();
+        foreach($result as $annonce){
+            $ids[] = $annonce->getEntreprise()->getId();
+        }
+        return $ids;
     }
 
     public function getEntrepriseActive()
@@ -262,6 +281,7 @@ class EntrepriseRepository extends ServiceEntityRepository
             ->where('e.moderation = 1')
             //->select('e', 's')
             ->join('e.secteur', 's');
+
 
         if(!empty($search->q)){
             $query = $query

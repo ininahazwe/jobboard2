@@ -2,7 +2,6 @@
 
 namespace App\Form;
 
-use App\Data\SearchData;
 use App\Data\SearchDataAnnonces;
 use App\Entity\Dictionnaire;
 use App\Entity\Entreprise;
@@ -25,11 +24,37 @@ class SearchAnnonceForm extends AbstractType
                 ]
             ])
             ->add('entreprises', EntityType::class, [
-                'class' => Entreprise::class,
                 'label' => false,
                 'required' => false,
                 'expanded' => true,
                 'multiple' => true,
+                'class' => Entreprise::class,
+                'query_builder' => function($repository) {
+                    $ids = $repository->getEntreprisesAnnoncesPubliees();
+                    $query = $repository->createQueryBuilder('e')
+                        ->select('e')
+                        ->where('e.moderation = 1')
+                        ->andWhere('e.id IN (:ids)')
+                        ->setParameter('ids', $ids)
+                    ;
+
+                    return $query;
+                }
+            ])
+            ->add('contrat', EntityType::class, [
+                'required'  => false,
+                'label' => false,
+                'expanded' => true,
+                'multiple' => true,
+                'class' => Dictionnaire::class,
+                'query_builder' => function($repository) {
+                    $query = $repository->createQueryBuilder('d')
+                        ->select('d')
+                        ->where('d.type = :type')
+                        ->setParameter('type', Dictionnaire::TYPE_CONTRACT);
+
+                    return $query;
+                }
             ])
 
         ;
@@ -47,5 +72,10 @@ class SearchAnnonceForm extends AbstractType
     public function getBlockPrefix(): string
     {
         return '';
+    }
+
+    public function getName()
+    {
+        return 'search_annonces';
     }
 }

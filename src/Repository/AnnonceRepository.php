@@ -2,7 +2,6 @@
 
 namespace App\Repository;
 
-use App\Data\SearchData;
 use App\Data\SearchDataAnnonces;
 use App\Entity\Annonce;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -109,7 +108,7 @@ class AnnonceRepository extends ServiceEntityRepository
      */
     public function findSearch(SearchDataAnnonces $search): PaginationInterface
     {
-        $query = $this->getSearchQuery($search)->getQuery();
+        $query = $this->getSearchQuery($search)->getQuery()->getResult();
 
         return $this->paginator->paginate(
             $query,
@@ -120,22 +119,32 @@ class AnnonceRepository extends ServiceEntityRepository
 
     public function getSearchQuery (SearchDataAnnonces $search): QueryBuilder
     {
+        $now = new \DateTime('now');
         $query = $this
             ->createQueryBuilder('a')
             ->andWhere('a.isActive = 1')
-            //->select('e', 's')
-            ->join('a.entreprise', 'e');
+            ->andWhere('a.dateLimiteCandidature > :date')
+            ->setParameter('date', $now);
+
+            //->join('a.contrat', 'c');
 
         if(!empty($search->q)){
-            $query = $query
+            $query
                 ->andWhere('a.name LIKE :q')
-                ->setParameter('q', "%{$search->q}%");
+                ->setParameter('q', "%" . $search->q . "%");
         }
 
         if(!empty($search->entreprises)){
-            $query = $query
+            $query
+                ->innerJoin('a.entreprise', 'e')
                 ->andWhere('e.id IN (:entreprises)')
                 ->setParameter('entreprises', $search->entreprises);
+        }
+        if(!empty($search->contrat)){
+            $query
+                ->innerJoin('a.type_contrat', 'c')
+                ->andWhere('c.id IN (:contrat)')
+                ->setParameter('contrat', $search->contrat);
         }
 
         return $query;

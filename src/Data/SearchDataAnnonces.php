@@ -3,6 +3,7 @@
 namespace App\Data;
 
 use App\Entity\Annonce;
+use App\Entity\Dictionnaire;
 use App\Entity\Entreprise;
 
 class SearchDataAnnonces
@@ -26,4 +27,9 @@ class SearchDataAnnonces
      * @var Entreprise[]
      */
     public array $entreprises = [];
+
+    /**
+     * @var Dictionnaire[]
+     */
+    public array $contrat = [];
 }

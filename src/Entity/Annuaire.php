@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=AnnuaireRepository::class)
@@ -23,6 +24,12 @@ class Annuaire
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\Length(
+     *      min = 10,
+     *      max = 500,
+     *      minMessage = "un minimum de {{ limit }} caractères est requis",
+     *      maxMessage = "{{ limit }} caractères sont la limite"
+     * )
      */
     private ?string $content;
 
@@ -69,8 +76,11 @@ class Annuaire
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\Email(
+     *     message = "'{{ value }}' n'est pas valide."
+     * )
      */
-    private $email;
+    private ?string $email;
 
     public function __construct()
     {
