@@ -6,6 +6,7 @@ use App\Repository\OffreRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=OffreRepository::class)
@@ -17,6 +18,12 @@ class Offre
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 50,
+     *      minMessage = "un minimum de {{ limit }} caractères est requis",
+     *      maxMessage = "{{ limit }} caractères sont la limite"
+     * )
      */
     private string $formule;
 

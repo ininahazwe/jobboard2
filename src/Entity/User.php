@@ -29,6 +29,7 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=180, unique=true)
      * @Assert\NotBlank(message="Merci de saisir une adresse email valide")
      * @Assert\Email(message="{{value}} n'est pas valide")
+     * @Assert\Unique
      */
     private string $email;
 
@@ -46,6 +47,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\Unique
      */
     protected string $username;
 
@@ -78,6 +80,10 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\Regex(
+     *     pattern = "/^[0-9]+$/i",
+     *     message = "Seul les chiffres sont acceptés",
+     * )
      */
     private ?string $telephone;
 

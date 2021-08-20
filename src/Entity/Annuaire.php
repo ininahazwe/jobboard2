@@ -19,6 +19,13 @@ class Annuaire
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 50,
+     *      minMessage = "un minimum de {{ limit }} caractères est requis",
+     *      maxMessage = "{{ limit }} caractères sont la limite"
+     * )
      */
     private ?string $title;
 
@@ -41,6 +48,9 @@ class Annuaire
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\Url(
+     *    message = "Le lien '{{ value }}' n'est pas au bon format",
+     * )
      */
     private ?string $web_link;
 
@@ -66,6 +76,10 @@ class Annuaire
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\Regex(
+     *     pattern = "/^[0-9]+$/i",
+     *     message = "Seul les chiffres sont acceptés",
+     * )
      */
     private ?string $telephone;
 

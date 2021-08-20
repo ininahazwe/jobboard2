@@ -10,6 +10,7 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class CallVillesApi
+
 {
     private HttpClientInterface $client;
 
@@ -18,21 +19,20 @@ class CallVillesApi
         $this->client = $client;
     }
 
-     /**
+    /**
      * @throws TransportExceptionInterface
      * @throws ServerExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws DecodingExceptionInterface
      * @throws ClientExceptionInterface
      */
-    private function getApi(): array
+    public function getAllData(): array
     {
-        $response = $this->client->request(
+        $reponse = $this->client->request(
             'GET',
-            'https://geo.api.gouv.fr/communes'
+            'https://geo.api.gouv.fr/communes?'
         );
 
-        return $response->toArray();
+        return $reponse->toArray();
     }
-
 }

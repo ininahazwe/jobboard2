@@ -72,7 +72,7 @@ class Candidature
     /**
      * @ORM\OneToOne(targetEntity=Messages::class, mappedBy="candidature", cascade={"persist", "remove"})
      */
-    private $messages;
+    private ?Messages $messages;
 
     public function __construct()
     {

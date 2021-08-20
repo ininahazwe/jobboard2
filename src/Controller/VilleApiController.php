@@ -9,12 +9,12 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class VilleApiController extends AbstractController
 {
-    #[Route('/ville', name: 'ville_api')]
+    #[Route('/cms/villes', name: 'ville_api')]
     public function index(CallVillesApi $callVillesApi): Response
     {
 
-        return $this->render('api/index.html.twig', [
-            'controller_name' => 'HomeController',
+        return $this->render('api/villes.html.twig', [
+            'data' => $callVillesApi->getAllData()
         ]);
     }
 }

@@ -6,6 +6,7 @@ use App\Repository\ModeleOffreCommercialeRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ModeleOffreCommercialeRepository::class)
@@ -16,6 +17,13 @@ class ModeleOffreCommerciale
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 50,
+     *      minMessage = "un minimum de {{ limit }} caractères est requis",
+     *      maxMessage = "{{ limit }} caractères sont la limite"
+     * )
      */
     private string $name;
 
@@ -36,6 +44,10 @@ class ModeleOffreCommerciale
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Regex(
+     *     pattern = "/^[0-9]+$/i",
+     *     message = "Seul les chiffres sont acceptés",
+     * )
      */
     private string $prix;
 

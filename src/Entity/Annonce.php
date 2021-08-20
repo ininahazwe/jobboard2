@@ -103,7 +103,9 @@ class Annonce
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\Url
+     * @Assert\Url(
+     *    message = "Le lien '{{ value }}' n'est pas au bon format",
+     * )
      */
     private ?string $lien;
 

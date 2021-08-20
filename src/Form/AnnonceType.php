@@ -5,6 +5,8 @@ namespace App\Form;
 use App\Entity\Entreprise;
 use App\Entity\User;
 use App\Entity\Dictionnaire;
+use App\Entity\Villes;
+use App\Form\FormExtension\SearchableType;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -77,6 +79,10 @@ class AnnonceType extends AbstractType
                     return $query;
                 }
             ])
+            /*->add('location', SearchableType::class, [
+                'label' => 'Ville',
+                'class' => Villes::class
+            ])*/
             ->add('entreprise', EntityType::class ,[
                 'class' => Entreprise::class,
                 'query_builder' => function($repository) use($user) {
@@ -120,7 +126,7 @@ class AnnonceType extends AbstractType
             ->add('lien', UrlType::class, [
                 'required' => false
             ])
-            ;
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver)

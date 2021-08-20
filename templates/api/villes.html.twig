@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Les chiffres du covid-19{% endblock %}
+
+{% block body %}
+    <main id="main">
+        <!-- ======= Breadcrumbs ======= -->
+        <section id="breadcrumbs" class="breadcrumbs">
+            <div class="container">
+                <ol>
+                    <li><a href="{{ path('app_home') }}">Home</a></li>
+                    <li><a href="{{ path('app_profile') }}">Dashboard</a></li>
+                    <li><a href="{{ path('annuaire_index') }}">Annuaire</a></li>
+                    <li>API</li>
+                </ol>
+                <h1>Les chiffres du covid en France</h1>
+            </div>
+        </section><!-- End Breadcrumbs -->
+        <section class="inner-page">
+            <div class="container">
+                {% for ville in data %}
+                    {{ ville.nom }} - {{ ville.code }}<br>
+                {% endfor %}
+            </div>
+        </section>
+    </main>
+
+{% endblock %}
