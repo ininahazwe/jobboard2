@@ -1,0 +1,9 @@
+{{ form_start(form, {attr: {class: 'filter js-filter-form'}}) }}
+    <div class="spinner-border js-loading" role="status" aria-hidden="true" style="display: none">
+        <span class="sr-only">Loading...</span>
+    </div>
+    {{ form_row(form.q) }}
+    <h5 class="mt-1">Trier par category</h5>
+    {{ form_row(form.category) }}
+    <button type="submit" class="btn-sm btn-primary mt-1">Filter</button>
+{{ form_end(form) }}

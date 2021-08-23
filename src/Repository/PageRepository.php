@@ -19,18 +19,4 @@ class PageRepository extends ServiceEntityRepository
         parent::__construct($registry, Page::class);
     }
 
-    public function search($mots = null){
-        $query = $this->createQueryBuilder('p');
-
-        if($mots ==! null){
-            $query->andWhere('MATCH_AGAINST(p.title, p.content) AGAINST(:mots boolean)>0')
-                ->setParameter('mots', $mots);
-        }
-
-        /*if ($mots){
-            $query->andWhere('p.title LIKE :mots')
-                ->setParameter('mots' ,  '%' . $mots . '%');
-        }*/
-        return $query->getQuery()->getResult();
-    }
 }

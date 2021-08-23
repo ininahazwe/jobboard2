@@ -1,0 +1,15 @@
+<div class="row mb-1 border" id="agenda-{{ agenda.id }}">
+    <div class="col-4 p-4">
+        <i class="fas fa-calendar-week"></i><br>
+        De {{ agenda.dateDebut|date('d-m-Y H:i:s') }}<br> à
+        {{ agenda.dateFin|date('d-m-Y H:i:s') }}
+    </div>
+    <div class="col-6 section-bg">
+        <h5 class="p-4"><a href="{{ path('agenda_show_unit', {id:agenda.id, slug:agenda.slug}) }}">{{ agenda.title }}</a></h5>
+    </div>
+    <div class="col-2 p-4">
+        <i class="fas fa-search-location"></i><br>
+        {{ agenda.organizer }}<br>
+        {{ agenda.city }}<br>
+    </div>
+</div>

@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Data\SearchData;
+use App\Data\SearchDataAgenda;
 use App\Data\SearchDataAnnonces;
+use App\Data\SearchDataBlog;
 use App\Entity\Annuaire;
 use App\Entity\Blog;
 use App\Entity\Entreprise;
@@ -12,7 +14,9 @@ use App\Entity\Page;
 use App\Entity\User;
 use App\Form\ContactType;
 use App\Form\CreationEntrepriseType;
+use App\Form\SearchAgendaForm;
 use App\Form\SearchAnnonceForm;
+use App\Form\SearchBlogForm;
 use App\Form\SearchEntrepriseForm;
 use App\Repository\AgendaRepository;
 use App\Repository\AnnonceRepository;
@@ -233,10 +237,26 @@ class HomeController extends AbstractController
     /*Affichage des agenda*/
 
     #[Route('/agenda', name: 'agenda_show_all', methods: ['GET'])]
-    public function ShowAllAgendas(AgendaRepository $agendaRepository): Response
+    public function ShowAllAgendas(AgendaRepository $agendaRepository, Request $request): Response
     {
+        $data = new SearchDataAgenda();
+        $data->page = $request->get('page', 1);
+        $form = $this->createForm(SearchAgendaForm::class, $data);
+        $form->handleRequest($request);
+
+        $agendas = $agendaRepository->findSearch($data);
+
+        if($request->get('ajax')){
+            return new JsonResponse([
+                'content' => $this->renderView('agenda/_agendas.html.twig', ['agendas' => $agendas]),
+                'pagination' => $this->renderView('agenda/_pagination.html.twig', ['agendas' => $agendas]),
+                'pages' => ceil($agendas->getTotalItemCount() / $agendas->getItemNumberPerPage())
+            ]);
+        }
+
         return $this->render('agenda/showAll.html.twig', [
-            'agendas' => $agendaRepository->findAll(),
+            'agendas' => $agendas,
+            'form' => $form->createView()
         ]);
     }
 
@@ -270,6 +290,7 @@ class HomeController extends AbstractController
     #[Route('/{slug}', name:'page_show')]
     public function page($slug): Response
     {
+
         $entityManager = $this->getDoctrine()->getManager();
 
         $page = $entityManager->getRepository(Page::class)->findOneBy(['slug' => $slug]);
@@ -293,6 +314,7 @@ class HomeController extends AbstractController
             'articles' => $articles,
             'conseils' => $conseils
         ]);
+
     }
 
     #[Route('/actualites-du-handicap/articles/{slug}', name:'article_show')]

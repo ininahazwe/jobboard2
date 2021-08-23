@@ -72,12 +72,12 @@ class SearchableType extends AbstractType
         $view->vars['full_name'] = '[]';
     }
 
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'choice';
     }
 
-    private function choices(Collection $value)
+    private function choices(Collection $value): array
     {
         return $value
             ->map(fn ($d) => new ChoiceView($d, (string)$d->getId(),(string)$d))

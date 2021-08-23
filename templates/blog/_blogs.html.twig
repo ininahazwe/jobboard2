@@ -1,0 +1,5 @@
+{% if articles|length %}
+    {% for article in articles %}
+    {% include 'blog/_card.html.twig' with {article: article} only %}
+    {% endfor %}
+{% endif %}

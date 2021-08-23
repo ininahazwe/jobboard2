@@ -16,27 +16,23 @@
         </section><!-- End Breadcrumbs -->
 
         <section class="inner-page">
-            <div class="container">
+            <div class="container js-filter">
                 <div class="section-title">
                     <p>Les évènements sont automatiquement classés par ordre chronologique et archivés dès que leurs dates sont dépassées.</p>
                 </div>
-                {% for agenda in agendas %}
-                    <div class="row mb-1 border">
-                        <div class="col-4 p-4">
-                            <i class="fas fa-calendar-week"></i><br>
-                            De {{ agenda.dateDebut|date('d-m-Y H:i:s') }}<br> à
-                            {{ agenda.dateFin|date('d-m-Y H:i:s') }}
+                <div class="row">
+                    <div class="col-md-3">
+                        {% include 'search/filtrer_agenda.html.twig' with {form: form} only %}
+                    </div>
+                    <div class="col-md-9">
+                        <div class="grid js-filter-content">
+                            {% include 'agenda/_blogs.html.twig' %}
                         </div>
-                        <div class="col-6 section-bg">
-                            <h5 class="p-4"><a href="{{ path('agenda_show_unit', {id:agenda.id, slug:agenda.slug}) }}">{{ agenda.title }}</a></h5>
-                        </div>
-                        <div class="col-2 p-4">
-                            <i class="fas fa-search-location"></i><br>
-                            {{ agenda.organizer }}<br>
-                            {{ agenda.city }}<br>
+                        <div class="mt-4 js-filter-pagination">
+                            {% include 'agenda/_pagination.html.twig' %}
                         </div>
                     </div>
-                {% endfor %}
+                </div>
             </div>
         </section>
     </main>
