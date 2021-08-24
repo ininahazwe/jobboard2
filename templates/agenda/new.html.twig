@@ -29,6 +29,102 @@
 {% endblock %}
 
 {% block javascripts %}
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=AIzaSyAm0lysQhTAjFvq1KUDk2ndh90Eq6UB4e4" async defer></script>
+    {#<script>
+        let autocomplete;
+        let address1Field;
+        let address2Field;
+        let postalField;
 
+        function initAutocomplete() {
+            address1Field = document.querySelector("#agenda_address");
+            address2Field = document.querySelector("#agenda_address");
+            postalField = document.querySelector("#agenda_code_postal");
+
+            autocomplete = new google.maps.places.Autocomplete(address1Field, {
+                componentRestrictions: { country: ["fr", "fr"] },
+                fields: ["address_components", "geometry"],
+                types: ["address"],
+            });
+            address1Field.focus();
+            autocomplete.addListener("place_changed", fillInAddress);
+        }
+
+
+        function fillInAddress() {
+
+            const place = autocomplete.getPlace();
+            let address1 = "";
+            let postcode = "";
+
+            for (const component of place.address_components) {
+                const componentType = component.types[0];
+
+                switch (componentType) {
+                    case "street_number": {
+                        address1 = `${component.long_name} ${address1}`;
+                        break;
+                    }
+
+                    case "route": {
+                        address1 += component.short_name;
+                        break;
+                    }
+
+                    case "postal_code": {
+                        postcode = `${component.long_name}${postcode}`;
+                        break;
+                    }
+
+                    case "postal_code_suffix": {
+                        postcode = `${postcode}-${component.long_name}`;
+                        break;
+                    }
+                    case "locality":
+                        document.querySelector("#agenda_city").value = component.long_name;
+                        break;
+
+                    case "administrative_area_level_1": {
+                        document.querySelector("#agenda_code_postal").value = component.short_name;
+                        break;
+                    }
+                    /*case "country":
+                        document.querySelector("#country").value = component.long_name;
+                        break;*/
+                }
+            }
+            address1Field.value = address1;
+            postalField.value = postcode;
+
+            address2Field.focus();
+        }
+    </script>#}
+    <script>
+        var searchInput = 'agenda_address';
+
+        $(document).ready(function () {
+            var autocomplete;
+            autocomplete = new google.maps.places.Autocomplete((document.getElementById(searchInput)), {
+                types: ['geocode'],
+            });
+
+            google.maps.event.addListener(autocomplete, 'place_changed', function () {
+                var near_place = autocomplete.getPlace();
+                document.getElementById('loc_lat').value = near_place.geometry.location.lat();
+                document.getElementById('loc_long').value = near_place.geometry.location.lng();
+
+                document.getElementById('latitude_view').innerHTML = near_place.geometry.location.lat();
+                document.getElementById('longitude_view').innerHTML = near_place.geometry.location.lng();
+            });
+        });
+
+        var autocomplete;
+        autocomplete = new google.maps.places.Autocomplete((document.getElementById(searchInput)), {
+            types: ['geocode'],
+            componentRestrictions: {
+                country: "FR"
+            }
+        });
+    </script>
 {% endblock %}
 
