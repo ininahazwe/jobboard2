@@ -130,6 +130,7 @@ class EntrepriseRepository extends ServiceEntityRepository
             $query = $this->createQueryBuilder('d')
                 ->select('d')
                 ->andWhere('d.id IN (:ids)')
+                ->andWhere('d.moderation = 1')
                 ->orderBy('d.name' ,  'ASC')
                 ->setParameter('ids',$ids);
             return $query;

@@ -64,7 +64,7 @@ class AnnonceType extends AbstractType
                     return $query;
                 }
             ])
-            ->add('location', EntityType::class, [
+            /*->add('location', EntityType::class, [
                 'required'  => false,
                 'label' => 'Zone géographique',
                 'expanded' => false,
@@ -78,11 +78,17 @@ class AnnonceType extends AbstractType
 
                     return $query;
                 }
-            ])
-            /*->add('location', SearchableType::class, [
-                'label' => 'Ville',
-                'class' => Villes::class
             ])*/
+            ->add('ville' , TextType::class, [
+                'required' => false,
+                'label' => 'Ville',
+            ])
+            ->add('code_postal', TextType::class, [
+                'required' => false,
+            ])
+            ->add('departement', TextType::class, [
+                'required' => false,
+            ])
             ->add('entreprise', EntityType::class ,[
                 'class' => Entreprise::class,
                 'query_builder' => function($repository) use($user) {

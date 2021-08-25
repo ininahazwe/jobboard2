@@ -137,6 +137,21 @@ class Annonce
      */
     private ?User $current_recruteur;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private ?string $ville;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private ?string $code_postal;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private ?string $departement;
+
     public function __construct()
     {
         $this->type_contrat = new ArrayCollection();
@@ -436,5 +451,41 @@ class Annonce
             $result = true;
         }
         return $result;
+    }
+
+    public function getVille(): ?string
+    {
+        return $this->ville;
+    }
+
+    public function setVille(?string $ville): self
+    {
+        $this->ville = $ville;
+
+        return $this;
+    }
+
+    public function getCodePostal(): ?string
+    {
+        return $this->code_postal;
+    }
+
+    public function setCodePostal(?string $code_postal): self
+    {
+        $this->code_postal = $code_postal;
+
+        return $this;
+    }
+
+    public function getDepartement(): ?string
+    {
+        return $this->departement;
+    }
+
+    public function setDepartement(?string $departement): self
+    {
+        $this->departement = $departement;
+
+        return $this;
     }
 }
