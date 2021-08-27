@@ -48,25 +48,6 @@ class Entreprise
     private string $description;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private string $address;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private string $city;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\Regex(
-     *     pattern = "/^[0-9]+$/i",
-     *     message = "Seul les chiffres sont acceptés",
-     * )
-     */
-    private string $zipcode;
-
-    /**
      * @ORM\ManyToOne(targetEntity=Dictionnaire::class, inversedBy="entreprises_secteur")
      */
     private ?Dictionnaire $secteur;
@@ -150,6 +131,11 @@ class Entreprise
      */
     private ?int $moderation;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Adresse::class, mappedBy="entreprise", orphanRemoval=true, cascade={"persist"})
+     */
+    private Collection $adresse;
+
     public function __construct()
     {
         $this->Offres = new ArrayCollection();
@@ -160,6 +146,7 @@ class Entreprise
         $this->factures = new ArrayCollection();
         $this->annonces_entreprise = new ArrayCollection();
         $this->candidatures = new ArrayCollection();
+        $this->adresse = new ArrayCollection();
     }
 
     /**
@@ -186,42 +173,6 @@ class Entreprise
     public function setDescription(string $description): self
     {
         $this->description = $description;
-
-        return $this;
-    }
-
-    public function getAddress(): ?string
-    {
-        return $this->address;
-    }
-
-    public function setAddress(string $address): self
-    {
-        $this->address = $address;
-
-        return $this;
-    }
-
-    public function getCity(): ?string
-    {
-        return $this->city;
-    }
-
-    public function setCity(string $city): self
-    {
-        $this->city = $city;
-
-        return $this;
-    }
-
-    public function getZipcode(): ?string
-    {
-        return $this->zipcode;
-    }
-
-    public function setZipcode(string $zipcode): self
-    {
-        $this->zipcode = $zipcode;
 
         return $this;
     }
@@ -641,4 +592,36 @@ class Entreprise
         }
         return $result;
     }
+
+    /**
+     * @return Collection|Adresse[]
+     */
+    public function getAdresse(): Collection
+    {
+        return $this->adresse;
+    }
+
+    public function addAdresse(Adresse $adresse): self
+    {
+        if (!$this->adresse->contains($adresse)) {
+            $this->adresse[] = $adresse;
+            $adresse->setEntreprise($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAdresse(Adresse $adresse): self
+    {
+        if ($this->adresse->removeElement($adresse)) {
+            // set the owning side to null (unless already changed)
+            if ($adresse->getEntreprise() === $this) {
+                $adresse->setEntreprise(null);
+            }
+        }
+
+        return $this;
+    }
+
+
 }

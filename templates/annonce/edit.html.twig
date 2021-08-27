@@ -9,9 +9,11 @@
         <div class="container">
             <ol>
                 <li><a href="{{ path('app_home') }}">Home</a></li>
-                <li>Annonce</li>
+                <li><a href="{{ path('app_profile') }}">Dashboard</a></li>
+                <li><a href="{{ path('annonce_index') }}">Offres d'emploi</a></li>
+                <li>Modification</li>
             </ol>
-            <h1>Modification d'annonce</h1>
+            <h1>{{ annonce.name }}</h1>
         </div>
     </section><!-- End Breadcrumbs -->
     <section class="inner-page">
@@ -20,4 +22,5 @@
         </div>
     </section>
 </main>
+    {% include 'annonce/_script.html.twig' %}
 {% endblock %}

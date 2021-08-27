@@ -53,7 +53,16 @@
                                     </div>
                                 </td>
                                 <td>
-                                    {{ user.getModerationName() }}
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" {{ (user.moderation) ? 'checked' : ''}} data-id="{{user.id}}"/>
+                                        <label class="form-check-label" for="flexSwitchCheckDefault">
+                                            {% if user.moderation  ? 'checked'%}
+                                                Accepté
+                                            {% else %}
+                                                non accepté
+                                            {% endif %}
+                                        </label>
+                                    </div>
                                 </td>
                             </tr>
                         {% else %}
@@ -68,4 +77,18 @@
         </div>
     </section>
 </main>
+{% endblock %}
+{% block javascripts %}
+    <script>
+        window.onload = () => {
+            let activer = document.querySelectorAll("[type=checkbox]")
+            for (let bouton of activer) {
+                bouton.addEventListener("click", function () {
+                    let xmlhttp = new XMLHttpRequest;
+                    xmlhttp.open("get", `/cms/utilisateurs/accepter/${this.dataset.id}`)
+                    xmlhttp.send()
+                })
+            }
+        }
+    </script>
 {% endblock %}

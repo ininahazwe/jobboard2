@@ -23,4 +23,18 @@
     </section>
 </main>
 
+
+{% endblock %}
+{% block javascripts %}
+    <script type="text/javascript">
+        var editor = grapesjs.init({
+            container : '#page_content',
+            plugins: ['gjs-preset-webpage'],
+            pluginsOpts: {
+                'gjs-preset-webpage': {
+                    // options
+                }
+            },
+        });
+    </script>
 {% endblock %}

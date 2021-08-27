@@ -8,7 +8,7 @@
             {{ form_row(form.telephone) }}
         </div>
         <div class="col-md-3">
-            <h2>Photo de profile</h2>
+            <h2>Votre photo</h2>
             {{ form_row(form.files) }}
             {% if app.request.attributes.get('_route') == 'app_profile_edit' %}
                 {% for image in user.files %}

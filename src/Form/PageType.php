@@ -19,7 +19,7 @@ class PageType extends AbstractType
         $builder
             ->add('title', TextType::class)
             ->add('content', CKEditorType::class)
-            ->add('style', TextareaType::class, [
+            ->add('style', TextType::class, [
                 'required' => false
             ])
             ->add('type',  ChoiceType::class, [

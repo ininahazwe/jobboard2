@@ -45,10 +45,11 @@
                         <thead>
                         <tr>
                             <th>Name</th>
+                            <th>Statut</th>
                             <th>Description</th>
                             <th>Entreprises</th>
+                            <th>Ville</th>
                             <th>Date de publication</th>
-                            <th>Active</th>
                             <th>actions</th>
 
                         </tr>
@@ -57,9 +58,6 @@
                         {% for annonce in annonces %}
                             <tr>
                                 <td><a href="{{ path('annonce_show_unit', {id: annonce.id, slug: annonce.slug})}}">{{ annonce.name }}</a></td>
-                                <td>{{ annonce.description|striptags|slice(0, 150) }}...</td>
-                                <td>{{ annonce.entreprise }}</td>
-                                <td>{{ annonce.createdAt|date('d/m/Y') }}</td>
                                 <td>
                                     <div class="form-check form-switch">
                                         <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" {{ (annonce.isActive) ? 'checked' : ''}} data-id="{{annonce.id}}"/>
@@ -69,6 +67,19 @@
                                             {% else %}
                                                 non publiée
                                             {% endif %}
+                                        </label>
+                                    </div>
+                                </td>
+                                <td>{{ annonce.description|striptags|slice(0, 150) }}...</td>
+                                <td>{{ annonce.entreprise }}</td>
+                                <td>{{ annonce.ville }}</td>
+                                <td>{{ annonce.createdAt|date('d/m/Y') }}</td>
+                                <td>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" {{ (annonce.isActive) ? 'checked' : ''}} data-id="{{annonce.id}}"/>
+                                        <label class="form-switch mt-2">
+                                            <input type="checkbox" {{ (annonce.isActive) ? 'checked' : ''}} data-id="{{annonce.id}}">
+                                            <span class="slider"></span>
                                         </label>
                                     </div>
                                 </td>
@@ -91,4 +102,18 @@
         </div>
     </section>
 </main>
+{% endblock %}
+{% block javascripts %}
+    <script>
+        window.onload = () => {
+            let activer = document.querySelectorAll("[type=checkbox]")
+            for (let bouton of activer) {
+                bouton.addEventListener("click", function () {
+                    let xmlhttp = new XMLHttpRequest;
+                    xmlhttp.open("get", `/cms/annonce/activer/${this.dataset.id}`)
+                    xmlhttp.send()
+                })
+            }
+        }
+    </script>
 {% endblock %}

@@ -1,20 +1,32 @@
 {{ form_start(form) }}
 <div class="container">
     <div class="row">
-        <div class="col-md-9">
+        <div class="col-md-3">
+            <h3>Identification</h3>
             {{ form_row(form.name) }}
             {{ form_row(form.description) }}
-            {{ form_row(form.address) }}
-            {{ form_row(form.city) }}
-            {{ form_row(form.zipcode) }}
             {{ form_row(form.regroupementCandidatures) }}
             {{ form_row(form.secteur) }}
             {{ form_row(form.numeroSiren) }}
             {{ form_row(form.numeroSiret) }}
             {{ form_row(form.taille) }}
+
+            <button type="button" class="btn btn-primary btn-new" data-collection="#adresse">Adresse</button>
+            <div
+                    id="adresse"
+                    class="row"
+                    data-prototype="{{ include("entreprise/_adresse.html.twig", {form: form.adresse.vars.prototype})|e("html_attr") }}"
+                    data-index="{{ form.adresse|length > 0 ? form.adresse|last.vars.adresse + 1 : 0 }}">
+                {% for adress in form.adresse %}
+                    <div class="col-4">
+                        {{ include("entreprise/_adresse.html.twig", {form: bar}) }}
+                    </div>
+                {% endfor %}
+            </div>
+
         </div>
         <div class="col-md-3">
-            <h2>Logo</h2>
+            <h3>Logo</h3>
             {{ form_row(form.logo) }}
             {% if app.request.attributes.get('_route') == 'entreprise_edit' %}
                 {% for image in entreprise.logo %}
@@ -26,11 +38,8 @@
             {% endif %}
         </div>
     </div>
-    {% if app.user %}
-        <button class="btn btn-primary mt-3">{{ button_label|default('Enregistrer') }}</button>
-    {% else %}
-        {% include 'partials/hcaptcha_submit_button.html.twig' %}
-    {% endif %}
+
+    <button class="btn btn-primary mt-3">{{ button_label|default('Enregistrer') }}</button>
+
 </div>
 {{ form_end(form) }}
-

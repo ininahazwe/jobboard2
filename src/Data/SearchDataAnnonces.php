@@ -32,4 +32,15 @@ class SearchDataAnnonces
      * @var Dictionnaire[]
      */
     public array $contrat = [];
+
+    /**
+     * @var Dictionnaire[]
+     */
+    public array $diplome = [];
+
+    /**
+     * @var Dictionnaire[]
+     */
+    public array $experience = [];
+
 }

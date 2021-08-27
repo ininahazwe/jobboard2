@@ -1,0 +1,84 @@
+<script>
+    $("#annonce_code_postal").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: "https://api-adresse.data.gouv.fr/search/?postcode="+$("input[name='annonce[code_postal]']").val(),
+                data: { q: request.term },
+                dataType: "json",
+                success: function (data) {
+                    var postcodes = [];
+                    response($.map(data.features, function (item) {
+
+                        if ($.inArray(item.properties.postcode, postcodes) == -1) {
+                            postcodes.push(item.properties.postcode);
+                            return { label: item.properties.postcode + " - " + item.properties.city,
+                                city: item.properties.city,
+                                context: item.properties.context,
+                                value: item.properties.postcode
+                            };
+                        }
+                    }));
+                }
+            });
+        },
+        // On remplit aussi la ville
+        select: function(event, ui) {
+            $('#annonce_ville').val(ui.item.city);
+            $('#annonce_departement').val(ui.item.context);
+        }
+    });
+    $("#annonce_ville").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: "https://api-adresse.data.gouv.fr/search/?city="+$("input[name='annonce[ville]']").val(),
+                data: { q: request.term },
+                dataType: "json",
+                success: function (data) {
+                    var cities = [];
+                    response($.map(data.features, function (item) {
+                        // Ici on est obligé d'ajouter les villes dans un array pour ne pas avoir plusieurs fois la même
+                        if ($.inArray(item.properties.postcode, cities) == -1) {
+                            cities.push(item.properties.postcode);
+                            return { label: item.properties.postcode + " - " + item.properties.city,
+                                postcode: item.properties.postcode,
+                                context: item.properties.context,
+                                value: item.properties.city
+                            };
+                        }
+                    }));
+                }
+            });
+        },
+        // On remplit aussi le CP
+        select: function(event, ui) {
+            $('#annonce_code_postal').val(ui.item.postcode);
+            $('#annonce_departement').val(ui.item.context);
+        }
+    });
+</script>
+<script>
+    new TomSelect('#annonce_auteur', {
+        plugins: {
+            remove_button:{
+                title:'Supprimer',
+            }
+        },
+        persist: false,
+        create: true,
+        onDelete: function(values) {
+            return confirm(values.length > 1 ? 'Are you sure you want to remove these ' + values.length + ' items?' : 'Are you sure you want to remove "' + values[0] + '"?');
+        }
+    });
+    new TomSelect('#annonce_type_contrat', {
+        plugins: {
+            remove_button:{
+                title:'Supprimer',
+            }
+        },
+        persist: false,
+        create: true,
+        onDelete: function(values) {
+            return confirm(values.length > 1 ? 'Are you sure you want to remove these ' + values.length + ' items?' : 'Are you sure you want to remove "' + values[0] + '"?');
+        }
+    });
+</script>

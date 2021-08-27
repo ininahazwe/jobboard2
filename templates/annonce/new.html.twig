@@ -1,11 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Offres d'emploi | Création{% endblock %}
-{% block javascripts %}
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.7.3/themes/base/jquery-ui.css">
-{% endblock %}
+
 {% block body %}
     <main id="main">
     <!-- ======= Breadcrumbs ======= -->
@@ -27,63 +23,6 @@
             </div>
         </section>
     </main>
-    <script>
-        $("#annonce_code_postal").autocomplete({
-            source: function (request, response) {
-                $.ajax({
-                    url: "https://api-adresse.data.gouv.fr/search/?postcode="+$("input[name='annonce[code_postal]']").val(),
-                    data: { q: request.term },
-                    dataType: "json",
-                    success: function (data) {
-                        var postcodes = [];
-                        response($.map(data.features, function (item) {
-
-                            if ($.inArray(item.properties.postcode, postcodes) == -1) {
-                                postcodes.push(item.properties.postcode);
-                                return { label: item.properties.postcode + " - " + item.properties.city,
-                                    city: item.properties.city,
-                                    context: item.properties.context,
-                                    value: item.properties.postcode
-                                };
-                            }
-                        }));
-                    }
-                });
-            },
-            // On remplit aussi la ville
-            select: function(event, ui) {
-                $('#annonce_ville').val(ui.item.city);
-                $('#annonce_departement').val(ui.item.context);
-            }
-        });
-        $("#annonce_ville").autocomplete({
-            source: function (request, response) {
-                $.ajax({
-                    url: "https://api-adresse.data.gouv.fr/search/?city="+$("input[name='annonce[ville]']").val(),
-                    data: { q: request.term },
-                    dataType: "json",
-                    success: function (data) {
-                        var cities = [];
-                        response($.map(data.features, function (item) {
-                            // Ici on est obligé d'ajouter les villes dans un array pour ne pas avoir plusieurs fois la même
-                            if ($.inArray(item.properties.postcode, cities) == -1) {
-                                cities.push(item.properties.postcode);
-                                return { label: item.properties.postcode + " - " + item.properties.city,
-                                    postcode: item.properties.postcode,
-                                    context: item.properties.context,
-                                    value: item.properties.city
-                                };
-                            }
-                        }));
-                    }
-                });
-            },
-            // On remplit aussi le CP
-            select: function(event, ui) {
-                $('#annonce_code_postal').val(ui.item.postcode);
-                $('#annonce_departement').val(ui.item.context);
-            }
-        });
-    </script>
+    {% include 'annonce/_script.html.twig' %}
 {% endblock %}
 

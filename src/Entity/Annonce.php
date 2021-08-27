@@ -36,7 +36,7 @@ class Annonce
      * @Assert\NotBlank()
      * @Assert\Length(
      *      min = 50,
-     *      max = 1000,
+     *      max = 2000,
      *      minMessage = "un minimum de {{ limit }} caractères est requis",
      *      maxMessage = "{{ limit }} caractères sont la limite"
      * )
@@ -152,6 +152,11 @@ class Annonce
      */
     private ?string $departement;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="favoris")
+     */
+    private Collection $favoris;
+
     public function __construct()
     {
         $this->type_contrat = new ArrayCollection();
@@ -159,6 +164,7 @@ class Annonce
         $this->location = new ArrayCollection();
         $this->createdAt = new \DateTimeImmutable('now');
         $this->candidatures = new ArrayCollection();
+        $this->favoris = new ArrayCollection();
     }
 
     public function getName(): ?string
@@ -485,6 +491,30 @@ class Annonce
     public function setDepartement(?string $departement): self
     {
         $this->departement = $departement;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getFavoris(): Collection
+    {
+        return $this->favoris;
+    }
+
+    public function addFavori(User $favori): self
+    {
+        if (!$this->favoris->contains($favori)) {
+            $this->favoris[] = $favori;
+        }
+
+        return $this;
+    }
+
+    public function removeFavori(User $favori): self
+    {
+        $this->favoris->removeElement($favori);
 
         return $this;
     }

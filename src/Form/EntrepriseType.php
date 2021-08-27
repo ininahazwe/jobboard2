@@ -2,12 +2,13 @@
 
 namespace App\Form;
 
+use App\Entity\Adresse;
 use App\Entity\Dictionnaire;
 use App\Entity\Entreprise;
-use HandiCV\RecaptchaBundle\Type\RecaptchaSubmitType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -31,41 +32,12 @@ class EntrepriseType extends AbstractType
             ])
             ->add('description', TextareaType::class, [
                 'label' => 'Description',
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Veuillez saisir une description',
-                    ]),
-                ],
             ])
             ->add('logo', FileType::class, [
                 'label' => false,
                 'multiple' => false,
                 'mapped' => false,
                 'required' => false
-            ])
-            ->add('address', TextType::class, [
-                'label' => 'Adresse',
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Veuillez saisir une adresse',
-                    ]),
-                ],
-            ])
-            ->add('city', TextType::class, [
-                'label' => 'Ville',
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Veuillez saisir une ville',
-                    ]),
-                ],
-            ])
-            ->add('zipcode' , TextType::class, [
-                'label' => 'Code postal',
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Veuillez saisir un code postal',
-                    ]),
-                ],
             ])
             ->add('regroupementCandidatures', ChoiceType::class, [
                 'choices' => [
@@ -98,8 +70,17 @@ class EntrepriseType extends AbstractType
             ->add('taille', IntegerType::class, [
                 'required' => false
             ])
+            ->add('adresse', CollectionType::class, [
+                'entry_type' => AdresseType::class,
+                'label' => 'Adresse',
+                'entry_options' => ['label' => false],
+                'allow_add' => true,
+                'allow_delete' => true,
+                'by_reference' => false
+            ])
         ;
     }
+
 
     public function configureOptions(OptionsResolver $resolver)
     {

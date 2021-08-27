@@ -174,7 +174,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     public function getAllcandidats(): mixed
     {
         $query = $this->createQueryBuilder('u')
-            ->where('u.roles = ROLE_CANDIDAT')
+            ->where('u.roles = [ROLE_CANDIDAT]')
         ;
         return $query->getQuery()->getResult();
     }

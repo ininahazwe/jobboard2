@@ -7,7 +7,6 @@ use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -27,9 +26,6 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Assert\NotBlank(message="Merci de saisir une adresse email valide")
-     * @Assert\Email(message="{{value}} n'est pas valide")
-     * @Assert\Unique
      */
     private string $email;
 
@@ -184,6 +180,11 @@ class User implements UserInterface
      */
     private Collection $blogs;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Annonce::class, mappedBy="favoris")
+     */
+    private Collection $favoris;
+
     public function __construct()
     {
         $this->isTermsClients = false;
@@ -200,6 +201,7 @@ class User implements UserInterface
         $this->annonces = new ArrayCollection();
         $this->createdAt = new \DateTimeImmutable('now');
         $this->blogs = new ArrayCollection();
+        $this->favoris = new ArrayCollection();
     }
 
     public function getEmail(): string
@@ -435,7 +437,7 @@ class User implements UserInterface
      */
     public function __toString(): string
     {
-        return $this->getEmail();
+        return $this->getFullname();
     }
 
     public function getOneRecruteurEntreprise(): string
@@ -966,7 +968,7 @@ class User implements UserInterface
     }
 
     /**
-     * @return Collection|Blog[]
+     * @return Collection
      */
     public function getBlogs(): Collection
     {
@@ -994,4 +996,32 @@ class User implements UserInterface
 
         return $this;
     }
+
+    /**
+     * @return Collection
+     */
+    public function getFavoris(): Collection
+    {
+        return $this->favoris;
+    }
+
+    public function addFavori(Annonce $favori): self
+    {
+        if (!$this->favoris->contains($favori)) {
+            $this->favoris[] = $favori;
+            $favori->addFavori($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFavori(Annonce $favori): self
+    {
+        if ($this->favoris->removeElement($favori)) {
+            $favori->removeFavori($this);
+        }
+
+        return $this;
+    }
+
 }

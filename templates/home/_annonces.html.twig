@@ -25,9 +25,7 @@
                         {% for typ in annonce.typeContrat %}
                             <span class="btn-secondary btn-sm">{{ typ.value }}</span>
                         {% endfor %}
-                        {% if annonce.entreprise.city %}
-                            <span class="btn-secondary btn-sm">{{ annonce.entreprise.city }}</span>
-                        {% endif %}
+
                     </div>
                     <div class="col-md-2">
                         Date limite de candidature <br>
@@ -35,7 +33,7 @@
                     </div>
                     <div class="col-md-2">
                         <a href="{{ path('entreprise_show_unit', {id:annonce.entreprise.id, slug:annonce.entreprise.slug}) }}">{{ annonce.entreprise.name }}</a><br>
-                        <span>{{ annonce.entreprise.city }}</span><br>
+                        <span></span><br>
                     </div>
                 </div>
             {% endfor %}

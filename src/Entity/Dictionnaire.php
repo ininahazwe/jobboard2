@@ -46,6 +46,7 @@ class Dictionnaire
     const TYPE_CATEGORIE_ANNUAIRE = 'categorie_annuaire';
     const TYPE_CATEGORIE_AGENDA = 'categorie_agenda';
     const TYPE_CATEGORIE_BLOG = 'categorie_blog';
+    const TYPE_CATEGORIE_CIVILITE = 'civilite';
 
     use ResourceId;
 
@@ -95,6 +96,11 @@ class Dictionnaire
      */
     private Collection $blogs;
 
+    /**
+     * @ORM\OneToMany(targetEntity=User::class, mappedBy="civilite")
+     */
+    private Collection $users;
+
     public function __construct()
     {
         $this->annonces = new ArrayCollection();
@@ -103,6 +109,7 @@ class Dictionnaire
         $this->annonces_location = new ArrayCollection();
         $this->annuaires = new ArrayCollection();
         $this->blogs = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public function setId($id)
@@ -461,6 +468,7 @@ class Dictionnaire
             Dictionnaire::TYPE_CATEGORIE_ANNUAIRE  => 'categorie_annuaire',
             Dictionnaire::TYPE_CATEGORIE_AGENDA  => 'categorie_agenda',
             Dictionnaire::TYPE_CATEGORIE_BLOG  => 'categorie_blog',
+            Dictionnaire::TYPE_CATEGORIE_CIVILITE  => 'Civilite',
         );
     }
 
@@ -488,6 +496,36 @@ class Dictionnaire
             // set the owning side to null (unless already changed)
             if ($blog->getCategorie() === $this) {
                 $blog->setCategorie(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+            $user->setCivilite($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        if ($this->users->removeElement($user)) {
+            // set the owning side to null (unless already changed)
+            if ($user->getCivilite() === $this) {
+                $user->setCivilite(null);
             }
         }
 

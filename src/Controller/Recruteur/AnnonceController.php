@@ -10,8 +10,10 @@ use App\Form\SearchAnnonceForm;
 use App\Repository\AnnonceRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/cms/annonce')]
@@ -89,6 +91,63 @@ class AnnonceController extends AbstractController
         return $this->render('annonce/edit.html.twig', [
             'annonce' => $annonce,
             'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/activer/{id}', name: 'annonce_activer')]
+    public function activer(Annonce $annonce): Response
+    {
+        $annonce->setIsActive(!$annonce->getIsActive());
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($annonce);
+        $em->flush();
+
+        return new Response("true");
+    }
+
+    #[Route('/favoris/ajout/{id}', name: 'annonce_ajout_favoris')]
+    public function ajoutFavoris(Annonce $annonce): RedirectResponse
+    {
+        if(!$annonce){
+            throw new NotFoundHttpException('Pas d\'annonce trouvée');
+        }
+        $annonce->addFavori($this->getUser());
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($annonce);
+        $em->flush();
+        return $this->redirectToRoute('annonces_show_all');
+    }
+
+    #[Route('/favoris/retrait/{id}', name: 'annonce_retrait_favoris')]
+    public function retraitFavoris(Annonce $annonce): RedirectResponse
+    {
+        if(!$annonce){
+            throw new NotFoundHttpException('Pas d\'annonce trouvée');
+        }
+        $annonce->removeFavori($this->getUser());
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($annonce);
+        $em->flush();
+        return $this->redirectToRoute('annonces_show_all');
+    }
+
+    #[Route('/selection', name: 'annonce_favoris')]
+    public function showFavoris(Request $request, AnnonceRepository $annonceRepository, PaginatorInterface $paginator): Response
+    {
+        $data = $annonceRepository->findAnnoncesEnFavori($this->getUser());
+        //$data = $this->getUser()->getFavoris();
+
+        $annonces = $paginator->paginate(
+            $data,
+            $request->query->getInt('page', 1),
+            100
+        );
+
+        return $this->render('annonce/favoris.html.twig', [
+            'annonces' => $annonces,
         ]);
     }
 

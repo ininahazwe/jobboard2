@@ -23,7 +23,7 @@ class Profile
      /**
      * @ORM\Column(type="datetime")
      */
-    private $birthdate;
+    private \DateTime $birthdate;
 
     /**
      * @ORM\Column(type="boolean")
@@ -41,14 +41,14 @@ class Profile
     private string $zipcode;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\ManyToOne(targetEntity=Dictionnaire::class, inversedBy="profile_diplome")
      */
-    private string $diplome;
+    private ?Dictionnaire $diplome;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\ManyToOne(targetEntity=Dictionnaire::class, inversedBy="profile_experiences")
      */
-    private string $experiences;
+    private ?Dictionnaire $experiences;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -56,9 +56,9 @@ class Profile
     private string $zoneDeRecherche;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\ManyToOne(targetEntity=Dictionnaire::class, inversedBy="profile_metiers")
      */
-    private string $metiers;
+    private ?Dictionnaire $metiers;
 
     /**
      * @ORM\Column(type="boolean")
@@ -81,10 +81,20 @@ class Profile
      */
     private User $user;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Dictionnaire::class, inversedBy="profile_civilite")
+     */
+    private ?Dictionnaire $civilite;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private ?string $departement;
+
     public function __construct()
     {
         $this->isVisible = false;
-        $this->createdAt = new \DateTime('now');
+        $this->createdAt = new \DateTimeImmutable('now');
     }
 
     public function getDescription(): ?string
@@ -99,7 +109,7 @@ class Profile
         return $this;
     }
 
-    public function getBirthdate()
+    public function getBirthdate(): \DateTime
     {
         return $this->birthdate;
     }
@@ -149,30 +159,26 @@ class Profile
         return $this;
     }
 
-    public function getDiplome(): ?string
+    public function getDiplome(): ?Dictionnaire
     {
         return $this->diplome;
     }
 
-    public function setDiplome(?string $diplome): self
+    public function setDiplome(?Dictionnaire $diplome): self
     {
-        if (isset($diplome)) {
-            $this->diplome = $diplome;
-        }
+        $this->diplome = $diplome;
 
         return $this;
     }
 
-    public function getExperiences(): ?string
+    public function getExperiences(): ?Dictionnaire
     {
         return $this->experiences;
     }
 
-    public function setExperiences(?string $experiences): self
+    public function setExperiences(?Dictionnaire $experiences): self
     {
-        if (isset($experiences)) {
-            $this->experiences = $experiences;
-        }
+        $this->experiences = $experiences;
 
         return $this;
     }
@@ -191,16 +197,14 @@ class Profile
         return $this;
     }
 
-    public function getMetiers(): ?string
+    public function getMetiers(): ?Dictionnaire
     {
         return $this->metiers;
     }
 
-    public function setMetiers(?string $metiers): self
+    public function setMetiers(?Dictionnaire $metiers): self
     {
-        if (isset($metiers)) {
-            $this->metiers = $metiers;
-        }
+        $this->metiers = $metiers;
 
         return $this;
     }
@@ -253,6 +257,30 @@ class Profile
         if (!empty($user)) {
             $this->user = $user;
         }
+
+        return $this;
+    }
+
+    public function getCivilite(): ?Dictionnaire
+    {
+        return $this->civilite;
+    }
+
+    public function setCivilite(?Dictionnaire $civilite): self
+    {
+        $this->civilite = $civilite;
+
+        return $this;
+    }
+
+    public function getDepartement(): ?string
+    {
+        return $this->departement;
+    }
+
+    public function setDepartement(?string $departement): self
+    {
+        $this->departement = $departement;
 
         return $this;
     }

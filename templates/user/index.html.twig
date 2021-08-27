@@ -18,7 +18,6 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-9">
-                        <h3>Gestion des tâches</h3>
                         {% if app.user.isSuperAdmin() %}
                         <div class="row row-cols-3 g-lg-3">
                             <a class="text-white" href="{{ path('agenda_index') }}"><div class="col"><div class="p-3 border" style="background-color: #0466c8"><i class="bi bi-calendar4-event m-2"></i>Agenda</div></div></a>
@@ -51,9 +50,9 @@
                         {% endif %}
                         {% if app.user.isCandidat() %}
                         <div class="row row-cols-3 g-lg-3">
+                            <a class="text-white" href="{{ path('annonce_favoris') }}"><div class="col"><div class="p-3 border" style="background-color: #014f86"><i class="bi bi-clipboard-check m-2"></i>Ma selection d'offres</div></div></a>
                             <a class="text-white" href="{{ path('candidature_index') }}"><div class="col"><div class="p-3 border" style="background-color: #2a6f97"><i class="bi bi-person-lines-fill m-2"></i>Mes candidatures</div></div></a>
                             <a class="text-white" href="{{ path('annonce_index') }}"><div class="col"><div class="p-3 border" style="background-color: #014f86"><i class="bi bi-clipboard-check m-2"></i>Offres en adéquation avec mon profil</div></div></a>
-                            <a class="text-white" href="{{ path('annonce_index') }}"><div class="col"><div class="p-3 border" style="background-color: #014f86"><i class="bi bi-clipboard-check m-2"></i>Offres selectionnées</div></div></a>
                         </div>
                         {% endif %}
                     </div>
@@ -68,20 +67,15 @@
                         </div>
 
                         <b class="p-1">{{ app.user.getFullname()|upper }}</b>
-                        <a href="{{ path('user_data', {id: user.id}) }}" class="btn-sm text-white mb-1" style="background-color: #023047"><i class="bi bi-eye m-2"></i>Voir mon profile complet</a>
+                        <a href="{{ path('user_data', {id: user.id}) }}" class="btn-sm text-white mb-1" style="background-color: #023047"><i class="bi bi-eye m-2"></i>Voir mon profil complet</a>
                         <a href="{{ path('app_profile_edit') }}" class="btn-sm text-white mb-1" style="background-color:#219ebc"><i class="bi bi-pencil-square m-2"></i>Mettre à jour mes infos de connexion</a>
                         {% if app.user.profile is empty %}
-                            <a href="{{ path('profile_new', {id: user.id}) }}" class="btn-sm text-white mb-1" style="background-color: #023047"><i class="bi bi-file-earmark-person"></i>Compléter mon profile</a>
+                            <a href="{{ path('profile_new', {id: user.id}) }}" class="btn-sm text-white mb-1" style="background-color: #023047"><i class="bi bi-file-earmark-person"></i>Compléter mon profil</a>
                         {% else %}
-                            <a href="{{ path('profile_edit', {id: user.id}) }}" class="btn-sm text-white mb-1" style="background-color: #ffb703"><i class="bi bi-pen m-2"></i>Mettre à jour mon profile</a>
+                            <a href="{{ path('profile_edit', {id: user.id}) }}" class="btn-sm text-white mb-1" style="background-color: #ffb703"><i class="bi bi-pen m-2"></i>Mettre à jour mon profil</a>
                         {% endif %}
                         <a class="btn-sm text-white mb-1" style="background-color: #fb8500" href="{{ path('pass_modifier', {id: user.id}) }}"><i class="bi bi-upc m-2"></i>Changer le mot de passe</a>
-
-                        {#{% if not app.user.isCandidat() %}
-                            <div>
-                                {{ app.user.getOneRecruteurEntreprise()|raw }}
-                            </div>
-                        {% endif %}#}
+                        <a class="btn-sm text-white mb-1" style="background-color: red" href="#"><i class="bi bi-upc m-2"></i>Supprimer le compte</a>
                     </div>
                 </div>
             </div>

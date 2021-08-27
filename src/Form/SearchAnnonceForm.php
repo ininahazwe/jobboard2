@@ -24,10 +24,10 @@ class SearchAnnonceForm extends AbstractType
                 ]
             ])
             ->add('entreprises', EntityType::class, [
-                'label' => false,
                 'required' => false,
-                'expanded' => true,
+                'label' => false,
                 'multiple' => true,
+                'expanded' => true,
                 'class' => Entreprise::class,
                 'query_builder' => function($repository) {
                     $ids = $repository->getEntreprisesAnnoncesPubliees();
@@ -56,6 +56,36 @@ class SearchAnnonceForm extends AbstractType
                     return $query;
                 }
             ])
+            ->add('diplome', EntityType::class, [
+                'required'  => false,
+                'label' => false,
+                'expanded' => true,
+                'multiple' => true,
+                'class' => Dictionnaire::class,
+                'query_builder' => function($repository) {
+                    $query = $repository->createQueryBuilder('d')
+                        ->select('d')
+                        ->where('d.type = :type')
+                        ->setParameter('type', Dictionnaire::TYPE_DIPLOMA);
+
+                    return $query;
+                }
+            ])
+            ->add('experience', EntityType::class, [
+                'required'  => false,
+                'label' => false,
+                'expanded' => true,
+                'multiple' => true,
+                'class' => Dictionnaire::class,
+                'query_builder' => function($repository) {
+                    $query = $repository->createQueryBuilder('d')
+                        ->select('d')
+                        ->where('d.type = :type')
+                        ->setParameter('type', Dictionnaire::TYPE_EXPERIENCE);
+
+                    return $query;
+                }
+            ])
         ;
     }
 
@@ -73,7 +103,7 @@ class SearchAnnonceForm extends AbstractType
         return '';
     }
 
-    public function getName()
+    public function getName(): string
     {
         return 'search_annonces';
     }

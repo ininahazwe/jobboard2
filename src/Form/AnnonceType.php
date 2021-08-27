@@ -5,14 +5,11 @@ namespace App\Form;
 use App\Entity\Entreprise;
 use App\Entity\User;
 use App\Entity\Dictionnaire;
-use App\Entity\Villes;
-use App\Form\FormExtension\SearchableType;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -85,9 +82,11 @@ class AnnonceType extends AbstractType
             ])
             ->add('code_postal', TextType::class, [
                 'required' => false,
+                'label' => 'Code postal',
             ])
             ->add('departement', TextType::class, [
                 'required' => false,
+                'label' => 'Département et région',
             ])
             ->add('entreprise', EntityType::class ,[
                 'class' => Entreprise::class,
@@ -99,11 +98,14 @@ class AnnonceType extends AbstractType
                 'required' => false,
                 'label'	=> "Gestionnaire(s) de l'offre d'emploi",
                 'multiple' => true,
-                'expanded' => true,
                 'class' => User::class,
                 'query_builder' => function($repository) use($user) {
                     return $repository->getEntreprisesRecruteur($user);
-                }
+                },
+                'by_reference' => false,
+                'attr' => [
+                    'class' => 'select-authors'
+                ]
             ])
             ->add('reference', TextType::class)
             ->add('dateLimiteCandidature', DateTimeType::class, [
@@ -114,7 +116,6 @@ class AnnonceType extends AbstractType
             ->add('type_contrat', EntityType::class, [
                 'required'  => false,
                 'label' => 'Type de contrat',
-                'expanded' => false,
                 'multiple' => true,
                 'class' => Dictionnaire::class,
                 'query_builder' => function($repository) {
@@ -126,9 +127,9 @@ class AnnonceType extends AbstractType
                     return $query;
                 }
             ])
-            ->add('adresse_email', EmailType::class, [
+            /*->add('adresse_email', EmailType::class, [
                 'required' => false,
-            ])
+            ])*/
             ->add('lien', UrlType::class, [
                 'required' => false
             ])

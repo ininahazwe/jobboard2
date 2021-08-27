@@ -55,10 +55,11 @@
                                 {% endif %}
                             {% endfor %}
                             <b>Entreprise:</b> <a href="{{ path('entreprise_show_unit', {'id':annonce.entreprise.id, 'slug':annonce.entreprise.slug }) }}">{{ annonce.entreprise }}</a><br>
-                            <b>Localisation:</b> {{ annonce.location|join('-') }}<br>
                             <b>Type de contrat:</b> {{ annonce.typeContrat|join('-') }}<br>
                             <b>Expérience souhaitée:</b> {{ annonce.experience }}<br>
-                            <b>Diplôme requis:</b> {{ annonce.diplome }}
+                            <b>Diplôme requis:</b> {{ annonce.diplome }}<br>
+                            <b>Ville:</b> {{ annonce.ville }} <br>
+                            <b>Région:</b> {{ annonce.departement }}
                         </div>
                         <div class="portfolio-description">
                             <b>Date de publication:</b> {{ annonce.createdAt|date('d-m-Y') }}<br>

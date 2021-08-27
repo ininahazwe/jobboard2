@@ -28,20 +28,26 @@
                         Nom: {{ app.user.lastname }}<br>
                         Prénom: {{ app.user.firstname }}<br>
                         Email: {{ app.user.email }}<br>
+                        Date de naissance: {{ app.user.profile.birthdate|date('d-m-Y') }}<br>
                     </div>
                 </div>
 
                 <div class="col-lg-6">
                     <div class="portfolio-description">
-                        <h2>Détails</h2>
+                        <h2>Présentation</h2>
                         {% if app.user.profile is not empty %}
                             <p>Description: {{ app.user.profile.description }}<br>
-                            Date de naissance: {{ app.user.profile.description }}<br>
-                            Ville: {{ app.user.profile.city }}<br>
-                            Code postal: {{ app.user.profile.zipcode }}<br>
-                            Diplôme: {{ app.user.profile.diplome }}<br>
-                            Expériences: {{ app.user.profile.experiences }}<br>
-                            Métiers: {{ app.user.profile.metiers }}<br></p>
+                            </p>
+                        <h2>Adresse</h2>
+                            <p>{{ app.user.profile.city }}<br>
+                               {{ app.user.profile.zipcode }}<br>
+                                {{ app.user.profile.departement }}<br>
+                            </p>
+                            <h2>Profil</h2>
+                            <p>Diplôme: {{ app.user.profile.diplome }}<br>
+                                Expériences: {{ app.user.profile.experiences }}<br>
+                                Métiers: {{ app.user.profile.metiers }}<br>
+                            </p>
                         {% endif %}
                     </div>
                 </div>

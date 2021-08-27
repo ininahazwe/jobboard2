@@ -103,6 +103,7 @@ class EntrepriseController extends AbstractController
         $entreprise = new Entreprise();
         $form = $this->createForm(EntrepriseType::class, $entreprise);
         $form->handleRequest($request);
+
         $ref = $entrepriseRepository->genererRef();
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -114,6 +115,7 @@ class EntrepriseController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
 
             $entityManager->persist($entreprise);
+
             $entityManager->flush();
 
             $modele = $modeleOffreCommercialeRepository->findOneBy(['prix' => '0']);
@@ -321,6 +323,7 @@ class EntrepriseController extends AbstractController
                 $user->setRoles(['ROLE_RECRUTEUR']);
             }
 
+            $user->setModeration(User::ACCEPTEE);
             $entityManager->persist($user);
             $entityManager->persist($entreprise);
             $entityManager->flush();

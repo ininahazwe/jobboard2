@@ -373,9 +373,6 @@ class HomeController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entreprise->setName($form->get('entreprise')->getData());
             $entreprise->setDescription($form->get('description')->getData());
-            $entreprise->setAddress($form->get('address')->getData());
-            $entreprise->setCity($form->get('city')->getData());
-            $entreprise->setZipcode($form->get('zipcode')->getData());
             $entreprise->setSecteur($form->get('secteur')->getData());
             $entreprise->setNumeroSiren($form->get('siren')->getData());
             $entreprise->setNumeroSiret($form->get('siret')->getData());

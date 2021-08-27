@@ -2,22 +2,12 @@
 
 namespace App\Form\FormExtension;
 
-use App\Entity\Entreprise;
-use App\Entity\User;
-use App\Entity\Dictionnaire;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
-use FOS\CKEditorBundle\Form\Type\CKEditorType;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\ChoiceList\View\ChoiceView;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -25,12 +15,12 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SearchableType extends AbstractType
 {
-    private EntityManagerInterface $entityManager;
+    /*private EntityManagerInterface $entityManager;
 
     public function _construct(EntityManagerInterface $entityManager)
     {
 
-    }
+    }*/
 
     public function configureOptions(OptionsResolver $resolver)
     {
@@ -41,7 +31,7 @@ class SearchableType extends AbstractType
         ]);
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    /*public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->addModelTransformer(new CallbackTransformer(
@@ -58,9 +48,9 @@ class SearchableType extends AbstractType
                 }
             ))
             ;
-    }
+    }*/
 
-    public function buildView(FormView $view, FormInterface $form, array $options,)
+    public function buildView(FormView $view, FormInterface $form, array $options)
     {
         $view->vars['expanded'] = false;
         $view->vars['placeholder'] = null;
@@ -77,7 +67,7 @@ class SearchableType extends AbstractType
         return 'choice';
     }
 
-    private function choices(Collection $value): array
+    private function choices(Collection $value)
     {
         return $value
             ->map(fn ($d) => new ChoiceView($d, (string)$d->getId(),(string)$d))

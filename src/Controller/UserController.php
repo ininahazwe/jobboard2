@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Annonce;
 use App\Entity\File;
+use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\EntrepriseRepository;
 use App\Repository\UserRepository;
@@ -195,5 +197,17 @@ class UserController extends AbstractController
         $img->setName($fichier);
         $img->setNameFile($name);
         $user->addFiles($img);
+    }
+
+    #[Route('/accepter/{id}', name: 'user_accepter')]
+    public function activer(User $user): Response
+    {
+        $user->setModeration(!$user->getModeration());
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($user);
+        $em->flush();
+
+        return new Response(User::ACCEPTEE);
     }
 }

@@ -41,16 +41,14 @@
                                         {% for typ in offre.typeContrat %}
                                             <span class="btn-secondary btn-sm">{{ typ.value }}</span>
                                         {% endfor %}
-                                        {% if offre.entreprise.city %}
-                                            <span class="btn-secondary btn-sm">{{ offre.entreprise.city }}</span>
-                                        {% endif %}
+
                                     </div>
                                     <div class="col-md-2">
                                         Date limite de candidature <br>
                                         <b>{{ offre.dateLimiteCandidature|date('d-m-Y') }}</b>
                                     </div>
                                     <div class="col-md-2">
-                                        <i class="bi bi-geo-alt"></i>  <span>{{ offre.entreprise.city }}</span><br>
+                                        <i class="bi bi-geo-alt"></i>  <span></span><br>
                                     </div>
                                 </div>
                         {% endfor %}

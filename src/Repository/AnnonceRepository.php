@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Data\SearchDataAnnonces;
 use App\Entity\Annonce;
+use App\Entity\Dictionnaire;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -122,11 +123,11 @@ class AnnonceRepository extends ServiceEntityRepository
         $now = new \DateTime('now');
         $query = $this
             ->createQueryBuilder('a')
-            ->andWhere('a.isActive = 1')
-            ->andWhere('a.dateLimiteCandidature > :date')
-            ->setParameter('date', $now);
+            ->andWhere('a.isActive = 1');
+        /*->andWhere('a.dateLimiteCandidature > :date')
+        ->setParameter('date', $now);*/
 
-            //->join('a.contrat', 'c');
+        //->join('a.contrat', 'c');
 
         if(!empty($search->q)){
             $query
@@ -146,7 +147,34 @@ class AnnonceRepository extends ServiceEntityRepository
                 ->andWhere('c.id IN (:contrat)')
                 ->setParameter('contrat', $search->contrat);
         }
+        if(!empty($search->diplome)){
+            $query
+                ->innerJoin('a.diplome', 'c')
+                ->andWhere('c.id IN (:diplome)')
+                ->setParameter('diplome', $search->diplome);
+        }
+        if(!empty($search->experience)){
+            $query
+                ->innerJoin('a.experience', 'c')
+                ->andWhere('c.id IN (:experience)')
+                ->setParameter('experience', $search->experience);
+        }
 
         return $query;
+    }
+
+    public function findAnnoncesEnFavori($user)
+    {
+        $now = new \DateTime('now');
+
+        $query = $this->createQueryBuilder('a')
+            ->andWhere('a.isActive = 1')
+            ->andWhere('a.dateLimiteCandidature >= :date')
+            ->innerJoin('a.favoris', 'u', 'WITH', 'u.id = :user')
+            ->setParameter('user', $user)
+            ->setParameter('date', $now);
+
+        return $query
+            ->getQuery()->getResult();
     }
 }
