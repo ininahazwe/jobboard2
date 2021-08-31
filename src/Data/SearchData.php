@@ -2,6 +2,7 @@
 
 namespace App\Data;
 
+use App\Entity\Adresse;
 use App\Entity\Dictionnaire;
 use App\Entity\Entreprise;
 
@@ -26,4 +27,9 @@ class SearchData
      * @var Dictionnaire[]
      */
     public array $secteur = [];
+
+    /**
+     * @var Adresse[]
+     */
+    public array $adresse = [];
 }

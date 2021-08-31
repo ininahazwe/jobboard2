@@ -61,19 +61,22 @@ class ProfileController extends AbstractController
     {
         $entityManager = $this->getDoctrine()->getManager();
 
-        $existeProfile = $entityManager->getRepository('App\Entity\Profile')->findOneBy(array('user' => $this->getUser()->getId()));
+       /* $existeProfile = $entityManager->getRepository('App\Entity\Profile')->findOneBy(array('user' => $this->getUser()->getId()));
 
         if ($existeProfile){
             $profile = $existeProfile;
         }else{
             $profile = new Profile();
-        }
+        }*/
+
+        $profile = new Profile();
 
         $form = $this->createForm(ProfileType::class, $profile);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $profile->setUser($this->getUser());
+            $profile->getUser()->setModeration('1');
 
             $entityManager->persist($profile);
             $entityManager->flush();
@@ -128,5 +131,17 @@ class ProfileController extends AbstractController
         }
 
         return $this->redirectToRoute('profile_index');
+    }
+    #[Route('/success/login', name: 'success_login')]
+    public function successLogin(Request $request)
+    {
+        $new = $request->get('new', false);
+        if ($this->getUser()){
+            if ($new){
+                return $this->redirectToRoute('profile_new',['id' => $this->getUser()->getId()]);
+            }
+            return $this->redirectToRoute('app_profile');
+        }
+        return $this->redirectToRoute('app_register');
     }
 }

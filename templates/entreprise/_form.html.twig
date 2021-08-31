@@ -1,7 +1,7 @@
 {{ form_start(form) }}
 <div class="container">
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-4">
             <h3>Identification</h3>
             {{ form_row(form.name) }}
             {{ form_row(form.description) }}
@@ -11,21 +11,16 @@
             {{ form_row(form.numeroSiret) }}
             {{ form_row(form.taille) }}
 
-            <button type="button" class="btn btn-primary btn-new" data-collection="#adresse">Adresse</button>
-            <div
-                    id="adresse"
-                    class="row"
-                    data-prototype="{{ include("entreprise/_adresse.html.twig", {form: form.adresse.vars.prototype})|e("html_attr") }}"
-                    data-index="{{ form.adresse|length > 0 ? form.adresse|last.vars.adresse + 1 : 0 }}">
-                {% for adress in form.adresse %}
-                    <div class="col-4">
-                        {{ include("entreprise/_adresse.html.twig", {form: bar}) }}
-                    </div>
-                {% endfor %}
+        </div>
+        <div class="col-md-4">
+            <h3>Adresse</h3>
+            <div id="adresse" data-prototype="{{ form_row(form.adresse.vars.prototype)|e('html_attr') }}">
+                {{ form_row(form.adresse) }}
+                <span></span>
             </div>
 
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
             <h3>Logo</h3>
             {{ form_row(form.logo) }}
             {% if app.request.attributes.get('_route') == 'entreprise_edit' %}

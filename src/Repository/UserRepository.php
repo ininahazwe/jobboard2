@@ -174,7 +174,8 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     public function getAllcandidats(): mixed
     {
         $query = $this->createQueryBuilder('u')
-            ->where('u.roles = [ROLE_CANDIDAT]')
+            ->where('u.roles = :roles')
+            ->setParameter('roles', "[\"ROLE_CANDIDAT\"]")
         ;
         return $query->getQuery()->getResult();
     }
@@ -184,7 +185,8 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     public function getAllRecruteurs(): mixed
     {
         $query = $this->createQueryBuilder('u')
-            ->where('u.roles = ROLE_RECRUTEUR')
+            ->where('u.roles = :roles')
+            ->setParameter('roles', "[\"ROLE_RECRUTEUR\"]")
         ;
         return $query->getQuery()->getResult();
     }
@@ -195,7 +197,8 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     public function getAllSuperRecruteurs(): mixed
     {
         $query = $this->createQueryBuilder('u')
-            ->where('u.roles = ROLE_SUPER_RECRUTEUR')
+            ->where('u.roles = :roles')
+            ->setParameter('roles', "[\"ROLE_SUPER_RECRUTEUR\"]")
         ;
         return $query->getQuery()->getResult();
     }

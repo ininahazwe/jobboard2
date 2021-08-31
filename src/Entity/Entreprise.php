@@ -594,7 +594,7 @@ class Entreprise
     }
 
     /**
-     * @return Collection|Adresse[]
+     * @return Collection
      */
     public function getAdresse(): Collection
     {

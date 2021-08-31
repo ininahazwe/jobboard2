@@ -29,6 +29,9 @@ security:
 
             form_login:
                 target_path_parameter: go_to
+                #default_target_path: profile_edit
+                #always_use_default_target_path: true
+                use_referer: true
 
             switch_user: true
 

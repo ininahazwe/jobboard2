@@ -9,6 +9,10 @@
             {{ form_row(form.siren) }}
             {{ form_row(form.siret) }}
             {{ form_row(form.taille) }}
+            <div id="adresse" data-prototype="{{ form_row(form.adresse.vars.prototype)|e('html_attr') }}">
+                {{ form_row(form.adresse) }}
+                <span></span>
+            </div>
         </div>
         <div class="col-md-6">
             <p style="font-weight: bold">Utilisateur</p>

@@ -3,8 +3,10 @@
 namespace App\Form;
 
 use App\Entity\Dictionnaire;
+use App\Entity\Entreprise;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -52,27 +54,7 @@ class CreationEntrepriseType extends AbstractType
                 ],
                 'required' => true
             ])
-            ->add('address', TextType::class, [
-                'label' => 'Adresse',
-                'attr' => [
-                    'class' => 'form-control'
-                ],
-                'required' => true
-            ])
-            ->add('city', TextType::class, [
-                'label' => 'Ville',
-                'attr' => [
-                    'class' => 'form-control'
-                ],
-                'required' => true
-            ])
-            ->add('zipcode', TextType::class, [
-                'label' => 'Code postal',
-                'attr' => [
-                    'class' => 'form-control'
-                ],
-                'required' => true
-            ])
+
             ->add('secteur', EntityType::class, [
                 'label' => 'Secteur',
                 'class' => Dictionnaire::class,
@@ -106,13 +88,21 @@ class CreationEntrepriseType extends AbstractType
                 ],
                 'required' => true
             ])
+            ->add('adresse', CollectionType::class, [
+                'entry_type' => AdresseType::class,
+                'label' => 'Adresse',
+                'entry_options' => ['label' => false],
+                'allow_add' => true,
+                'allow_delete' => true,
+                'by_reference' => false
+            ])
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-
+            'data_class' => Entreprise::class,
         ]);
     }
 }

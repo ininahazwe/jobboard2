@@ -296,6 +296,12 @@ class EntrepriseRepository extends ServiceEntityRepository
                 ->setParameter('secteur', $search->secteur);
         }
 
+        if(!empty($search->adresse)){
+            $query = $query
+                ->andWhere('s.id IN (:adresse)')
+                ->setParameter('adresse', $search->adresse);
+        }
+
         return $query;
     }
 }

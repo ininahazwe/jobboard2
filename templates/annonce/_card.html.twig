@@ -25,7 +25,7 @@
         <span></span><br>
     </div>
     <div class="float-right">
-        {% if is_granted("ROLE_CANDIDAT") %}
+        {% if app.user.isCandidat() %}
             {% set isFavorite = false %}
             {% for favoris in annonce.favoris %}
                 {% if favoris.id == app.user.id %}
@@ -33,13 +33,10 @@
                 {% endif %}
             {% endfor %}
             {% if isFavorite %}
-                <a href="{{ path('annonce_retrait_favoris', {id: annonce.id}) }}"><i class="fas fa-heart"></i></a>
+                <a href="{{ path('annonce_retrait_favoris', {id: annonce.id}) }}"><i class="fas fa-heart"></i> en mémoire</a>
             {% else %}
-                <a href="{{ path('annonce_ajout_favoris', {id: annonce.id}) }}"><i class="far fa-heart"></i></a>
+                <a href="{{ path('annonce_ajout_favoris', {id: annonce.id}) }}"><i class="far fa-heart"></i> mettre en mémoire</a>
             {% endif %}
-
-        {% else %}
-            <i class="far fa-heart"></i>
         {% endif %}
     </div>
 </div>

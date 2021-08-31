@@ -2,7 +2,6 @@
 
 namespace App\Form;
 
-use App\Entity\Adresse;
 use App\Entity\Dictionnaire;
 use App\Entity\Entreprise;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;

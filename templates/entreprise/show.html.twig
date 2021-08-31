@@ -37,7 +37,12 @@
                         <i>Secteur :</i> {{ entreprise.secteur }}
                         <br><br>
                         <b>Adresse</b>
-
+                         {% for adresse in entreprise.adresse %}
+                            {{ adresse.adresse }}<br>
+                             {{ adresse.complement }}<br>
+                             {{ adresse.city }}<br>
+                             {{ adresse.departement }}
+                         {% endfor%}
                         <br><br>
                         <b>Identification</b>
                         <i>Siret :</i> {{ entreprise.numeroSiret }}<br>

@@ -1,8 +1,15 @@
 <script>
-    $("#agenda_code_postal").autocomplete({
+    let zipcode = $('#agenda_code_postal');
+    let city = $('#agenda_city');
+    let departement = $('#agenda_departement');
+    let adresse = $('#agenda_address');
+    let zipcodeName = $('agenda[code_postal]');
+    let cityName = $('agenda[city]');
+
+    $(zipcode).autocomplete({
         source: function (request, response) {
             $.ajax({
-                url: "https://api-adresse.data.gouv.fr/search/?postcode="+$("input[name='agenda[code_postal]']").val(),
+                url: "https://api-adresse.data.gouv.fr/search/?postcode="+$("input[name=zipcodeName]").val(),
                 data: { q: request.term },
                 dataType: "json",
                 success: function (data) {
@@ -21,16 +28,16 @@
                 }
             });
         },
-        // On remplit aussi la ville
+        // On remplit aussi la ville et le département
         select: function(event, ui) {
-            $('#agenda_city').val(ui.item.city);
-            $('#agenda_departement').val(ui.item.context);
+            $(city).val(ui.item.city);
+            $(departement).val(ui.item.context);
         }
     });
-    $("#agenda_city").autocomplete({
+    $(city).autocomplete({
         source: function (request, response) {
             $.ajax({
-                url: "https://api-adresse.data.gouv.fr/search/?city="+$("input[name='agenda[city]']").val(),
+                url: "https://api-adresse.data.gouv.fr/search/?city="+$("input[name=cityName]").val(),
                 data: { q: request.term },
                 dataType: "json",
                 success: function (data) {
@@ -49,13 +56,14 @@
                 }
             });
         },
-        // On remplit aussi le CP
+        // On remplit aussi le CP et le département
         select: function(event, ui) {
-            $('#agenda_code_postal').val(ui.item.postcode);
-            $('#agenda_departement').val(ui.item.context);
+            $(zipcode).val(ui.item.postcode);
+            $(departement).val(ui.item.context);
         }
     });
-    $("#agenda_address").autocomplete({
+
+    $(adresse).autocomplete({
         source: function (request, response) {
             $.ajax({
                 url: "https://api-adresse.data.gouv.fr/search/?postcode="+$("input[name='agenda[code_postal]']").val(),

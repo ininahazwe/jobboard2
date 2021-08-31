@@ -54,7 +54,7 @@ class User implements UserInterface
      *     match=false,
      *     message="Ton prénom ne doit pas contenir de chiffre"
      * )
-     * @Assert\Length(min="3", max="15")
+     * @Assert\Length(min="3", max="15", minMessage = "un minimum de {{ limit }} caractères est requis", maxMessage = "{{ limit }} caractères sont la limite")
      */
     private string $firstname;
 
@@ -65,7 +65,7 @@ class User implements UserInterface
      *     match=false,
      *     message="Ton nom ne doit pas contenir de chiffre"
      * )
-     * @Assert\Length(min="3", max="15")
+     * @Assert\Length(min="3", max="15", minMessage = "un minimum de {{ limit }} caractères est requis", maxMessage = "{{ limit }} caractères sont la limite")
      */
     private string $lastname;
 
@@ -176,7 +176,7 @@ class User implements UserInterface
     private ?string $moderation;
 
     /**
-     * @ORM\OneToMany(targetEntity=Blog::class, mappedBy="Auteur")
+     * @ORM\OneToMany(targetEntity=Blog::class, mappedBy="auteur")
      */
     private Collection $blogs;
 
@@ -979,7 +979,7 @@ class User implements UserInterface
     {
         if (!$this->blogs->contains($blog)) {
             $this->blogs[] = $blog;
-            $blog->setAuteur($this);
+            $blog->setAuthor($this);
         }
 
         return $this;
@@ -989,8 +989,8 @@ class User implements UserInterface
     {
         if ($this->blogs->removeElement($blog)) {
             // set the owning side to null (unless already changed)
-            if ($blog->getAuteur() === $this) {
-                $blog->setAuteur(null);
+            if ($blog->getAuthor() === $this) {
+                $blog->setAuthor(null);
             }
         }
 

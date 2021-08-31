@@ -9,6 +9,7 @@ use App\Entity\User;
 use App\Form\EntrepriseType;
 use App\Form\OffreType;
 use App\Form\UserType;
+use App\Repository\AdresseRepository;
 use App\Repository\AnnonceRepository;
 use App\Repository\EntrepriseRepository;
 use App\Repository\FactureRepository;
@@ -159,7 +160,7 @@ class EntrepriseController extends AbstractController
         $entreprise = $entrepriseRepository->findOneBy(['slug' => $slug]);
         return $this->render('entreprise/show.html.twig', [
             'user' => $user,
-            'entreprise' => $entreprise,
+            'entreprise' => $entreprise
         ]);
     }
 

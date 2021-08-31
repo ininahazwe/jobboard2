@@ -109,13 +109,15 @@ class SecurityAuthenticator extends AbstractFormLoginAuthenticator implements Pa
         return $credentials['password'];
     }
 
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $providerKey): RedirectResponse
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $providerKey, $new = false): RedirectResponse
     {
         if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
             return new RedirectResponse($targetPath);
         }
-
-        return new RedirectResponse($this->urlGenerator->generate('app_profile'));
+        if ($new){
+            return new RedirectResponse($this->urlGenerator->generate('success_login', ['new' => 1]));
+        }
+        return new RedirectResponse($this->urlGenerator->generate('success_login'));
 
     }
 
