@@ -1,0 +1,92 @@
+{% extends 'base.html.twig' %}
+{% block title %}Offres d'emploi | Recherche avancée{% endblock %}
+{% block body %}
+    <main id="main">
+        <!-- ======= Breadcrumbs ======= -->
+        <section id="breadcrumbs" class="breadcrumbs">
+            <div class="container">
+                <ol>
+                    <li><i class="bi bi-house"></i><a href="{{ path('app_home') }}"> Home</a></li>
+                    <li>Offres d'emploi</li>
+                </ol>
+                <h1>Ma selection d'offres</h1>
+            </div>
+        </section><!-- End Breadcrumbs -->
+
+        <section class="inner-page">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3">
+                        {%  if app.user.isSuperAdmin() %}
+                            <div class="p-3 border bg-light">
+                                <b>{{ pluralize(annonces|length, 'annonce') }} enregistrées </b>
+                            </div>
+                        {% else %}
+                            {% if app.user.getNbrAnnoncesMaxi() > annonces.totalItemCount %}
+                                <a class="btn btn-primary btn-sm mb-4" href="{{ path('annonce_new') }}">Ajouter</a><br/>
+                            {% endif %}
+                            <div class="p-3 border bg-light">
+                                <b>{{ pluralize(annonces|length, 'annonce') }} enregistrées </b>
+                            </div>
+                            <div class="p-3 border bg-light">
+                                {% for entreprise in app.user.getEntrepriseAll() %}
+                                    <b>{{ entreprise.name }} : </b>{{ entreprise.getNumberAnnonces() }}/{{ entreprise.getMaxAnnonces() }} annonces<br>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        {% include('annonce/menu.html.twig') %}
+                        <br>
+                    </div>
+                    <div class="col-md-9">
+                        <a class="btn btn-primary btn-sm mb-4" href="{{ path('annonce_new') }}">Ajouter</a>
+                        <table class="table table-striped table-bordered" id="datatable">
+                            <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Entreprises</th>
+                                <th>Ville</th>
+                                <th>Date de publication</th>
+                                <th>Date de dépublication</th>
+                                <th>Statut</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for annonce in annonces %}
+                                <tr>
+                                    <td><a href="{{ path('annonce_show_unit', {id: annonce.id, slug: annonce.slug})}}">{{ annonce.name }}</a></td>
+                                    <td>{{ annonce.entreprise }}</td>
+                                    <td>{{ annonce.ville }}</td>
+                                    <td>{{ annonce.createdAt|date('d/m/Y') }}</td>
+                                    <td>{{ annonce.fin }}</td>
+                                    <td>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" {{ (annonce.isActive) ? 'checked' : ''}} data-id="{{annonce.id}}"/>
+                                            <label class="form-switch mt-2">
+                                                <span class="slider"></span>
+                                                {% if annonce.isActive  ? 'checked'%}
+                                                    publiée
+                                                {% else %}
+                                                    non publiée
+                                                {% endif %}
+                                            </label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex justify-content-around">
+                                            <a href="{{ path('annonce_edit', {'id': annonce.id}) }}" class="d-flex align-items-center"><i class="fas fa-edit"></i></a>
+                                            {{ include('annonce/_delete_form.html.twig') }}
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="4">no records found</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+{% endblock %}

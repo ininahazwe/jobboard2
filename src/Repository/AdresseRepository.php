@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Adresse;
+use App\Entity\Entreprise;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -17,6 +18,22 @@ class AdresseRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Adresse::class);
+    }
+
+    public function getAdressesEntrepriseActifs(): array
+    {
+        $ids = array();
+        $query = $this->getEntityManager()->getRepository(Entreprise::class)->createQueryBuilder('e')
+            ->where('e.moderation = 1')
+        ;
+
+        $result = $query->getQuery()->getResult();
+        foreach($result as $entreprise){
+            if($entreprise->getAdresse()){
+                $ids[] = $entreprise->getId();
+            }
+        }
+        return $ids;
     }
 
     // /**

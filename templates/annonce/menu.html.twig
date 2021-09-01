@@ -1,0 +1,24 @@
+<div class="list-group"><a
+            {% if app.request.attributes.get('_route') == 'annonce_index'%}
+                class="list-group-item list-group-item-action active"
+            {% else %}
+                class="list-group-item list-group-item-action"
+            {% endif %}
+            href="{{ path('annonce_index') }}">Toutes les annonces</a>
+</div>
+<div class="list-group"><a
+            {% if app.request.attributes.get('_route') == 'annonce_attente'%}
+                class="list-group-item list-group-item-action active"
+            {% else %}
+                class="list-group-item list-group-item-action"
+            {% endif %}
+            href="{{ path('annonce_attente') }}">En attente d'activation</a>
+</div>
+<div class="list-group"><a
+            {% if app.request.attributes.get('_route') == 'annonce_archives'%}
+                class="list-group-item list-group-item-action active"
+            {% else %}
+                class="list-group-item list-group-item-action"
+            {% endif %}
+            href="{{ path('annonce_archives') }}">Archives</a>
+</div>

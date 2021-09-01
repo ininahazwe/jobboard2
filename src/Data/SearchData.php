@@ -31,5 +31,7 @@ class SearchData
     /**
      * @var Adresse[]
      */
-    public array $adresse = [];
+    public array $ville = [];
+
+
 }

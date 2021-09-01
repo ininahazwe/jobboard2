@@ -1,32 +1,36 @@
 {{ form_start(form) }}
 <div class="container">
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-4">
             <p style="font-weight: bold">Entreprise</p>
-            {{ form_row(form.entreprise) }}
+            {{ form_row(form.name) }}
             {{ form_row(form.description) }}
             {{ form_row(form.secteur) }}
             {{ form_row(form.siren) }}
             {{ form_row(form.siret) }}
             {{ form_row(form.taille) }}
+        </div>
+        <div class="col-md-4">
+            <p style="font-weight: bold">Adresse</p>
             <div id="adresse" data-prototype="{{ form_row(form.adresse.vars.prototype)|e('html_attr') }}">
                 {{ form_row(form.adresse) }}
                 <span></span>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
             <p style="font-weight: bold">Utilisateur</p>
             {{ form_row(form.firstname) }}
             {{ form_row(form.lastname) }}
             {{ form_row(form.email) }}
+            {{ form_row(form.password) }}
         </div>
-
     </div>
     {% if app.user %}
-        <button class="btn btn-primary mt-3">{{ button_label|default('Enregistrer') }}</button>
+        <div class="clearfix">
+            <button class="btn btn-primary mt-3 float-end">{{ button_label|default('Enregistrer') }}</button>
+        </div>
     {% else %}
         {% include 'partials/hcaptcha_submit_button.html.twig' %}
     {% endif %}
 </div>
 {{ form_end(form) }}
-

@@ -51,7 +51,11 @@
                                             <img class="card-img-top" style="width:50px" src="{{ asset(entreprise.getUrlLastLogo()) }}" alt="{{ entreprise.getNameLastLogo() }}">
                                         {% endif %}
                                     </td>
-                                    <td>{{ entreprise.address }}<br>{{ entreprise.city }}<br>{{ entreprise.zipcode }}</td>
+                                    <td>
+                                        {% for adresse in adresses %}
+                                            {{ adresse.city }}<br>{{ adresse.zipcode }}
+                                        {% endfor %}
+                                    </td>
                                     <td>{{ entreprise.secteur }}</td>
                                     <td>
                                         {%  if entreprise.moderation is same as 0 %}

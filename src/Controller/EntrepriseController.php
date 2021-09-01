@@ -36,9 +36,10 @@ use Twig\Loader\ArrayLoader;
 class EntrepriseController extends AbstractController
 {
     #[Route('/', name: 'entreprise_index')]
-    public function index(Request $request, EntrepriseRepository $entrepriseRepository, PaginatorInterface $paginator): Response
+    public function index(Request $request, EntrepriseRepository $entrepriseRepository, PaginatorInterface $paginator, AdresseRepository $adresseRepository): Response
     {
         $data = $entrepriseRepository->findAllEntreprise($this->getUser());
+        $adresses = $adresseRepository->findAll();
 
         $entreprises = $paginator->paginate(
             $data,
@@ -55,32 +56,36 @@ class EntrepriseController extends AbstractController
 
         return $this->render('entreprise/index.html.twig', [
             'entreprises' => $entreprises,
+            'adresses' => $adresses
         ]);
     }
 
     #[Route('/attente', name: 'entreprise_attente', methods: ['GET'])]
-    public function entrepriseEnAttente(EntrepriseRepository $entrepriseRepository, Request $request): Response
+    public function entrepriseEnAttente(EntrepriseRepository $entrepriseRepository, Request $request, AdresseRepository $adresseRepository): Response
     {
         return $this->render('entreprise/attente.html.twig', [
             'entreprises' => $entrepriseRepository->getEntreprisesEnAttente(),
+            'adresses' => $adresseRepository->findAll(),
             'referer' => base64_encode($request->getRequestUri()),
         ]);
     }
 
     #[Route('/acceptees', name: 'entreprise_acceptees', methods: ['GET'])]
-    public function entreprisesAcceptees(EntrepriseRepository $entrepriseRepository, Request $request): Response
+    public function entreprisesAcceptees(EntrepriseRepository $entrepriseRepository, Request $request, AdresseRepository $adresseRepository): Response
     {
         return $this->render('entreprise/acceptees.html.twig', [
             'entreprises' => $entrepriseRepository->getEntreprisesAcceptees(),
+            'adresses' => $adresseRepository->findAll(),
             'referer' => base64_encode($request->getRequestUri()),
         ]);
     }
 
     #[Route('/refusees', name: 'entreprise_refusees', methods: ['GET'])]
-    public function entreprisesRefusees(EntrepriseRepository $entrepriseRepository, Request $request): Response
+    public function entreprisesRefusees(EntrepriseRepository $entrepriseRepository, Request $request, AdresseRepository $adresseRepository): Response
     {
         return $this->render('entreprise/refusees.html.twig', [
             'entreprises' => $entrepriseRepository->getEntreprisesRefusees(),
+            'adresses' => $adresseRepository->findAll(),
             'referer' => base64_encode($request->getRequestUri()),
         ]);
     }
@@ -189,16 +194,14 @@ class EntrepriseController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/annonces', name: 'entreprise_annonces', methods: ['GET', 'POST'])]
-    public function AnnoncesShowByEntreprise(Request $request, Entreprise $entreprise, AnnonceRepository $annonceRepository): Response
+    #[Route('/{slug}/annonces', name: 'entreprise_annonces', methods: ['GET', 'POST'])]
+    public function AnnoncesShowByEntreprise(Request $request, $slug, EntrepriseRepository $entrepriseRepository, AnnonceRepository $annonceRepository): Response
     {
-        $annonces = $annonceRepository->findBy([
-            'entreprise' => $entreprise,
-        ]);
-
+        $annonces = $annonceRepository->getAnnoncesEntreprise();
+        $entreprise = $entrepriseRepository->findOneBy(['slug' => $slug]);
         return $this->render('entreprise/annonces_par_entreprise.html.twig', [
             'entreprise' =>$entreprise,
-            'annonces' => $annonces,
+            'annonces' => $annonces
         ]);
     }
 
@@ -529,9 +532,10 @@ class EntrepriseController extends AbstractController
         $entreprise->addLogo($img);
     }
 
-    #[Route('/{id}/accepter', name: 'entreprise_accepter')]
+    #[Route('/{id}/accepter/{token}', name: 'entreprise_accepter')]
     public function accepterEntreprise(Entreprise $entreprise,
                                        $id,
+                                       $token,
                                        Request $request,
                                        UserPasswordEncoderInterface $passwordEncoder,
                                        UserRepository $userRepository,
@@ -539,22 +543,22 @@ class EntrepriseController extends AbstractController
                                        ModeleOffreCommercialeRepository $modeleOffreCommercialeRepository
     ): Response
     {
+        $user = $userRepository->findOneBy(['activation_token' => $token]);
+
+        if(!$user){
+            throw $this->createNotFoundException('Cet utilisateur n\'existe pas');
+        }
+
         $entityManager = $this->getDoctrine()->getManager();
-        $entreprise = $entityManager->getRepository('App:Entreprise')->find($id);
-        $entreprise->setModeration('1');
+        $entreprise = $entityManager->getRepository(Entreprise::class)->find($id);
+        $entreprise->setModeration(Entreprise::ACCEPTEE);
         $entityManager->persist($entreprise);
 
         $recruteurs = $entreprise->getAllRecruteurs();
 
         foreach($recruteurs as $recruteur){
-            $password = $userRepository->genererMDP();
-            $recruteur->setPassword(
-                $passwordEncoder->encodePassword(
-                    $recruteur,
-                    $password
-                )
-            );
-            $recruteur->setModeration('1');
+            $recruteur->setActivationToken(null);
+            $recruteur->setModeration(User::ACCEPTEE);
             $entityManager->persist($recruteur);
 
             $email = $entityManager->getRepository('App:Email')->findOneBy(['code' => 'EMAIL_VALIDATION_ENTREPRISE_RECRUTEUR']);
@@ -564,7 +568,7 @@ class EntrepriseController extends AbstractController
             ]);
 
             $twig = new Environment($loader);
-            $message = $twig->render('email',['recruteur' => $recruteur, 'password' => $password, 'entreprise' => $entreprise ]);
+            $message = $twig->render('email',['recruteur' => $recruteur, 'entreprise' => $entreprise ]);
 
             $mailer->send([
                 'recipient_email' => $recruteur->getEmail(),
@@ -596,7 +600,7 @@ class EntrepriseController extends AbstractController
     {
         $entityManager = $this->getDoctrine()->getManager();
         $entreprise = $entityManager->getRepository('App:Entreprise')->find($id);
-        $entreprise->setModeration('2');
+        $entreprise->setModeration(Entreprise::REFUSEE);
         $entityManager->persist($entreprise);
         $entityManager->flush();
 

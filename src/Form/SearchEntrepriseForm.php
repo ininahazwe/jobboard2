@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Data\SearchData;
+use App\Entity\Adresse;
 use App\Entity\Dictionnaire;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -38,6 +39,22 @@ class SearchEntrepriseForm extends AbstractType
                         ->setParameter('ids', $ids)
                     ;
 
+                    return $query;
+                }
+            ])
+            ->add('ville', EntityType::class, [
+                'required' => false,
+                'label' => false,
+                'expanded' => true,
+                'multiple'=> true,
+                'class' => Adresse::class,
+                'query_builder' => function($repository) {
+                    $ids = $repository->getAdressesEntrepriseActifs();
+                    $query = $repository->createQueryBuilder('a')
+                        ->select('a')
+                        ->where('a.entreprise IN (:ids)')
+                        ->setParameter('ids', $ids)
+                    ;
                     return $query;
                 }
             ])

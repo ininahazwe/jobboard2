@@ -38,6 +38,6 @@
                 {% else %}
                     class="list-group-item list-group-item-action"
                 {% endif %}
-                href="{{ path('entreprise_annonces', {id: entreprise.id}) }}">Annonces</a>
+                href="{{ path('entreprise_annonces', {slug: entreprise.slug}) }}">Annonces</a>
     </div>
 {% endif %}

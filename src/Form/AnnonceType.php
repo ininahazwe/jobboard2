@@ -61,21 +61,6 @@ class AnnonceType extends AbstractType
                     return $query;
                 }
             ])
-            /*->add('location', EntityType::class, [
-                'required'  => false,
-                'label' => 'Zone géographique',
-                'expanded' => false,
-                'multiple' => true,
-                'class' => 'App\Entity\Dictionnaire',
-                'query_builder' => function($repository) {
-                    $query = $repository->createQueryBuilder('d')
-                        ->select('d')
-                        ->where('d.type = :type')
-                        ->setParameter('type', Dictionnaire::TYPE_LOCATION);
-
-                    return $query;
-                }
-            ])*/
             ->add('ville' , TextType::class, [
                 'required' => false,
                 'label' => 'Ville',
@@ -127,9 +112,6 @@ class AnnonceType extends AbstractType
                     return $query;
                 }
             ])
-            /*->add('adresse_email', EmailType::class, [
-                'required' => false,
-            ])*/
             ->add('lien', UrlType::class, [
                 'required' => false
             ])

@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Dictionnaire;
 use App\Entity\Entreprise;
+use App\Form\FormExtension\RepeatedPasswordType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -40,7 +41,9 @@ class CreationEntrepriseType extends AbstractType
                 ],
                 'required' => true
             ])
-            ->add('entreprise', TextType::class, [
+            ->add('password', RepeatedPasswordType::class)
+
+            ->add('name', TextType::class, [
                 'label' => 'Nom de l\'entreprise',
                 'attr' => [
                     'class' => 'form-control'
@@ -102,7 +105,7 @@ class CreationEntrepriseType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Entreprise::class,
+           //'data_class' => Entreprise::class
         ]);
     }
 }

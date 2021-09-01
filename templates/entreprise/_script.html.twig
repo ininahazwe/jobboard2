@@ -1,114 +1,81 @@
 <script>
-    let zip = "entreprise_adresse_"+index+"_zipcode";
-    let zipName = "entreprise[adresse]["+index+"][zipcode]";
+    let index = '';
+    let zipcode = "entreprise_adresse_"+index+"_zipcode";
+    let zipcodeName = "entreprise[adresse]["+index+"][zipcode]";
     let city = "entreprise_adresse_"+index+"_city";
     let cityName = "entreprise[adresse]["+index+"][city]";
     let adresse = "entreprise_adresse_"+index+"_adresse";
     let departement = "entreprise_adresse_"+index+"_departement";
-    let url = "https://api-adresse.data.gouv.fr/search/?postcode=";
 
-    //completeAddress(zip, zipName, city, cityName, departement, adresse, url);
+    $(zipcode).autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: "https://api-adresse.data.gouv.fr/search/?postcode="+$("input[name=zipcodeName]").val(),
+                data: { q: request.term },
+                dataType: "json",
+                success: function (data) {
+                    var postcodes = [];
+                    response($.map(data.features, function (item) {
 
-        $("#"+zip).autocomplete({
-            source: function (request, response) {
-                $.ajax({
-                    url: url+$("input[name='" +zipName+ "']").val(),
-                    data: { q: request.term },
-                    dataType: "json",
-                    success: function (data) {
-                        var postcodes = [];
-                        response($.map(data.features, function (item) {
+                        if ($.inArray(item.properties.postcode, postcodes) == -1) {
+                            postcodes.push(item.properties.postcode);
+                            return { label: item.properties.postcode + " - " + item.properties.city,
+                                city: item.properties.city,
+                                context: item.properties.context,
+                                value: item.properties.postcode
+                            };
+                        }
+                    }));
+                }
+            });
+        },
+        // On remplit aussi la ville et le département
+        select: function(event, ui) {
+            $(city).val(ui.item.city);
+            $(departement).val(ui.item.context);
+        }
+    });
+    $(city).autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: "https://api-adresse.data.gouv.fr/search/?city="+$("input[name=cityName]").val(),
+                data: { q: request.term },
+                dataType: "json",
+                success: function (data) {
+                    var cities = [];
+                    response($.map(data.features, function (item) {
+                        // Ici on est obligé d'ajouter les villes dans un array pour ne pas avoir plusieurs fois la même
+                        if ($.inArray(item.properties.postcode, cities) == -1) {
+                            cities.push(item.properties.postcode);
+                            return { label: item.properties.postcode + " - " + item.properties.city,
+                                postcode: item.properties.postcode,
+                                context: item.properties.context,
+                                value: item.properties.city
+                            };
+                        }
+                    }));
+                }
+            });
+        },
+        // On remplit aussi le CP et le département
+        select: function(event, ui) {
+            $(zipcode).val(ui.item.postcode);
+            $(departement).val(ui.item.context);
+        }
+    });
 
-                            if ($.inArray(item.properties.postcode, postcodes) == -1) {
-                                postcodes.push(item.properties.postcode);
-                                return { label: item.properties.postcode + " - " + item.properties.city,
-                                    city: item.properties.city,
-                                    context: item.properties.context,
-                                    value: item.properties.postcode
-                                };
-                            }
-                        }));
-                    }
-                });
-            },
-            // On remplit aussi la ville
-            select: function(event, ui) {
-                $("#"+city).val(ui.item.city);
-                $("#"+departement).val(ui.item.context);
-            }
-        });
-
-    function completeAddress(zip, zipName, city, cityName, departement, adresse, url) {
-        alert(zip);
-        $("#entreprise_adresse_0_zipcode").autocomplete({
-            source: function (request, response) {
-                $.ajax({
-                    url: url+$("input[name='" +zipName+ "']").val(),
-                    data: { q: request.term },
-                    dataType: "json",
-                    success: function (data) {
-                        var postcodes = [];
-                        response($.map(data.features, function (item) {
-
-                            if ($.inArray(item.properties.postcode, postcodes) == -1) {
-                                postcodes.push(item.properties.postcode);
-                                return { label: item.properties.postcode + " - " + item.properties.city,
-                                    city: item.properties.city,
-                                    context: item.properties.context,
-                                    value: item.properties.postcode
-                                };
-                            }
-                        }));
-                    }
-                });
-            },
-            // On remplit aussi la ville
-            select: function(event, ui) {
-                $("#"+city).val(ui.item.city);
-                $("#"+departement).val(ui.item.context);
-            }
-        });
-        $("#"+city).autocomplete({
-            source: function (request, response) {
-                $.ajax({
-                    url: "https://api-adresse.data.gouv.fr/search/?city="+$("input[name='" +cityName+ "']").val(),
-                    data: { q: request.term },
-                    dataType: "json",
-                    success: function (data) {
-                        var cities = [];
-                        response($.map(data.features, function (item) {
-                            // Ici on est obligé d'ajouter les villes dans un array pour ne pas avoir plusieurs fois la même
-                            if ($.inArray(item.properties.postcode, cities) == -1) {
-                                cities.push(item.properties.postcode);
-                                return { label: item.properties.postcode + " - " + item.properties.city,
-                                    postcode: item.properties.postcode,
-                                    context: item.properties.context,
-                                    value: item.properties.city
-                                };
-                            }
-                        }));
-                    }
-                });
-            },
-            // On remplit aussi le CP
-            select: function(event, ui) {
-                $("#"+zip).val(ui.item.postcode);
-                $("#"+departement).val(ui.item.context);
-            }
-        });
-        $("#"+adresse).autocomplete({
-            source: function (request, response) {
-                $.ajax({
-                    url: "https://api-adresse.data.gouv.fr/search/?postcode="+$("input[name='" +zipName+ "']").val(),
-                    data: { q: request.term },
-                    dataType: "json",
-                    success: function (data) {
-                        response($.map(data.features, function (item) {
-                            return { label: item.properties.name, value: item.properties.name};
-                        }));
-                    }
-                });
-            }
-        });
-    }
+    $(adresse).autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: "https://api-adresse.data.gouv.fr/search/?postcode="+$("input[name='agenda[code_postal]']").val(),
+                data: { q: request.term },
+                dataType: "json",
+                success: function (data) {
+                    response($.map(data.features, function (item) {
+                        return { label: item.properties.name, value: item.properties.name};
+                    }));
+                }
+            });
+        }
+    });
 </script>

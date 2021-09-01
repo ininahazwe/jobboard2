@@ -3,7 +3,6 @@
 namespace App\Repository;
 
 use App\Entity\Facture;
-use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -26,7 +25,7 @@ class FactureRepository extends ServiceEntityRepository
      */
     public function getFacturesAPayer(bool $critique = false): mixed
     {
-        $now = new DateTime('now');
+        $now = new \DateTime('now');
         $query = $this->createQueryBuilder('f')
             ->andWhere('f.isPaid = 0')
             ;

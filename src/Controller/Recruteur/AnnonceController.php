@@ -151,6 +151,39 @@ class AnnonceController extends AbstractController
         ]);
     }
 
+    #[Route('/archives', name: 'annonce_archives')]
+    public function showArchives(Request $request, AnnonceRepository $annonceRepository, PaginatorInterface $paginator): Response
+    {
+        $data = $annonceRepository->getAnnoncesArchivees();
+
+        $annonces = $paginator->paginate(
+            $data,
+            $request->query->getInt('page', 1),
+            100
+        );
+
+        return $this->render('annonce/archives.html.twig', [
+            'annonces' => $annonces,
+        ]);
+    }
+
+    #[Route('/enattente', name: 'annonce_attente')]
+    public function showEnAttente(Request $request, AnnonceRepository $annonceRepository, PaginatorInterface $paginator): Response
+    {
+        $data = $annonceRepository->getAnnoncesAttente();
+
+        $annonces = $paginator->paginate(
+            $data,
+            $request->query->getInt('page', 1),
+            100
+        );
+
+        return $this->render('annonce/attente.html.twig', [
+            'annonces' => $annonces,
+        ]);
+    }
+
+
     #[Route('/{id}', name: 'annonce_delete')]
     public function delete(Request $request, Annonce $annonce): Response
     {

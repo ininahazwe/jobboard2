@@ -76,22 +76,11 @@ class AnnonceRepository extends ServiceEntityRepository
         return $query->getQuery()->getResult();
     }
 
-    /**
-     * @param $entreprise
-     * @return mixed
-     */
-    public function getAnnoncesEntreprise($entreprise): mixed
+    public function getAnnoncesEntreprise()
     {
-        $now = new \DateTime('now');
-        $query = $this->createQueryBuilder('a')
-            ->andWhere('a.isActive = 1')
-            ->andWhere('a.entreprise = :entreprise')
-            ->andWhere('a.dateLimiteCandidature > :date')
-            ->setParameter('date', $now)
-            ->setParameter('entreprise', $entreprise)
-        ;
-
-        return $query->getQuery()->getResult();
+        return $this->createQueryBuilder('a')
+            ->join('a.auteur', 'e', 'WITH', 'e = a.id')
+            ->getQuery()->getResult();
     }
 
     /**
@@ -176,5 +165,23 @@ class AnnonceRepository extends ServiceEntityRepository
 
         return $query
             ->getQuery()->getResult();
+    }
+
+    public function getAnnoncesArchivees(): mixed
+    {
+        $now = new \DateTime('now');
+        $query = $this->createQueryBuilder('a')
+            ->andWhere('a.dateLimiteCandidature < :date')
+            ->setParameter('date', $now)
+        ;
+        return $query->getQuery()->getResult();
+    }
+
+    public function getAnnoncesAttente(): mixed
+    {
+        $query = $this->createQueryBuilder('a')
+            ->andWhere('a.isActive < 0')
+        ;
+        return $query->getQuery()->getResult();
     }
 }

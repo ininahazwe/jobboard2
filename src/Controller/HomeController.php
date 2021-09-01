@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Data\SearchData;
 use App\Data\SearchDataAgenda;
 use App\Data\SearchDataAnnonces;
-use App\Data\SearchDataBlog;
+use App\Entity\Adresse;
 use App\Entity\Annuaire;
 use App\Entity\Blog;
 use App\Entity\Entreprise;
@@ -16,7 +16,6 @@ use App\Form\ContactType;
 use App\Form\CreationEntrepriseType;
 use App\Form\SearchAgendaForm;
 use App\Form\SearchAnnonceForm;
-use App\Form\SearchBlogForm;
 use App\Form\SearchEntrepriseForm;
 use App\Repository\AgendaRepository;
 use App\Repository\AnnonceRepository;
@@ -366,23 +365,32 @@ class HomeController extends AbstractController
     ): Response
     {
         $entreprise = new Entreprise();
+
         $form = $this->createForm(CreationEntrepriseType::class);
         $form->handleRequest($request);
         $ref = $entrepriseRepository->genererRef();
 
+        $entityManager = $this->getDoctrine()->getManager();
+
         if ($form->isSubmitted() && $form->isValid()) {
-            $entreprise->setName($form->get('entreprise')->getData());
+            $entreprise->setName($form->get('name')->getData());
             $entreprise->setDescription($form->get('description')->getData());
             $entreprise->setSecteur($form->get('secteur')->getData());
             $entreprise->setNumeroSiren($form->get('siren')->getData());
             $entreprise->setNumeroSiret($form->get('siret')->getData());
             $entreprise->setTaille($form->get('taille')->getData());
-
             $entreprise->setModeration(Entreprise::EN_ATTENTE);
-
             $entreprise->setRefClient($ref);
 
-            $entityManager = $this->getDoctrine()->getManager();
+            /*$adresse = new Adresse();
+
+            $adresse->setZipcode($form->get('zipcode')->getData());
+            $adresse->setCity($form->get('city')->getData());
+            $adresse->setAdresse($form->get('adresse')->getData());
+            $adresse->setComplement($form->get('complement')->getData());
+            $adresse->setDepartement($form->get('department')->getData());
+
+            $entityManager->persist($adresse);*/
 
             $user = new User();
 
@@ -391,17 +399,18 @@ class HomeController extends AbstractController
             $user->setLastname($form->get('lastname')->getData());
             $user->setModeration(User::EN_ATTENTE);
             $user->setRoles(['ROLE_SUPER_RECRUTEUR']);
-            $password = $userRepository->genererMDP();
             $user->setPassword(
                 $passwordEncoder->encodePassword(
                     $user,
-                    $password
+                    $form->get('password')->getData(),
                 )
             );
+            $user->setActivationToken(md5(uniqid()));
 
             $entityManager->persist($user);
 
             $entreprise->addSuperRecruteur($user);
+            //$entreprise->addAdresse($adresse);
 
             $entityManager->persist($entreprise);
 

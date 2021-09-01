@@ -16,13 +16,12 @@
         <section class="inner-page">
             <div class="container">
                 <div class="row">
-                    <div class="alert alert-success" role="alert">
-                        {{user.firstname}} {{ user.lastname }} vous avez enregistré l'entreprise {{ entreprise.name }} avec succès. Vous revenons vers vous prochainement
-                    </div>
-                </div>
-                <div class="row">
-                    <a href="{{ path('app_home') }}" class="btn-sm btn-primary">Revenir à l'accueil</a>
-                </div>
+
+                        <p> {{user.firstname|capitalize}} {{ user.lastname|capitalize }} vous avez enregistré l'entreprise {{ entreprise.name|capitalize }} avec succès.<br>
+                            Vous revenons vers vous prochainement</p>
+                        <hr>
+                        <p class="mb-0"><a href="{{ path('app_home') }}">Revenir à l'accueil</a></p>
+
             </div>
         </section>
     </main>

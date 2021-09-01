@@ -51,7 +51,11 @@
                                             <img class="card-img-top" style="width:50px" src="{{ asset(entreprise.getUrlLastLogo()) }}" alt="{{ entreprise.getNameLastLogo() }}">
                                         {% endif %}
                                     </td>
-                                    <td>{{ entreprise.address }}<br>{{ entreprise.city }}<br>{{ entreprise.zipcode }}</td>
+                                    <td>
+                                        {% for adresse in adresses %}
+                                            {{ adresse.city }}<br>{{ adresse.zipcode }}
+                                        {% endfor %}
+                                    </td>
                                     <td>{{ entreprise.secteur }}</td>
                                     <td>
                                         {%  if entreprise.moderation is same as 0 %}
@@ -63,7 +67,7 @@
                                         {% endif %}
                                     </td>
                                     <td>
-                                        <a class="btn-sm btn-success" href="{{ path('entreprise_accepter', {'id': entreprise.id, 'referer': referer}) }}">Accepter</a>
+                                        <a class="btn-sm btn-success" href="{{ path('entreprise_accepter', {'id': entreprise.id, 'referer': referer, 'token': token}) }}">Accepter</a>
                                         <a class="btn-sm btn-danger" href="{{ path('entreprise_rejeter', {'id': entreprise.id, 'referer': referer}) }}">Refuser</a>
                                     </td>
                                 </tr>
