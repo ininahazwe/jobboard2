@@ -17,6 +17,7 @@ use App\Form\CreationEntrepriseType;
 use App\Form\SearchAgendaForm;
 use App\Form\SearchAnnonceForm;
 use App\Form\SearchEntrepriseForm;
+use App\Repository\AdresseRepository;
 use App\Repository\AgendaRepository;
 use App\Repository\AnnonceRepository;
 use App\Repository\AnnuaireRepository;
@@ -222,13 +223,15 @@ class HomeController extends AbstractController
     }
 
     #[Route('/entreprises/{id}-{slug}', name: 'entreprise_show_unit', methods: ['GET'])]
-    public function showEntreprise($id, $slug, EntrepriseRepository $entrepriseRepository, Request $request, AnnonceRepository $annonceRepository): Response
+    public function showEntreprise($id, $slug, EntrepriseRepository $entrepriseRepository, Request $request, AnnonceRepository $annonceRepository, AdresseRepository $adresseRepository): Response
     {
         $entreprise = $entrepriseRepository->findOneBy(['slug' => $slug, 'id' => $id]);
         $annonces = $annonceRepository->getAnnoncesEntreprise($entreprise);
+        $adresses = $adresseRepository->findAll();
 
         return $this->render('entreprise/show_unit.html.twig', [
             'entreprise' => $entreprise,
+            'adresses' => $adresses,
             'annonces' => $annonces
         ]);
     }

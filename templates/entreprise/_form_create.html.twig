@@ -26,9 +26,7 @@
         </div>
     </div>
     {% if app.user %}
-        <div class="clearfix">
-            <button class="btn btn-primary mt-3 float-end">{{ button_label|default('Enregistrer') }}</button>
-        </div>
+        <input type="submit" value="Enregistrer" class="bouton solid" />
     {% else %}
         {% include 'partials/hcaptcha_submit_button.html.twig' %}
     {% endif %}

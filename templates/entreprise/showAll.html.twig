@@ -16,11 +16,11 @@
         <section class="inner-page">
             <div class="container js-filter">
                 <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-md-3 ">
                         {% include 'search/filtrer_entreprise.html.twig' with {form: form} only %}
                     </div>
                     <div class="col-md-9">
-                        <div class="grid js-filter-content">
+                        <div class="row js-filter-content">
                             {% include 'entreprise/_entreprises.html.twig' %}
                         </div>
                         <div class="mt-4 js-filter-pagination">

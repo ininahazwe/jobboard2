@@ -25,7 +25,7 @@
         <span></span><br>
     </div>
     <div class="float-right">
-        {% if app.user.isCandidat() %}
+        {% if is_granted('ROLE_CANDIDAT') %}
             {% set isFavorite = false %}
             {% for favoris in annonce.favoris %}
                 {% if favoris.id == app.user.id %}

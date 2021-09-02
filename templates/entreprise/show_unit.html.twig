@@ -64,6 +64,10 @@
                             {% if entreprise.secteur %}<b>Secteur:</b> {{ entreprise.secteur }}{% endif %}<br>
                             {% if entreprise.numeroSiren %}<b>Siren:</b> {{ entreprise.numeroSiren }}{% endif %}<br>
                             {% if entreprise.numeroSiret %}<b>Siret:</b> {{ entreprise.numeroSiret }}{% endif %}<br>
+                            <b>Adresse:</b><br>
+                            {% for adresse in adresses %}
+                                {{ adresse.city }}<br>{{ adresse.zipcode }}<br>{{ adresse.departement }}
+                            {% endfor %}
                         </div>
                         <div class="portfolio-description">
 

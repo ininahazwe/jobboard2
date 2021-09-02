@@ -1,9 +1,21 @@
 {{ form_start(form, {attr: {class: 'filter js-filter-form'}}) }}
-    <div class="spinner-border js-loading" role="status" aria-hidden="true" style="display: none">
-        <span class="sr-only">Loading...</span>
+<div class="spinner-border js-loading" role="status" aria-hidden="true" style="display: none">
+    <span class="sr-only">Loading...</span>
+</div>
+{{ form_row(form.q) }}
+
+<div class="accordion accordion-flush" id="accordionFlushExample">
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="flush-headingOne">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                Par categorie
+            </button>
+        </h2>
+        <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+            <div class="accordion-body">{{ form_row(form.category) }}</div>
+        </div>
     </div>
-    {{ form_row(form.q) }}
-    <h5 class="mt-1">Trier par category</h5>
-    {{ form_row(form.category) }}
-    <button type="submit" class="btn-sm btn-primary mt-1">Filter</button>
+</div>
+
+<input type="submit" value="Filtrer" class="bouton solid" />
 {{ form_end(form) }}

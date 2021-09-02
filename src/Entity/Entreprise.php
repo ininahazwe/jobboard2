@@ -347,10 +347,8 @@ class Entreprise
         return $url ;
     }
 
-    /**
-     * @return string
-     */
-    public function getNameLastLogo(): string
+
+    public function getNameLastLogo()
     {
         $logos = array();
         foreach ($this->getLogo() as $logo){
