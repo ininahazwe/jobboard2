@@ -5,7 +5,7 @@
 {% block body %}
     <main id="main">
         <!-- ======= Breadcrumbs ======= -->
-        {#<section id="breadcrumbs" class="breadcrumbs">
+        <section id="breadcrumbs" class="breadcrumbs">
             <div class="container">
                 <ol>
                     <li><a href="{{ path('app_home') }}">Home</a></li>
@@ -13,162 +13,40 @@
                 </ol>
                 <h1>Se connecter</h1>
             </div>
-        </section><!-- End Breadcrumbs -->#}
+        </section><!-- End Breadcrumbs -->
 
         <section class="inner-page">
-            <div class="wrapper">
-                <div class="forms-wrapper">
-                    <div class="signin-signup">
-                        <form action="{{ path('app_login') }}" class="sign-in-form" method="post">
-                            {% if error %}
-                                <div style="background: red; color: white; padding: 3px">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-                            {% endif %}
-                            {% if app.user %}
-                                <div class="mb-3">
-                                    You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
-                                </div>
-                            {% endif %}
-                            <h2 class="title">Connexion</h2>
+            <div class="container">
+                <form action="{{ path('app_login') }}" method="post" class="" data-turbo="false">
+                    {% if error %}
+                        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                    {% endif %}
 
-                            <div class="input-field">
-                                <i class="bi bi-at"></i>
-                                <input type="email" placeholder="E-mail" value="{{ last_username }}" name="email" id="inputEmail" required autofocus>
-                            </div>
-
-                            <div class="input-field">
-                                <i class="bi bi-lock-fill"></i>
-                                <input type="password" placeholder="Password" name="password" id="inputPassword" required />
-                            </div>
-
-                            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-                            <input type="hidden" name="go_to" value="{{ path('app_profile') }}"/>
-
-                            <fieldset class="custom-control custom-switch mb-3">
-                                <input type="checkbox" class="custom-control-input" id="remember_me_checkbox" name="_remember_me">
-                                <label for="remember_me_checkbox" class="custom-control-label">Se souvenir de moi</label>
-                            </fieldset>
-                            <a href="{{ path('app_forgot_password') }}" class="d-block text-info text-decoration-none mt-2">Mot de passe oublié ?</a>
-
-                            <input type="submit" value="Valider" class="bouton solid" />
-                            <p class="social-text">ou avec l'une de ces plateformes</p>
-                            <div class="social-media">
-                                <a href="#" class="social-icon">
-                                    <i class="fab fa-facebook-f"></i>
-                                </a>
-                                <a href="#" class="social-icon">
-                                    <i class="fab fa-twitter"></i>
-                                </a>
-                                <a href="#" class="social-icon">
-                                    <i class="fab fa-google"></i>
-                                </a>
-                                <a href="#" class="social-icon">
-                                    <i class="fab fa-linkedin-in"></i>
-                                </a>
-                            </div>
-                        </form>
-                        {#Inscription#}
-
-                        {% for flashError in app.flashes('verify_email_error') %}
-                            <div class="alert alert-danger" role="alert">{{ flashError }}</div>
-                        {% endfor %}
-                        {% if app.user %}
+                    {% if app.user %}
                         <div class="mb-3">
                             You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
                         </div>
-                        {% else %}
-                        <form name="registration_form" method="post" class="sign-up-form">
-                            <h2 class="title">Inscription</h2>
-                            <div class="input-field">
-                                <i class="bi bi-person-fill"></i>
-                                <input type="text" placeholder="Nom" id="registration_form_lastname" name="registration_form[lastname]" required autofocus />
-                            </div>
-                            <div class="input-field">
-                                <i class="bi bi-person-fill"></i>
-                                <input type="text" placeholder="Prénom" id="registration_form_firstname" name="registration_form[firstname]" required autofocus />
-                            </div>
-                            <div class="input-field">
-                                <i class="bi bi-at"></i>
-                                <input type="email" placeholder="Email" id="registration_form_email" name="registration_form[email]" required autofocus />
-                            </div>
-                            <div class="input-field">
-                                <i class="bi bi-lock-fill"></i>
-                                <input type="password" placeholder="Mot de passe" id="registration_form_password_first" name="registration_form[password][first]"/>
-                            </div>
-                            <div class="input-field">
-                                <i class="bi bi-lock-fill"></i>
-                                <input type="password" placeholder="Confirmation du mot de passe" id="registration_form_password_second" name="registration_form[password][second]"/>
-                            </div>
-                            
-                            <fieldset class="sweet-candy">
-                                <label for="registration_form_phone">Phone</label>
-                                <input type="text" id="registration_form_phone" name="registration_form[phone]" autocomplete="off" tabindex="-1">
-                            </fieldset>
-                            <fieldset class="sweet-candy">
-                                <label for="registration_form_faxNumber">Phone</label>
-                                <input type="text" id="registration_form_faxNumber" name="registration_form[faxNumber]" autocomplete="off" tabindex="-1">
-                            </fieldset>
+                    {% endif %}
+                    <div class="row">
+                        <label for="inputEmail">Email</label>
+                        <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" required autofocus>
+                    </div>
+                    <div class="row">
+                        <label for="inputPassword">Password</label>
+                        <input type="password" name="password" id="inputPassword" class="form-control" required>
+                    </div>
 
-                            <input type="submit" class="bouton" value="Sign up" />
-                            <p class="social-text">Ou avec l'une de ces plateformes</p>
-                            <div class="social-media">
-                                <a href="#" class="social-icon">
-                                    <i class="fab fa-facebook-f"></i>
-                                </a>
-                                <a href="#" class="social-icon">
-                                    <i class="fab fa-twitter"></i>
-                                </a>
-                                <a href="#" class="social-icon">
-                                    <i class="fab fa-google"></i>
-                                </a>
-                                <a href="#" class="social-icon">
-                                    <i class="fab fa-linkedin-in"></i>
-                                </a>
-                            </div>
-                        </form>
-                        {% endif %}
-                    </div>
-                </div>
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                    <input type="hidden" name="go_to" value="{{ path('app_profile') }}"/>
 
-                <div class="panels-wrapper">
-                    <div class="panel left-panel">
-                        <div class="content">
-                            <h3>Pas encore inscrit</h3>
-                            <p>
-                                Créez votre compte et gérez vos candicatures,
-                                en un clic!
-                            </p>
-                            <button class="bouton transparent" id="sign-up-bouton">
-                                S'inscrire
-                            </button>
-                        </div>
-                        <img src="{{ asset('assets/img/log.svg') }}" class="image" alt="" />
-                    </div>
-                    <div class="panel right-panel">
-                        <div class="content">
-                            <h3>Déjà inscrit ?</h3>
-                            <p>
-                                Grâce à vos identidiants,
-                                accèdez à votre espace personnel.
-                            </p>
-                            <button class="bouton transparent" id="sign-in-bouton">
-                                Se connecter
-                            </button>
-                        </div>
-                        <img src="{{ asset('assets/img/register.svg') }}" class="image" alt="" />
-                    </div>
-                </div>
+                    <fieldset class="custom-control custom-switch mb-3">
+                        <input type="checkbox" class="custom-control-input" id="remember_me_checkbox" name="_remember_me">
+                        <label for="remember_me_checkbox" class="custom-control-label">Se souvenir de moi</label>
+                    </fieldset>
+                    <a href="{{ path('app_forgot_password') }}" class="d-block text-info text-decoration-none mt-2">Mot de passe oublié ?</a>
+                    <button class="btn-sm btn-primary mt-1" type="submit">Se connecter</button>
+                </form>
             </div>
         </section>
     </main>
-    <script src="{{ asset('assets/js/login-register.js') }}"></script>
 {% endblock %}
-
-{#{% form_theme registrationForm _self %}
-{% block _registration_form_agreeTerms_widget %}
-    <input type="checkbox" id="registration_form_agreeTerms" name="registration_form[agreeTerms]" required="required" class="form-check-input" value="1">
-    <label class="form-check-label required" for="registration_form_agreeTerms">
-        J'accepte les conditions d'utilisation <a href="#">TOTO</a>
-    </label>
-
-{% endblock %}#}
-

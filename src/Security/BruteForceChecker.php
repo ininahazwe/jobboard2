@@ -3,6 +3,10 @@
 namespace App\Security;
 
 use App\Repository\AuthLogRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class BruteForceChecker
@@ -24,10 +28,10 @@ class BruteForceChecker
      *
      * @param string $emailEntered
      * @param string|null $userIP
-     * @throws \Doctrine\ORM\NoResultException
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws NoResultException
+     * @throws NonUniqueResultException
+     * @throws ORMException
+     * @throws OptimisticLockException
      */
     public function addFailedAuthAttempt(
         string $emailEntered,
@@ -45,7 +49,7 @@ class BruteForceChecker
      * Returns the end of blacklisting rounded up to the next minute or null.
      *
      * @return string|null Example: if the end of blacklisting is 12:01:37, it returns 12h02
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NonUniqueResultException
      */
     public function getEndOfBlackListing(): ?string
     {

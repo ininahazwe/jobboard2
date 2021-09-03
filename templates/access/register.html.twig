@@ -1,0 +1,106 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AccessController!{% endblock %}
+
+{% block body %}
+    <main id="main">
+        <section class="inner-page">
+            <div class="wrapper">
+                <div class="forms-wrapper">
+                    <div class="signin-signup">
+                        <form name="registration_form" class="sign-up-form">
+                            <h2 class="title">Inscription</h2>
+                            <div class="input-field">
+                                <i class="bi bi-person-fill"></i>
+                                <input type="email" id="registration_form_email" name="registration_form[email]" required="required" autofocus="autofocus" placeholder="E-mail">
+                            </div>
+                            <div class="input-field">
+                                <i class="fas fa-envelope"></i>
+                                <input type="text" id="registration_form_firstname" name="registration_form[firstname]" required="required" autofocus="autofocus" placeholder="Prénom">
+                            </div>
+                            <div class="input-field">
+                                <i class="fas fa-lock"></i>
+                                <input type="text" id="registration_form_lastname" name="registration_form[lastname]" required="required" autofocus="autofocus" placeholder="Nom">
+                            </div>
+                            <div class="input-field">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" id="registration_form_password_first" name="registration_form[password][first]" placeholder="Mot de passe">
+                            </div>
+                            <div class="input-field">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" id="registration_form_password_second" name="registration_form[password][second]" placeholder="Resaisir le mot de passe">
+                            </div>
+                            <fieldset class="sweet-candy">
+                                <label for="registration_form_phone">Phone</label>
+                                <input type="text" id="registration_form_phone" name="registration_form[phone]" autocomplete="off" tabindex="-1" class="form-control">
+                            </fieldset>
+                            <fieldset class="sweet-candy">
+                                <label for="registration_form_faxNumber">Fax number</label>
+                                <input type="text" id="registration_form_faxNumber" name="registration_form[faxNumber]" autocomplete="off" tabindex="-1" class="form-control">
+                            </fieldset>
+                            <input type="checkbox" id="registration_form_agreeTerms" name="registration_form[agreeTerms]" required="required" class="form-check-input" value="1">
+                            <label class="form-check-label required" for="registration_form_agreeTerms">
+                                J'accepte les conditions d'utilisation <a href="#">TOTO</a>
+                            </label>
+
+                            <input type="submit" class="bouton" value="Sign up"/>
+                            <p class="social-text">Ou avec l'une de ces plateformes</p>
+                            <div class="social-media">
+                                <a href="#" class="social-icon">
+                                    <i class="fab fa-facebook-f"></i>
+                                </a>
+                                <a href="#" class="social-icon">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                                <a href="#" class="social-icon">
+                                    <i class="fab fa-google"></i>
+                                </a>
+                                <a href="#" class="social-icon">
+                                    <i class="fab fa-linkedin-in"></i>
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="panels-wrapper">
+                    <div class="panel left-panel">
+                        <div class="content">
+                            <h3>Pas encore inscrit</h3>
+                            <p>
+                                Créez votre compte et gérez vos candicatures,
+                                en un clic!
+                            </p>
+                            <button class="bouton transparent" id="sign-up-bouton">
+                                S'inscrire
+                            </button>
+                        </div>
+                        <img src="{{ asset('assets/img/log.svg') }}" class="image" alt=""/>
+                    </div>
+                    <div class="panel right-panel">
+                        <div class="content">
+                            <h3>Déjà inscrit ?</h3>
+                            <p>
+                                Grâce à vos identidiants,
+                                accèdez à votre espace personnel.
+                            </p>
+                            <button class="bouton transparent" id="sign-in-bouton">
+                                Se connecter
+                            </button>
+                        </div>
+                        <img src="{{ asset('assets/img/register.svg') }}" class="image" alt=""/>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script src="{{ asset('assets/js/login-register.js') }}"></script>
+{% endblock %}
+{% form_theme registrationForm _self %}
+{% block _registration_form_agreeTerms_widget %}
+    <input type="checkbox" id="registration_form_agreeTerms" name="registration_form[agreeTerms]" required="required" class="form-check-input" value="1">
+    <label class="form-check-label required" for="registration_form_agreeTerms">
+        J'accepte les conditions d'utilisation <a href="#">TOTO</a>
+    </label>
+
+{% endblock %}

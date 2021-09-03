@@ -43,8 +43,6 @@ class RegistrationController extends AbstractController
                 )
             );
 
-            $user->setModeration('0');
-
             $entityManager = $this->getDoctrine()->getManager();
 
             $entityManager->persist($user);
@@ -69,7 +67,7 @@ class RegistrationController extends AbstractController
 
             $this->addFlash('success', "Un mail de bienvenue vous a été envoyé !");
 
-            //return $this->redirectToRoute('profile_new');
+            //return $this->redirectToRoute('app_profile');
             return $guardHandler->authenticateUserAndHandleSuccess(
                 $user,
                 $request,

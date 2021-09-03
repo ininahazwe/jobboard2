@@ -4,7 +4,7 @@
 
 {% block body %}
     <main id="main">
-    <!-- ======= Breadcrumbs ======= -->
+        <!-- ======= Breadcrumbs ======= -->
         <section id="breadcrumbs" class="breadcrumbs">
             <div class="container">
                 <ol>
@@ -20,38 +20,38 @@
                     {% for flashError in app.flashes('verify_email_error') %}
                         <div class="alert alert-danger" role="alert">{{ flashError }}</div>
                     {% endfor %}
-                        {% if app.user %}
-                            <div class="mb-3">
-                                You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
-                            </div>
-                            {% else %}
-                                <h1>Inscription</h1>
+                    {% if app.user %}
+                        <div class="mb-3">
+                            You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+                        </div>
+                    {% else %}
+                        <h1>Inscription</h1>
 
-                                {{ form_start(registrationForm) }}
+                        {{ form_start(registrationForm) }}
 
-                                    {{ form_row(registrationForm.email) }}
-                                    {{ form_row(registrationForm.firstname) }}
-                                    {{ form_row(registrationForm.lastname) }}
-                                    {{ form_row(registrationForm.password) }}
-                                    {{ form_label(registrationForm.agreeTerms) }}
-                                    {{ form_errors(registrationForm.agreeTerms) }}
-                                {#{{ form_widget(registrationForm.agreeTerms) }}#}
+                        {{ form_row(registrationForm.email) }}
+                        {{ form_row(registrationForm.firstname) }}
+                        {{ form_row(registrationForm.lastname) }}
+                        {{ form_row(registrationForm.password) }}
+                        {{ form_label(registrationForm.agreeTerms) }}
+                        {{ form_errors(registrationForm.agreeTerms) }}
+                        {#{{ form_widget(registrationForm.agreeTerms) }}#}
 
-                                <fieldset class="sweet-candy">
-                                    {{ form_label(registrationForm.phone) }}
-                                    {{ form_errors(registrationForm.phone) }}
-                                    {{ form_widget(registrationForm.phone) }}
-                                </fieldset>
-                                <fieldset class="sweet-candy">
-                                    {{ form_label(registrationForm.faxNumber) }}
-                                    {{ form_errors(registrationForm.faxNumber) }}
-                                    {{ form_widget(registrationForm.faxNumber) }}
-                                </fieldset>
+                        <fieldset class="sweet-candy">
+                            {{ form_label(registrationForm.phone) }}
+                            {{ form_errors(registrationForm.phone) }}
+                            {{ form_widget(registrationForm.phone) }}
+                        </fieldset>
+                        <fieldset class="sweet-candy">
+                            {{ form_label(registrationForm.faxNumber) }}
+                            {{ form_errors(registrationForm.faxNumber) }}
+                            {{ form_widget(registrationForm.faxNumber) }}
+                        </fieldset>
 
-                                <button type="submit" class="btn btn-primary mt-2">Valider</button>
-                                {{ form_end(registrationForm) }}
+                        <button type="submit" class="btn btn-primary mt-2">Valider</button>
+                        {{ form_end(registrationForm) }}
 
-                           {% endif %}
+                    {% endif %}
                 </div>
             </div>
         </section>

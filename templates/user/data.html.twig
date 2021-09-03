@@ -55,6 +55,29 @@
                     <a href="{{ path('data_download') }}" class="btn btn-primary">Télécharger les données</a>
                 </div>
             </div>
+            <div class="col-md-12 text-center d-flex flex-column">
+                {% if user.files|length %}
+                    <img class="rounded-circle mx-auto " style="width:150px" src="{{ asset(user.getUrlLastFile()) }}" alt="{{ user.getNameLastFIle() }}">
+                {% endif %}
+                <div>
+                            <span class="bg-secondary p-1 px-4 rounded text-white">
+                            {{ app.user.getRoleName() }}
+                            </span>
+                </div>
+
+                <b class="p-1">{{ app.user.getFullname()|upper }}</b>
+                <a href="{{ path('user_data', {id: user.id}) }}" class="btn-sm text-white mb-1" style="background-color: #023047"><i class="bi bi-eye m-2"></i>Voir mon profil complet</a>
+                {% if app.user.isCandidat() %}
+                    <a href="{{ path('app_profile_edit') }}" class="btn-sm text-white mb-1" style="background-color:#219ebc"><i class="bi bi-pencil-square m-2"></i>Mettre à jour mes infos de connexion</a>
+                {% endif %}
+                {% if app.user.profile is empty %}
+                    <a href="{{ path('profile_new', {id: user.id}) }}" class="btn-sm text-white mb-1" style="background-color: #023047"><i class="bi bi-file-earmark-person"></i>Compléter mon profil</a>
+                {% else %}
+                    <a href="{{ path('profile_edit', {id: user.id}) }}" class="btn-sm text-white mb-1" style="background-color: #ffb703"><i class="bi bi-pen m-2"></i>Mettre à jour mon profil</a>
+                {% endif %}
+                <a class="btn-sm text-white mb-1" style="background-color: #fb8500" href="{{ path('pass_modifier', {id: user.id}) }}"><i class="bi bi-upc m-2"></i>Changer le mot de passe</a>
+                <a class="btn-sm text-white mb-1" style="background-color: red" href="#"><i class="bi bi-upc m-2"></i>Supprimer le compte</a>
+            </div>
         </div>
     </section><!-- End Portfolio Details Section -->
     </main>

@@ -69,7 +69,7 @@ class UserCreationController extends AbstractController
             return $this->redirectToRoute('user_creation');
         }
 
-        return $this->render('user_creation/index.html.twig', [
+        return $this->render('user_creation/login.html.twig', [
             'user' => $user,
             'form' => $form->createView(),
         ]);

@@ -270,6 +270,7 @@ form.sign-in-form {
 .wrapper.sign-up-mode .right-panel {
     pointer-events: all;
 }
+/*
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
@@ -277,6 +278,7 @@ input:-webkit-autofill:active  {
     -webkit-box-shadow: 0 0 0 30px #F0F0F0 inset !important;
     border-radius: 25%;
 }
+*/
 
 @media (max-width: 870px) {
     .wrapper {

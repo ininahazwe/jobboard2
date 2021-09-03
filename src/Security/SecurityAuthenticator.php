@@ -25,7 +25,7 @@ class SecurityAuthenticator extends AbstractFormLoginAuthenticator implements Pa
 {
     use TargetPathTrait;
 
-    public const LOGIN_ROUTE = 'app_login';
+    public const LOGIN_ROUTE = 'access_login';
 
     private BruteForceChecker $bruteForceChecker;
     private EntityManagerInterface $entityManager;

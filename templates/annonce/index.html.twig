@@ -18,7 +18,7 @@
     </section><!-- End Breadcrumbs -->
     <section class="inner-page">
         <div class="container">
-            <div class="row">
+           {# <div class="row">
                 <div class="col-md-3">
                     {%  if app.user.isSuperAdmin() %}
                         <div class="p-3 border bg-light">
@@ -39,6 +39,13 @@
                     {% endif %}
                     {% include('annonce/menu.html.twig') %}
                     <br>
+                </div>
+                <div class="col-md-9">
+                </div>
+            </div>#}
+            <div class="row">
+                <div class="col-md-3">
+                    {% include('layouts/dash_sidebar.html.twig') %}
                 </div>
                 <div class="col-md-9">
                     <a class="btn btn-primary btn-sm mb-4" href="{{ path('annonce_new') }}">Ajouter</a>

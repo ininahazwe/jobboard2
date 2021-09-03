@@ -146,7 +146,7 @@ Voici les
 7. Installation de EasyAdmin
    ```sh
    composer require easycorp/easyadmin-bundle
-   symfony console make:admin:dashboard
+   symfony console make:admin:dashboard.css
    symfony console make:admin:crud
    ```
 
