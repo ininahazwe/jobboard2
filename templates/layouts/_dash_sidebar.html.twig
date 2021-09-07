@@ -39,9 +39,12 @@
 <script type="text/javascript">
     const url = "{{ app.request.attributes.get('_route') }}";
 
-    $('.nav-link').each(function(){
+    $ ('.nav-link').each(function(){
         const infoUrl = $(this).data('info');
+        const result = url.search(infoUrl);
+        console.log(result);
 
+        //if (url === infoUrl) {
         if (url === infoUrl) {
             $(this).addClass('active');
         }else{

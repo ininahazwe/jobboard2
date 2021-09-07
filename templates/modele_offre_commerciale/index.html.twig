@@ -18,44 +18,51 @@
     </section><!-- End Breadcrumbs -->
     <section class="inner-page">
         <div class="container">
-            <a class="btn btn-primary btn-sm mt-1" href="{{ path('modele_offre_commerciale_new') }}">Ajouter</a>
-             <table class="table table-striped table-bordered" id="datatable">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Slug</th>
-                        <th>Nombre d'offres</th>
-                        <th>Nombre de recruteurs</th>
-                        <th>IsCvTheque</th>
-                        <th>DureeContrat</th>
-                        <th>Prix</th>
-                        <th>actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {% for modele_offre_commerciale in modele_offre_commerciales %}
-                    <tr>
-                        <td><a href="{{ path('modele_offre_commerciale_show', {'id': modele_offre_commerciale.id}) }}">{{ modele_offre_commerciale.name }}</a></td>
-                        <td>{{ modele_offre_commerciale.slug }}</td>
-                        <td>{{ modele_offre_commerciale.nombreOffres }}</td>
-                        <td>{{ modele_offre_commerciale.nombreRecruteurs }}</td>
-                        <td>{{ modele_offre_commerciale.isCvTheque ? 'Yes' : 'No' }}</td>
-                        <td>{{ modele_offre_commerciale.dureeContrat }}</td>
-                        <td>{{ modele_offre_commerciale.prix }}</td>
-                        <td>
-                            <div class="d-flex justify-content-around">
-                                <a href="{{ path('modele_offre_commerciale_edit', {'id': modele_offre_commerciale.id}) }}" class="d-flex align-items-center"><i class="fas fa-edit"></i></a>
-                                {{ include('modele_offre_commerciale/_delete_form.html.twig') }}
-                            </div>
-                        </td>
-                    </tr>
-                {% else %}
-                    <tr>
-                        <td colspan="7">no records found</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+            <div class="row">
+                <div class="col-md-3">
+                    {% include('layouts/_dash_sidebar.html.twig') %}
+                </div>
+                <div class="col-md-9">
+                    <a class="btn btn-primary btn-sm mt-1" href="{{ path('modele_offre_commerciale_new') }}">Ajouter</a>
+                     <table class="table table-striped table-bordered" id="datatable">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Slug</th>
+                                <th>Nombre d'offres</th>
+                                <th>Nombre de recruteurs</th>
+                                <th>IsCvTheque</th>
+                                <th>DureeContrat</th>
+                                <th>Prix</th>
+                                <th>actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for modele_offre_commerciale in modele_offre_commerciales %}
+                            <tr>
+                                <td><a href="{{ path('modele_offre_commerciale_show', {'id': modele_offre_commerciale.id}) }}">{{ modele_offre_commerciale.name }}</a></td>
+                                <td>{{ modele_offre_commerciale.slug }}</td>
+                                <td>{{ modele_offre_commerciale.nombreOffres }}</td>
+                                <td>{{ modele_offre_commerciale.nombreRecruteurs }}</td>
+                                <td>{{ modele_offre_commerciale.isCvTheque ? 'Yes' : 'No' }}</td>
+                                <td>{{ modele_offre_commerciale.dureeContrat }}</td>
+                                <td>{{ modele_offre_commerciale.prix }}</td>
+                                <td>
+                                    <div class="d-flex justify-content-around">
+                                        <a href="{{ path('modele_offre_commerciale_edit', {'id': modele_offre_commerciale.id}) }}" class="d-flex align-items-center"><i class="fas fa-edit"></i></a>
+                                        {{ include('modele_offre_commerciale/_delete_form.html.twig') }}
+                                    </div>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="7">no records found</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </section>
 </main>

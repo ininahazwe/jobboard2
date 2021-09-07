@@ -61,8 +61,8 @@ class ForgotPasswordController extends AbstractController
             }
 
             $user->setForgotPasswordToken($tokenGenerator->generateToken());
-            $user->setForgotPasswordTokenRequestedAt(new DateTimeImmutable('now'));
-            $user->setForgotPasswordTokenMustBeVerifiedBefore(new DateTimeImmutable('+15 minutes'));
+            $user->setForgotPasswordTokenRequestedAt(new \DateTimeImmutable('now'));
+            $user->setForgotPasswordTokenMustBeVerifiedBefore(new \DateTimeImmutable('+15 minutes'));
 
             $this->entityManager->flush();
 
@@ -132,7 +132,7 @@ class ForgotPasswordController extends AbstractController
 
             /** Suppression et annulation du token */
             $user->setForgotPasswordToken(null);
-            $user->setForgotPasswordTokenVerifiedAt(new DateTimeImmutable('now'));
+            $user->setForgotPasswordTokenVerifiedAt(new \DateTimeImmutable('now'));
 
             $this->entityManager->flush();
             $this->removeCredentialsFromSession();

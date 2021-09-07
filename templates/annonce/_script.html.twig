@@ -1,4 +1,4 @@
-<script>
+<script type="text/javascript">
     $("#annonce_code_postal").autocomplete({
         source: function (request, response) {
             $.ajax({
@@ -21,7 +21,7 @@
                 }
             });
         },
-        // On remplit aussi la ville
+        // On remplit aussi la ville et le département
         select: function(event, ui) {
             $('#annonce_ville').val(ui.item.city);
             $('#annonce_departement').val(ui.item.context);

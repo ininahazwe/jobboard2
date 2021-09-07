@@ -194,9 +194,10 @@ Voici les
    symfony console make:test
    php bin/phpunit
    ```
-17. Charts
+17. UX
    ```sh
    composer require symfony/ux-chartjs
+   composer require symfony/ux-dropzone
    ```
 
 <!-- USAGE EXAMPLES -->

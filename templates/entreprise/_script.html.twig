@@ -1,16 +1,23 @@
-<script>
-    let index = '';
+<!-- Jquery core -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+<!-- Jquery Ui -->
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+<script type="text/javascript">
+    /*let index = '';
     let zipcode = "entreprise_adresse_"+index+"_zipcode";
     let zipcodeName = "entreprise[adresse]["+index+"][zipcode]";
     let city = "entreprise_adresse_"+index+"_city";
     let cityName = "entreprise[adresse]["+index+"][city]";
     let adresse = "entreprise_adresse_"+index+"_adresse";
     let departement = "entreprise_adresse_"+index+"_departement";
-
-    $(zipcode).autocomplete({
+*/
+    $('#entreprise_adresse_0_zipcode').autocomplete({
         source: function (request, response) {
             $.ajax({
-                url: "https://api-adresse.data.gouv.fr/search/?postcode="+$("input[name=zipcodeName]").val(),
+                url: "https://api-adresse.data.gouv.fr/search/?postcode="+$("input[name='entreprise[adresse][0][zipcode]']").val(),
                 data: { q: request.term },
                 dataType: "json",
                 success: function (data) {
@@ -31,14 +38,14 @@
         },
         // On remplit aussi la ville et le département
         select: function(event, ui) {
-            $(city).val(ui.item.city);
-            $(departement).val(ui.item.context);
+            $('#entreprise_adresse_0_city').val(ui.item.city);
+            $('#entreprise_adresse_0_departement').val(ui.item.context);
         }
     });
-    $(city).autocomplete({
+    $('#entreprise_adresse_0_city').autocomplete({
         source: function (request, response) {
             $.ajax({
-                url: "https://api-adresse.data.gouv.fr/search/?city="+$("input[name=cityName]").val(),
+                url: "https://api-adresse.data.gouv.fr/search/?city="+$("input[name='entreprise[adresse][0][city]']").val(),
                 data: { q: request.term },
                 dataType: "json",
                 success: function (data) {
@@ -64,10 +71,10 @@
         }
     });
 
-    $(adresse).autocomplete({
+    $('#entreprise_adresse_0_adresse').autocomplete({
         source: function (request, response) {
             $.ajax({
-                url: "https://api-adresse.data.gouv.fr/search/?postcode="+$("input[name='agenda[code_postal]']").val(),
+                url: "https://api-adresse.data.gouv.fr/search/?postcode="+$("input[name='entreprise[adresse][0][zipcode]']").val(),
                 data: { q: request.term },
                 dataType: "json",
                 success: function (data) {
@@ -79,3 +86,4 @@
         }
     });
 </script>
+

@@ -5,11 +5,11 @@ namespace App\Form;
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\UX\Dropzone\Form\DropzoneType;
 
 class UserType extends AbstractType
 {
@@ -22,9 +22,10 @@ class UserType extends AbstractType
             ->add('telephone', NumberType::class, [
                 'required' => false,
             ])
-            ->add('files', FileType::class, [
+            ->add('files', DropzoneType::class, [
                 'attr' => [
-                    'placeholder' => 'Choisir une image'
+                    'placeholder' => 'Choisir une image',
+                    'data-controller' => 'mydropzone'
                 ],
                 'label' => false,
                 'multiple' => false,
