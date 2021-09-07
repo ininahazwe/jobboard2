@@ -19,14 +19,12 @@
         <section class="inner-page">
             <div class="container">
                 <div class="row">
-                    <div class="col-md-2">
-                        <div class="d-flex flex-column">
-                            {{ include('facture/menu.html.twig') }}
-                        </div>
+                    <div class="col-md-3">
+                        {% include('layouts/_dash_sidebar.html.twig') %}
                     </div>
-                    <div class="col-md-10">
+                    <div class="col-md-9">
                         <div class="float-right">
-                            <a href="{{ path('factures_generate') }}" class="btn btn-primary">Génération de factures</a>
+                            <a href="{{ path('factures_generate') }}" class="btn-sm btn-success">Génération de factures</a>
                         </div>
 
                         <table class="table table-striped table-bordered" id="datatable">
@@ -97,12 +95,12 @@
                                             </div>
                                         </div>
                                         <div class="d-flex justify-content-around">
-                                        {% if facture.isPaid == false %}
-                                            <div class="d-flex align-items-center m-2">
-                                                <button type="button" class="open-modal btn btn-primary btn-sm" data-open="modal{{ facture.id }}">Régler</button>
-                                            </div>
-                                        {% endif %}
-                                        <a class="d-flex align-items-center" target="_blank" href="{{ path('facture_download', {'id': facture.id}) }}"><i class="fas fa-download"></i></a>
+                                            {% if facture.isPaid == false %}
+                                                <div class="d-flex align-items-center m-2">
+                                                    <button type="button" class="open-modal btn-sm btn-success" data-open="modal{{ facture.id }}">Régler</button>
+                                                </div>
+                                            {% endif %}
+                                            <a class="d-flex align-items-center" target="_blank" href="{{ path('facture_download', {'id': facture.id}) }}"><i class="fas fa-download"></i></a>
                                         </div>
                                     </td>
                                 </tr>

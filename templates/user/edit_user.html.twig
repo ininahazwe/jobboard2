@@ -17,11 +17,16 @@
         </section><!-- End Breadcrumbs -->
 
         <section class="inner-page">
-        <div class="container">
-            <div class="col-xs4">
-                 {{ include('user/_form.html.twig', {'button_label': 'Enregistrer'}) }}
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3">
+                        {% include('layouts/_dash_sidebar.html.twig') %}
+                    </div>
+                    <div class="col-md-9">
+                        {{ include('user/_form.html.twig', {'button_label': 'Enregistrer'}) }}
+                    </div>
+                </div>
             </div>
-        </div>
         </section>
     </main>
 {% endblock %}

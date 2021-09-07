@@ -2,12 +2,14 @@
 
 namespace App\Controller;
 
-use App\Entity\Annonce;
 use App\Entity\File;
 use App\Entity\User;
 use App\Form\UserType;
+use App\Repository\AgendaRepository;
+use App\Repository\AnnonceRepository;
+use App\Repository\BlogRepository;
+use App\Repository\CandaditureRepository;
 use App\Repository\EntrepriseRepository;
-use App\Repository\UserRepository;
 use App\Service\Mailer;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,7 +19,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Dompdf\Dompdf;
 use Dompdf\Options;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\UX\Chartjs\Builder\ChartBuilderInterface;
+use Symfony\UX\Chartjs\Model\Chart;
 use Twig\Environment;
 use Twig\Loader\ArrayLoader;
 
@@ -25,14 +28,49 @@ use Twig\Loader\ArrayLoader;
 class UserController extends AbstractController
 {
     #[Route('/', name: 'app_profile')]
-    public function index(EntrepriseRepository $entrepriseRepository): Response
+    public function index(EntrepriseRepository $entrepriseRepository,
+                          BlogRepository $blogRepository,
+                          AnnonceRepository $annonceRepository,
+                          CandaditureRepository $candaditureRepository,
+                          AgendaRepository $agendaRepository,
+                          ChartBuilderInterface $chartBuilder
+
+    ): Response
     {
-        $entreprise = $entrepriseRepository->findAll();
+        $entreprise = $entrepriseRepository->getEntrepriseActive();
+        $blogs =$blogRepository->getBlogLimitedDashBoard();
+        $annonces = $annonceRepository->findActiveQuery();
+        $candidatures =$candaditureRepository->getCountOnDashboard();
+        $agendas =$agendaRepository->getAgendasEnCours();
+
+        $labels = [];
+        $data = [];
+        foreach($annonces as $annonce){
+            $labels = $annonce->getCreatedAt()->format('d/m/Y');
+            $data = count($annonce->getId());
+        }
+        $chart = $chartBuilder->createChart(Chart::TYPE_LINE);
+        $chart->setData([
+            'labels' => $labels,
+            'datasets' => [
+                [
+                    'label' => 'Test',
+                    'backgroundColor' => 'rgb(21, 163, 98)',
+                    'borderColor' => 'rgb(21, 163, 98)',
+                    'data' => $data,
+                ],
+            ],
+        ]);
 
         $user = $this->getUser();
         return $this->render('user/index.html.twig', [
             'user' => $user,
-            'entreprise' => $entreprise
+            'entreprises' => $entreprise,
+            'blogs' => $blogs,
+            'annonces' => $annonces,
+            'candidatures' => $candidatures,
+            'agendas' => $agendas,
+            'chart' => $chart
         ]);
     }
 
@@ -209,5 +247,14 @@ class UserController extends AbstractController
         $em->flush();
 
         return new Response(User::ACCEPTEE);
+    }
+
+    #[Route('/parametres', name: 'user_parametres')]
+    public function parametres(): Response
+    {
+        $user = $this->getUser();
+        return $this->render('user/parametres.html.twig',[
+            'user' => $user
+        ]);
     }
 }

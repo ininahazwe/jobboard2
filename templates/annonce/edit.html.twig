@@ -18,7 +18,14 @@
     </section><!-- End Breadcrumbs -->
     <section class="inner-page">
         <div class="container">
-            {{ include('annonce/_form.html.twig', {'button_label': 'Enregistrer'}) }}
+            <div class="row">
+                <div class="col-md-3">
+                    {% include('layouts/_dash_sidebar.html.twig') %}
+                </div>
+                <div class="col-md-9">
+                    {{ include('annonce/_form.html.twig', {'button_label': 'Enregistrer'}) }}
+                </div>
+            </div>
         </div>
     </section>
 </main>

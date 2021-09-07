@@ -18,23 +18,15 @@
     </section><!-- End Breadcrumbs -->
     <section class="inner-page">
         <div class="container">
-            {{ include('page/_form.html.twig') }}
+            <div class="row">
+                <div class="col-md-3">
+                    {% include('layouts/_dash_sidebar.html.twig') %}
+                </div>
+                <div class="col-md-9">
+                    {{ include('page/_form.html.twig') }}
+                </div>
+            </div>
         </div>
     </section>
 </main>
-
-
-{% endblock %}
-{% block javascripts %}
-    <script type="text/javascript">
-        var editor = grapesjs.init({
-            container : '#page_content',
-            plugins: ['gjs-preset-webpage'],
-            pluginsOpts: {
-                'gjs-preset-webpage': {
-                    // options
-                }
-            },
-        });
-    </script>
 {% endblock %}

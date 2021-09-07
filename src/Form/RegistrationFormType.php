@@ -19,29 +19,28 @@ class RegistrationFormType extends HoneyPotType
         parent::buildForm($builder, $options);
         $builder
             ->add('email', EmailType::class, [
-                'label'         => "Email",
                 'required'      => true,
                 'attr' => [
-                    'autofocus' => true
+                    'autofocus' => true,
+                    'placeholder' => 'Email'
+                ]
+            ])
+            ->add('firstname', TextType::class, [
+                'required'      => true,
+                'attr' => [
+                    'autofocus' => true,
+                    'placeholder' => 'Prénom'
+                ]
+            ])
+            ->add('lastname', TextType::class, [
+                'required'      => true,
+                'attr' => [
+                    'autofocus' => true,
+                    'placeholder' => 'Nom'
                 ]
             ])
             ->add('password', RepeatedPasswordType::class, [
                 'required' => false,
-            ])
-
-            ->add('firstname', TextType::class, [
-                'label'         => "Prénom",
-                'required'      => true,
-                'attr' => [
-                    'autofocus' => true
-                ]
-            ])
-            ->add('lastname', TextType::class, [
-                'label'         => "Nom",
-                'required'      => true,
-                'attr' => [
-                    'autofocus' => true
-                ]
             ])
             ->add('agreeTerms', CheckboxType::class, [
                 'label'             => "J'accepte les conditions d'utilisation",

@@ -2,9 +2,6 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Regions;
-use App\Form\RegionsType;
-use App\Repository\RegionsRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

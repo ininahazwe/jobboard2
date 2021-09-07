@@ -143,29 +143,29 @@ Voici les
    composer require knpuniversity/oauth2-client-bundle
    composer require league/oauth2-google
    ```
-7. Installation de EasyAdmin
+8. Installation de EasyAdmin
    ```sh
    composer require easycorp/easyadmin-bundle
    symfony console make:admin:dashboard.css
    symfony console make:admin:crud
    ```
 
-7. Export de données au format pdf
+9. Export de données au format pdf
    ```sh
    composer require dompdf/dompdf
    ```
 
-8. Automatisation des slugs
-   ```sh
-   composer req antishov/doctrine-extensions-bundle
-   ```
+10. Automatisation des slugs
+    ```sh
+    composer req antishov/doctrine-extensions-bundle
+    ```
 
-9. Extension Twig
-   ```sh
-   composer require twig/string-extra
-   ```
+11. Extension Twig
+    ```sh
+    composer require twig/string-extra
+    ```
 
-10. Gestionnaire de fichiers Vich et ckeditor
+12. Gestionnaire de fichiers Vich et ckeditor
     ```sh
     composer require vich/uploader-bundle
     composer require friendsofsymfony/ckeditor-bundle
@@ -173,26 +173,30 @@ Voici les
     php bin/console assets:install public
     ```
 
-11. Voter de sécurisation d'acces aux contenus
+13. Voter de sécurisation d'acces aux contenus
    ```sh
    symfony console make:voter
    ```
 
-12. Notifications par mail/SMS
+14. Notifications par mail/SMS
    ```sh
    composer require symfony/notifier
    composer require symfony/twig-pack twig/cssinliner-extra twig/inky-extra
    ```
 
-13. Notifications par mail/SMS
+15. Pagination
    ```sh
    composer require knplabs/knp-paginator-bundle
    ```
 
-14. Tests
+16. Tests
    ```sh
    symfony console make:test
    php bin/phpunit
+   ```
+17. Charts
+   ```sh
+   composer require symfony/ux-chartjs
    ```
 
 <!-- USAGE EXAMPLES -->

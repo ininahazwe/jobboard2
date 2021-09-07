@@ -77,4 +77,13 @@ class CandaditureRepository extends ServiceEntityRepository
             ;
     }
 
+
+    public function getCountOnDashboard(): array|int|string
+    {
+        $query = $this->createQueryBuilder('c')
+            ->select('c');
+        return $query
+            ->getQuery()->getScalarResult();
+    }
+
 }

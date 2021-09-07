@@ -17,14 +17,14 @@
 
         <section class="inner-page">
             <div class="container">
-                <form action="{{ path('app_login') }}" method="post" class="" data-turbo="false">
+                <form action="{{ path('access_login') }}" method="post" class="" data-turbo="false">
                     {% if error %}
                         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
                     {% endif %}
 
                     {% if app.user %}
                         <div class="mb-3">
-                            You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+                            You are logged in as {{ app.user.username }}, <a href="{{ path('access_logout') }}">Logout</a>
                         </div>
                     {% endif %}
                     <div class="row">

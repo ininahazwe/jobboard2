@@ -112,9 +112,9 @@ class AnnonceRepository extends ServiceEntityRepository
         $now = new \DateTime('now');
         $query = $this
             ->createQueryBuilder('a')
-            ->andWhere('a.isActive = 1');
-        /*->andWhere('a.dateLimiteCandidature > :date')
-        ->setParameter('date', $now);*/
+            ->andWhere('a.isActive = 1')
+            ->andWhere('a.dateLimiteCandidature > :date')
+            ->setParameter('date', $now);
 
         //->join('a.contrat', 'c');
 

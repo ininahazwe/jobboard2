@@ -142,6 +142,6 @@ class ProfileController extends AbstractController
             }
             return $this->redirectToRoute('app_profile');
         }
-        return $this->redirectToRoute('app_register');
+        return $this->redirectToRoute('access_register');
     }
 }

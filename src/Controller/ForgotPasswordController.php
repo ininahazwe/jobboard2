@@ -57,7 +57,7 @@ class ForgotPasswordController extends AbstractController
             if(!$user){
                 $this->addFlash('success', 'Un email vous a été envoyé pour redéfinir votre mot de passe.');
 
-                return $this->redirectToRoute('app_login');
+                return $this->redirectToRoute('access_login');
             }
 
             $user->setForgotPasswordToken($tokenGenerator->generateToken());
@@ -77,7 +77,7 @@ class ForgotPasswordController extends AbstractController
 
             $this->addFlash('success', 'Un email vous a été envoyé pour redéfinir votre mot de passe.');
 
-            return $this->redirectToRoute('app_login');
+            return $this->redirectToRoute('access_login');
         }
         return $this->render('forgot_password/forgot_password_step_1.html.twig', [
             'forgotPasswordFormStep1' => $form->createView(),
@@ -139,7 +139,7 @@ class ForgotPasswordController extends AbstractController
 
             $this->addFlash('success', 'Votre mot de passe a été modifié, vous pouvez à présent vous connecter');
 
-            return $this->redirectToRoute('app_login');
+            return $this->redirectToRoute('access_login');
         }
 
         return $this->render('forgot_password/forgot_password_step_2.html.twig', [

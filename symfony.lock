@@ -617,6 +617,9 @@
     "symfony/uid": {
         "version": "v5.2.6"
     },
+    "symfony/ux-chartjs": {
+        "version": "v1.3.0"
+    },
     "symfony/ux-turbo": {
         "version": "v1.3.0"
     },

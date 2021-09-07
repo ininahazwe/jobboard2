@@ -23,23 +23,23 @@ class RepeatedPasswordType extends AbstractType
             'invalid_message'       => "Veuillez saisir le même mot de passe",
             'required'              => true,
             'first_options'         => [
-                'label'             => "Password",
-                'label_attr'        => [
-                    'title'         => 'For security reasons, your password must contains...',
-                ],
+/*                'label_attr'        => [
+                    'title'         => 'Pour des raisons de sécurité, votre mot de passe doit contenir...',
+                ],*/
                 'attr'              => [
-                    'title'         => "For security reasons, your password must contains",
-                    'maxlength'     => 255
+    /*                'title'         => "Pour des raisons de sécurité, votre mot de passe doit contenir...",*/
+                    'maxlength'     => 255,
+                    'placeholder' => 'Mot de passe'
                 ]
             ],
             'second_options'        => [
-                'label'             => "Confirmer le mot de passe",
-                'label_attr'        => [
+                /*'label_attr'        => [
                     'title'         => "Confirmer le mot de passe"
-                ],
+                ],*/
                 'attr'              => [
-                    'title'         => "Confirm  password",
-                    'maxlength'     => 255
+                   /* 'title'         => "Confirmer le mot de passe",*/
+                    'maxlength'     => 255,
+                    'placeholder'   => "Confirmer le mot de passe",
                 ]
             ],
         ]);
