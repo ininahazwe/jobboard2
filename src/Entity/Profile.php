@@ -31,16 +31,6 @@ class Profile
     private bool $isRqth;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private string $city;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private string $zipcode;
-
-    /**
      * @ORM\ManyToOne(targetEntity=Dictionnaire::class, inversedBy="profile_diplome")
      */
     private ?Dictionnaire $diplome;
@@ -87,9 +77,9 @@ class Profile
     private ?Dictionnaire $civilite;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\OneToOne(targetEntity=Adresse::class, cascade={"persist", "remove"})
      */
-    private ?string $departement;
+    private $adresse;
 
     public function __construct()
     {
@@ -131,30 +121,6 @@ class Profile
     public function setIsRqth(bool $isRqth): self
     {
         $this->isRqth = $isRqth;
-
-        return $this;
-    }
-
-    public function getCity(): ?string
-    {
-        return $this->city;
-    }
-
-    public function setCity(string $city): self
-    {
-        $this->city = $city;
-
-        return $this;
-    }
-
-    public function getZipcode(): ?string
-    {
-        return $this->zipcode;
-    }
-
-    public function setZipcode(string $zipcode): self
-    {
-        $this->zipcode = $zipcode;
 
         return $this;
     }
@@ -273,14 +239,14 @@ class Profile
         return $this;
     }
 
-    public function getDepartement(): ?string
+    public function getAdresse(): ?Adresse
     {
-        return $this->departement;
+        return $this->adresse;
     }
 
-    public function setDepartement(?string $departement): self
+    public function setAdresse(?Adresse $adresse): self
     {
-        $this->departement = $departement;
+        $this->adresse = $adresse;
 
         return $this;
     }

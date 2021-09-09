@@ -1,5 +1,10 @@
 {% extends 'base.html.twig' %}
 
+{% block javascripts %}
+    {% include ('adresse/jquery.html.twig') %}
+    <script src="{{ asset('js/images.js') }}"></script>
+{% endblock %}
+
 {% block title %}New Profile{% endblock %}
 
 {% block body %}
@@ -28,5 +33,6 @@
         </div>
     </section>
 </main>
-    {% include 'profile/_script.html.twig' %}
+    {% include 'adresse/_script.html.twig' %}
+    {{ render(controller('App\\Controller\\AdresseController::addEntite',{'entite' : 'profile' })) }}
 {% endblock %}

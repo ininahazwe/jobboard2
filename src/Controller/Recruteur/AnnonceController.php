@@ -7,6 +7,7 @@ use App\Entity\Entreprise;
 use App\Entity\Offre;
 use App\Form\AnnonceType;
 use App\Form\SearchAnnonceForm;
+use App\Repository\AdresseRepository;
 use App\Repository\AnnonceRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,7 +21,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class AnnonceController extends AbstractController
 {
     #[Route('/index', name: 'annonce_index')]
-    public function index(Request $request, AnnonceRepository $annonceRepository, PaginatorInterface $paginator): Response
+    public function index(Request $request, AnnonceRepository $annonceRepository, PaginatorInterface $paginator, AdresseRepository $adresseRepository): Response
     {
         $data = $annonceRepository->findAllActiveQuery($this->getUser());
 
@@ -32,6 +33,7 @@ class AnnonceController extends AbstractController
 
         return $this->render('annonce/index.html.twig', [
             'annonces' => $annonces,
+            'adresses' => $adresseRepository->findAll()
         ]);
     }
 

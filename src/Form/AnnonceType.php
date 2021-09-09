@@ -9,6 +9,7 @@ use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
@@ -61,17 +62,13 @@ class AnnonceType extends AbstractType
                     return $query;
                 }
             ])
-            ->add('ville' , TextType::class, [
-                'required' => false,
-                'label' => 'Ville',
-            ])
-            ->add('code_postal', TextType::class, [
-                'required' => false,
-                'label' => 'Code postal',
-            ])
-            ->add('departement', TextType::class, [
-                'required' => false,
-                'label' => 'Département et région',
+            ->add('adresse', CollectionType::class, [
+                'entry_type' => AdresseType::class,
+                'label' => 'Adresse',
+                'entry_options' => ['label' => false],
+                'allow_add' => true,
+                'allow_delete' => true,
+                'by_reference' => false
             ])
             ->add('entreprise', EntityType::class ,[
                 'class' => Entreprise::class,

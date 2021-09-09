@@ -58,8 +58,7 @@
                             <b>Type de contrat:</b> {{ annonce.typeContrat|join('-') }}<br>
                             <b>Expérience souhaitée:</b> {{ annonce.experience }}<br>
                             <b>Diplôme requis:</b> {{ annonce.diplome }}<br>
-                            <b>Ville:</b> {{ annonce.ville }} <br>
-                            <b>Région:</b> {{ annonce.departement }}
+                            <b>Adresse:</b> {{ annonce.adresse|join() }} <br>
                         </div>
                         <div class="portfolio-description">
                             <b>Date de publication:</b> {{ annonce.createdAt|date('d-m-Y') }}<br>

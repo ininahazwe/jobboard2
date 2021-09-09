@@ -1,6 +1,9 @@
 {% extends 'base.html.twig' %}
 
 {% block javascripts %}
+    {% include ('adresse/jquery.html.twig') %}
+    <script src="{{ asset('js/images.js') }}"></script>
+
     <script async defer src="https://hcaptcha.com/1/api.js?hl={{ app.request.locale }}"></script>
     {% include 'partials/hcaptcha_callback_script.html.twig' %}
 {% endblock %}
@@ -36,6 +39,6 @@
         </div>
     </section>
 </main>
-    {% include 'entreprise/_script.html.twig' %}
     {% include 'adresse/_script.html.twig' %}
+    {{ render(controller('App\\Controller\\AdresseController::addEntite',{'entite' : 'entreprise' })) }}
 {% endblock %}

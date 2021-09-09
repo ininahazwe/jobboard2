@@ -2,7 +2,7 @@
 {{ form_start(form) }}
 <div class="container">
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-4">
             <b>Description du poste et missions</b>
             {{ form_row(form.name) }}
             {{ form_row(form.description) }}
@@ -10,11 +10,15 @@
             <i class="fas fa-info"></i><b> Si candidature externe</b>
             {{ form_row(form.lien) }}
             {{ form_row(form.dateLimiteCandidature) }}
-            {{ form_row(form.ville) }}
-            {{ form_row(form.code_postal) }}
-            {{ form_row(form.departement) }}
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
+            <h3>Adresse</h3>
+            <div id="adresse" data-prototype="{{ form_row(form.adresse.vars.prototype)|e('html_attr') }}">
+                {{ form_row(form.adresse) }}
+                <span></span>
+            </div>
+        </div>
+        <div class="col-md-4">
             <b>Profil du candidat</b>
             {{ form_row(form.diplome) }}
             {{ form_row(form.experience) }}

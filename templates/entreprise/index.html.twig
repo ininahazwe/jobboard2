@@ -24,12 +24,12 @@
                 </div>
                 <div class="col-md-9">
                     <a class="btn btn-success btn-sm mt-1" href="{{ path('entreprise_new') }}">Ajouter</a>
-                    <table class="table table-striped table-bordered" id="datatable">
+                    <table class="table" id="datatable">
                         <thead>
                         <tr>
-                            <th>Name</th>
+                            <th>Nom</th>
                             <th>Logo</th>
-                            <th>Address</th>
+                            <th>Adresse</th>
                             <th>Secteur</th>
                             {% if app.user.isSuperAdmin() %}<th>Status</th>{% endif %}
                             <th>actions</th>
@@ -46,8 +46,8 @@
                                     {% endif %}
                                 </td>
                                 <td>
-                                    {% for adresse in adresses %}
-                                        {{ adresse.city }}<br>{{ adresse.zipcode }}
+                                    {% for adresse in entreprise.adresse %}
+                                        {{ adresse.city }}<br>{{ adresse.zipcode }}<br>{{ adresse.departement }}
                                     {% endfor %}
                                 </td>
                                 <td>{{ entreprise.secteur }}</td>

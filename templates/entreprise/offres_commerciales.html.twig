@@ -36,7 +36,7 @@
                         </div>
                         {% endif %}
 
-                        <table class="table">
+                        <table class="table" id="datatable">
                             <thead>
                             <tr>
                                 <th>Formule</th>
@@ -104,7 +104,9 @@
                 <header class="modal-header">
                     Ajouter une offre
                     <button class="close-modal" aria-label="close modal" data-close>
-                        ✕
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                            <path d="M1.293 1.293a1 1 0 0 1 1.414 0L8 6.586l5.293-5.293a1 1 0 1 1 1.414 1.414L9.414 8l5.293 5.293a1 1 0 0 1-1.414 1.414L8 9.414l-5.293 5.293a1 1 0 0 1-1.414-1.414L6.586 8 1.293 2.707a1 1 0 0 1 0-1.414z"/>
+                        </svg>
                     </button>
                 </header>
                 <section class="modal-content">
@@ -131,11 +133,27 @@
                 <header class="modal-header">
                     Ajouter une offre personnalisée
                     <button class="close-modal" aria-label="close modal" data-close>
-                        ✕
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                            <path d="M1.293 1.293a1 1 0 0 1 1.414 0L8 6.586l5.293-5.293a1 1 0 1 1 1.414 1.414L9.414 8l5.293 5.293a1 1 0 0 1-1.414 1.414L8 9.414l-5.293 5.293a1 1 0 0 1-1.414-1.414L6.586 8 1.293 2.707a1 1 0 0 1 0-1.414z"/>
+                        </svg>
                     </button>
                 </header>
                 <section class="modal-content">
-                    {{ include('offre/_form.html.twig') }}
+                    {{ form_start(form) }}
+                        <div class="row">
+                            <div class="col-md-6">
+                                {{ form_row(form.formule) }}
+                                {{ form_row(form.nombre_offres) }}
+                                {{ form_row(form.debutContratAt) }}
+                                {{ form_row(form.finContratAt) }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form_row(form.prix) }}
+                                {{ form_row(form.isCvTheque) }}
+                            </div>
+                            <input type="submit" value="Enregistrer" class="bouton solid" />
+                            {{ form_end(form, {'render_rest': false}) }}
+                        </div>
                 </section>
             </div>
         </div>
@@ -234,6 +252,10 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+        }
+
+        .modal-header button{
+            border: none;
         }
 
         .modal-header .close-modal {
@@ -345,6 +367,9 @@
             100% {
                 transform: rotate(0deg);
             }
+        }
+        #offre_finContratAt_time_hour{
+            display: none;
         }
     </style>
 {% endblock %}

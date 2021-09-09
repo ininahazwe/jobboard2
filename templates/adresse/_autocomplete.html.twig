@@ -1,0 +1,86 @@
+<script type="text/javascript">
+    function completAdresse( index) {
+
+        const zipId  = "{{ entite }}_adresse_"+ index+ "_zipcode";
+        const cityId  = "{{ entite }}_adresse_"+ index+ "_city";
+        const departementId  = "{{ entite }}_adresse_"+ index+ "_departement";
+        const adresse = "{{ entite }}_adresse_"+ index+ "_adresse"
+
+        //console.log($("#entreprise_name").val());
+        //return false;
+
+        $("#"+ zipId).autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "https://api-adresse.data.gouv.fr/search/?postcode=" +  $("#"+ zipId).val(),
+                    data: {q: request.term},
+                    dataType: "json",
+                    success: function (data) {
+                        var postcodes = [];
+                        response($.map(data.features, function (item) {
+
+                            if ($.inArray(item.properties.postcode, postcodes) == -1) {
+                                postcodes.push(item.properties.postcode);
+                                return {
+                                    label: item.properties.postcode + " - " + item.properties.city,
+                                    city: item.properties.city,
+                                    context: item.properties.context,
+                                    value: item.properties.postcode
+                                };
+                            }
+                        }));
+                    }
+                });
+            },
+            // On remplit aussi la ville et le département
+            select: function (event, ui) {
+                $('#' + zipId ).val(ui.item.city);
+                $('#' + departementId ).val(ui.item.context);
+            }
+        });
+        $('#' + cityId ).autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "https://api-adresse.data.gouv.fr/search/?city="+$('#' + cityId ).val(),
+                    data: { q: request.term },
+                    dataType: "json",
+                    success: function (data) {
+                        var cities = [];
+                        response($.map(data.features, function (item) {
+                            // Ici on est obligé d'ajouter les villes dans un array pour ne pas avoir plusieurs fois la même
+                            if ($.inArray(item.properties.postcode, cities) == -1) {
+                                cities.push(item.properties.postcode);
+                                return { label: item.properties.postcode + " - " + item.properties.city,
+                                    postcode: item.properties.postcode,
+                                    context: item.properties.context,
+                                    value: item.properties.city
+                                };
+                            }
+                        }));
+                    }
+                });
+            },
+            // On remplit aussi le CP et le département
+            select: function(event, ui) {
+                $('#' + zipId ).val(ui.item.postcode);
+                $('#' + departementId ).val(ui.item.context);
+            }
+        });
+
+        $('#' + adresse).autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "https://api-adresse.data.gouv.fr/search/?postcode="+$("#"+ zipId).val(),
+                    data: { q: request.term },
+                    dataType: "json",
+                    success: function (data) {
+                        response($.map(data.features, function (item) {
+                            return { label: item.properties.name, value: item.properties.name};
+                        }));
+                    }
+                });
+            }
+        });
+    }
+</script>
+

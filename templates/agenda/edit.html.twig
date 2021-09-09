@@ -1,5 +1,9 @@
 {% extends 'base.html.twig' %}
 
+{% block javascripts %}
+    {% include ('adresse/jquery.html.twig') %}
+{% endblock %}
+
 {% block title %}Agenda | Modification{% endblock %}
 
 {% block body %}
@@ -29,5 +33,6 @@
             </div>
         </section>
     </main>
-    {% include 'agenda/_script.html.twig' %}
+    {% include 'adresse/_script.html.twig' %}
+    {{ render(controller('App\\Controller\\AdresseController::addEntite',{'entite' : 'agenda' })) }}
 {% endblock %}

@@ -1,5 +1,9 @@
 {% extends 'base.html.twig' %}
 
+{% block javascripts %}
+    {% include ('adresse/jquery.html.twig') %}
+{% endblock %}
+
 {% block title %}Edit Annonce{% endblock %}
 
 {% block body %}
@@ -23,11 +27,13 @@
                     {% include('layouts/_dash_sidebar.html.twig') %}
                 </div>
                 <div class="col-md-9">
-                    {{ include('annonce/_form.html.twig', {'button_label': 'Enregistrer'}) }}
+                    {{ include('annonce/_form.html.twig'}) }}
                 </div>
             </div>
         </div>
     </section>
 </main>
+    {% include 'adresse/_script.html.twig' %}
     {% include 'annonce/_script.html.twig' %}
+    {{ render(controller('App\\Controller\\AdresseController::addEntite',{'entite' : 'annonce' })) }}
 {% endblock %}

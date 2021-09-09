@@ -8,10 +8,13 @@
         boutonAjout.innerText = "Ajouter une adresse";
         let nouveauBouton = span.append(boutonAjout);
         collection.dataset.index = collection.querySelectorAll("input").length;
-        boutonAjout.addEventListener("click", function(){
+        boutonAjout.addEventListener("click", function () {
             addButton(collection, nouveauBouton);
+            let indexAdresse = collection.dataset.index - 1
+            completAdresse(indexAdresse);
         });
     }
+
     function addButton(collection, nouveauBouton) {
         let prototype = collection.dataset.prototype;
         let index = collection.dataset.index;
@@ -29,7 +32,9 @@
         let boutonAjout = collection.querySelector(".ajout-adresse");
         span.insertBefore(newForm, boutonAjout);
         boutonSuppr.addEventListener("click", function () {
+
             this.previousElementSibling.parentElement.remove();
         })
     }
+
 </script>

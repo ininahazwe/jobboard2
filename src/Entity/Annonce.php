@@ -88,15 +88,6 @@ class Annonce
     private Collection $auteur;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Dictionnaire::class, inversedBy="annonces_location")
-     * @ORM\JoinTable(name="annonces_location",
-     *      joinColumns={@ORM\JoinColumn(name="annonce_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="dictionnaire_id", referencedColumnName="id")}
-     *      )
-     **/
-    private Collection $location;
-
-    /**
      * @ORM\ManyToOne(targetEntity=Entreprise::class, inversedBy="annonces_entreprise")
      */
     private ?Entreprise $entreprise;
@@ -138,33 +129,23 @@ class Annonce
     private ?User $current_recruteur;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private ?string $ville;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private ?string $code_postal;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private ?string $departement;
-
-    /**
      * @ORM\ManyToMany(targetEntity=User::class, inversedBy="favoris")
      */
     private Collection $favoris;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Adresse::class, mappedBy="annonce")
+     */
+    private Collection $adresse;
 
     public function __construct()
     {
         $this->type_contrat = new ArrayCollection();
         $this->auteur = new ArrayCollection();
-        $this->location = new ArrayCollection();
         $this->createdAt = new \DateTimeImmutable('now');
         $this->candidatures = new ArrayCollection();
         $this->favoris = new ArrayCollection();
+        $this->adresse = new ArrayCollection();
     }
 
     public function getName(): ?string
@@ -292,30 +273,6 @@ class Annonce
         return $this;
     }
 
-    /**
-     * @return Collection
-     */
-    public function getLocation(): Collection
-    {
-        return $this->location;
-    }
-
-    public function addLocation(Dictionnaire $location): self
-    {
-        if (!$this->location->contains($location)) {
-            $this->location[] = $location;
-        }
-
-        return $this;
-    }
-
-    public function removeLocation(Dictionnaire $location): self
-    {
-        $this->location->removeElement($location);
-
-        return $this;
-    }
-
     public function getEntreprise(): ?Entreprise
     {
         return $this->entreprise;
@@ -376,7 +333,7 @@ class Annonce
         return $this;
     }
 
-    public function isActive()
+    public function isActive(): bool
     {
         if ($this->getIsActive() == 1 ){
             return true;
@@ -459,44 +416,9 @@ class Annonce
         return $result;
     }
 
-    public function getVille(): ?string
-    {
-        return $this->ville;
-    }
-
-    public function setVille(?string $ville): self
-    {
-        $this->ville = $ville;
-
-        return $this;
-    }
-
-    public function getCodePostal(): ?string
-    {
-        return $this->code_postal;
-    }
-
-    public function setCodePostal(?string $code_postal): self
-    {
-        $this->code_postal = $code_postal;
-
-        return $this;
-    }
-
-    public function getDepartement(): ?string
-    {
-        return $this->departement;
-    }
-
-    public function setDepartement(?string $departement): self
-    {
-        $this->departement = $departement;
-
-        return $this;
-    }
 
     /**
-     * @return Collection|User[]
+     * @return Collection
      */
     public function getFavoris(): Collection
     {
@@ -515,6 +437,36 @@ class Annonce
     public function removeFavori(User $favori): self
     {
         $this->favoris->removeElement($favori);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getAdresse(): Collection
+    {
+        return $this->adresse;
+    }
+
+    public function addAdresse(Adresse $adresse): self
+    {
+        if (!$this->adresse->contains($adresse)) {
+            $this->adresse[] = $adresse;
+            $adresse->setAnnonce($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAdresse(Adresse $adresse): self
+    {
+        if ($this->adresse->removeElement($adresse)) {
+            // set the owning side to null (unless already changed)
+            if ($adresse->getAnnonce() === $this) {
+                $adresse->setAnnonce(null);
+            }
+        }
 
         return $this;
     }
