@@ -1,0 +1,54 @@
+{% form_theme form _self %}
+{{ form_start(form) }}
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <b>Description du poste et missions</b>
+            {{ form_row(form.name) }}
+            {{ form_row(form.description) }}
+            {{ form_row(form.reference) }}
+            <i class="fas fa-info"></i><b> Si candidature externe</b>
+            {{ form_row(form.lien) }}
+            {{ form_row(form.dateLimiteCandidature) }}
+        </div>
+        <div class="col-md-4">
+            <h3>Adresse</h3>
+            {{ form_row(form2.city) }}
+            {{ form_row(form2.zipcode) }}
+            {{ form_row(form2.departement) }}
+            {{ form_row(form2.complement) }}
+        </div>
+        <div class="col-md-4">
+            <b>Profil du candidat</b>
+            {{ form_row(form.diplome) }}
+            {{ form_row(form.experience) }}
+            {{ form_row(form.type_contrat) }}
+            <br>
+            <b>Recruteur</b>
+            {{ form_row(form.auteur) }}
+{#            <i class="fas fa-info"></i><b> Si candidature par mail</b>
+            {{ form_row(form.adresse_email) }}#}
+            <br>
+            <b>Entreprise</b>
+            {{ form_row(form.entreprise) }}
+            {{ form_row(form.isActive) }}
+        </div>
+    </div>
+    <input type="submit" value="Enregistrer" class="bouton solid" />
+</div>
+{{ form_end(form) }}
+{#{% block _annonce_dateLimiteCandidatur_widget %}
+    <div id="annonce_dateLimiteCandidature" class="form-inline">
+        <div class="sr-only"><label class="required" for="annonce_dateLimiteCandidature_time_hour">Date limite candidature</label>
+        </div><input type="date" id="annonce_dateLimiteCandidature_date" name="annonce[dateLimiteCandidature][date]" required="required" class="form-control">
+    </div>
+
+{% endblock %}#}
+<style>
+    #annonce_dateLimiteCandidature_time_hour{
+        display: none;
+    }
+    div.sr-only{
+             display: none;
+         }
+</style>

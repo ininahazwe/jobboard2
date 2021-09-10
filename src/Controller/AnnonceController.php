@@ -1,13 +1,10 @@
 <?php
 
-namespace App\Controller\Recruteur;
+namespace App\Controller;
 
 use App\Entity\Annonce;
 use App\Entity\Entreprise;
-use App\Entity\Offre;
 use App\Form\AnnonceType;
-use App\Form\SearchAnnonceForm;
-use App\Repository\AdresseRepository;
 use App\Repository\AnnonceRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,16 +18,9 @@ use Symfony\Component\Routing\Annotation\Route;
 class AnnonceController extends AbstractController
 {
     #[Route('/index', name: 'annonce_index')]
-    public function index(Request $request, AnnonceRepository $annonceRepository, PaginatorInterface $paginator): Response
+    public function index(AnnonceRepository $annonceRepository): Response
     {
-        $data = $annonceRepository->findAllActiveQuery($this->getUser());
-
-        $annonces = $paginator->paginate(
-            $data,
-            $request->query->getInt('page', 1),
-            100
-        );
-
+        $annonces = $annonceRepository->findAllActiveQuery($this->getUser());
         return $this->render('annonce/index.html.twig', [
             'annonces' => $annonces,
         ]);

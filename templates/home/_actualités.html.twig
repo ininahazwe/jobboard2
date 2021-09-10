@@ -7,25 +7,27 @@
             <p>Actualités sur l'emploi et l'handicap</p>
         </div>
 
-        <div class="row">
-            {% if actualites|length %}
-                {% for actualite in actualites %}
-                    <div class="col">
-                        <div class="card flex-md-row mb-4 box-shadow h-md-250" data-aos="zoom-in" data-aos-delay="100">
-                            <div class="card-body d-flex flex-column align-items-start">
-                                <h3 class="mb-2">
-                                    <a class="text-dark" href="{{ path('article_show', {slug: actualite.slug}) }}">{{ actualite.title|length > 50 ? actualite.title|slice(0, 50) ~ '...' : actualite.title }}</a>
-                                </h3>
-                                <div class="card-text mb-auto">{{ actualite.content|slice(0, 250)|raw }}</div>
-                                <a class="{{ actualite.id }}" href="{{ path('article_show', {'slug': actualite.slug}) }}">Lire plus</a>
+        <div class="container">
+            <div class="row mb-2">
+                {% if actualites|length %}
+                    {% for actualite in actualites %}
+                        <div class="col">
+                            <div class="card flex-md-row mb-4 box-shadow h-md-250" data-aos="zoom-in" data-aos-delay="100">
+                                <div class="card-body d-flex flex-column align-items-start">
+                                    <div class="d-inline-block mb-2 text-primary">{{ actualite.categorie }}</div>
+                                    <h3 class="mb-0">
+                                        <a class="text-dark" href="{{ path('article_show', {slug: actualite.slug}) }}">{{ actualite.title|length > 50 ? actualite.title|slice(0, 50) ~ '...' : actualite.title }}</a>
+                                    </h3>
+                                    <div class="mb-1 text-muted"><i class="bi bi-calendar-check"></i> {{ actualite.createdAt|date('d-m-Y') }}</div>
+                                    <div class="card-text mb-auto">{{ actualite.content|slice(0, 100)|raw }}</div>
+                                    <a class="{{ actualite.id }}" href="{{ path('article_show', {'slug': actualite.slug}) }}">Lire plus</a>
+                                </div>
+                                <div style=" width: 300px; height: 250px; background: url({{ asset(actualite.getUrlLastFile()) }}); background-size: cover; background-position: center"></div>
                             </div>
-                            <div style=" width: 300px; height: 250px; background: url({{ asset(actualite.getUrlLastFile()) }}); background-size: cover; background-position: center"></div>
                         </div>
-                    </div>
-                {% endfor %}
-            {% endif %}
-
+                    {% endfor %}
+                {% endif %}
+            </div>
         </div>
-
     </div>
 </section><!-- End Team Section -->

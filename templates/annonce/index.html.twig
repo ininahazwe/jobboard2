@@ -1,5 +1,4 @@
 {% extends 'base.html.twig' %}
-
 {% block title %}Offres d'emploi{% endblock %}
 
 {% block body %}
@@ -52,14 +51,16 @@
                     <table class="table" id="datatable">
                         <thead>
                         <tr>
-                            <th>Name</th>
+                            <th>Nom</th>
                             <th>Entreprises</th>
                             <th>Adresse</th>
                             <th>Date de publication</th>
                             <th>Statut</th>
+                            <th>Actions</th>
                         </tr>
                         </thead>
                         <tbody>
+
                         {% for annonce in annonces %}
                             <tr>
                                 <td><a href="{{ path('annonce_show_unit', {id: annonce.id, slug: annonce.slug})}}">{{ annonce.name }}</a></td>
@@ -102,8 +103,6 @@
         </div>
     </section>
 </main>
-{% endblock %}
-{% block javascripts %}
     <script>
         window.onload = () => {
             let activer = document.querySelectorAll("[type=checkbox]")

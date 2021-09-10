@@ -27,24 +27,22 @@ class AnnonceRepository extends ServiceEntityRepository
         $this->paginator = $paginator;
     }
 
-    public function findAllActiveQuery($user): QueryBuilder
+    public function findAllActiveQuery($user)
     {
         $query = $this->createQueryBuilder('a');
         if ($user->isSuperAdmin()) {
-            $query//->andWhere('a.isActive = true')
-            ->addOrderBy('a.createdAt', 'DESC')
-                ->getQuery();
-
-            return $query;
-        } elseif ($user->isSuperRecruteur() || $user->isRecruteur()) {
-            $ids = $user->getEntrepriseIds();
-            $query->andWhere('a.entreprise IN (:entreprises)')
-                ->addOrderBy('a.createdAt', 'DESC')
-                ->setParameter('entreprises', $ids)
-                ->getQuery();
-
-            return $query;
+            $query->addOrderBy('a.createdAt', 'DESC')
+                ;
+            return $query->getQuery()->getResult();
         }
+        $ids = $user->getEntrepriseIds();
+        $query->andWhere('a.entreprise IN (:entreprises)')
+            ->addOrderBy('a.createdAt', 'DESC')
+            ->setParameter('entreprises', $ids)
+            ;
+
+        return $query->getQuery()->getResult();
+
     }
 
     /**

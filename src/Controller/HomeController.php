@@ -57,7 +57,7 @@ class HomeController extends AbstractController
         $annonces = $annoncesRepo->findActiveAndLive(5);
         $offres = $modeleOffreCommercialeRepository->findAll();
         $entreprises = $entrepriseRepository->getEntrepriseHome(6);
-        $actualites = $blogRepository->getActuHandicapeBlog(4);
+        $actualites = $blogRepository->getActuHandicapeBlog();
 
         return $this->render('home/index.html.twig', [
             'annonces' => $annonces,

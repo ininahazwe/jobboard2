@@ -4,7 +4,7 @@
         collection = document.querySelector("#adresse");
         span = collection.querySelector("span");
         boutonAjout = document.createElement("button");
-        boutonAjout.className = "ajout-adresse btn-sm btn-primary";
+        boutonAjout.className = "bouton solid";
         boutonAjout.innerText = "Ajouter une adresse";
         let nouveauBouton = span.append(boutonAjout);
         collection.dataset.index = collection.querySelectorAll("input").length;
@@ -24,7 +24,7 @@
         let newForm = content.querySelector("div");
         let boutonSuppr = document.createElement("button");
         boutonSuppr.type = "button";
-        boutonSuppr.className = "btn-sm btn-danger";
+        boutonSuppr.className = "btn-sm btn-danger mt-2";
         boutonSuppr.id = "delete-adresse-" + index;
         boutonSuppr.innerText = "Supprimer cette adresse";
         newForm.append(boutonSuppr);
@@ -35,6 +35,7 @@
 
             this.previousElementSibling.parentElement.remove();
         })
+        console.log(prototype);
     }
 
 </script>

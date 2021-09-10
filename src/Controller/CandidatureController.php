@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Candidat;
+namespace App\Controller;
 
 use App\Entity\Annonce;
 use App\Entity\Candidature;

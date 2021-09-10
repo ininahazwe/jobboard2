@@ -20,10 +20,14 @@
         </div>
         <div class="col-md-4">
             <h3>Adresse</h3>
-            <div id="adresse" data-prototype="{{ form_row(form.adresse.vars.prototype)|e('html_attr') }}">
-                {{ form_row(form.adresse) }}
+           <div id="adresse" data-prototype="{{ form_row(form.adresse.vars.prototype)|e('html_attr') }}">
+               {% for adresse in form.adresse %}
+                   {{ form_row(adresse) }}
+               {% endfor %}
                 <span></span>
             </div>
+
+
         </div>
     </div>
     <input type="submit" value="Enregistrer" class="bouton solid" />

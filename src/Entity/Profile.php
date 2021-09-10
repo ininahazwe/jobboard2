@@ -79,7 +79,7 @@ class Profile
     /**
      * @ORM\OneToOne(targetEntity=Adresse::class, cascade={"persist", "remove"})
      */
-    private $adresse;
+    private ?Adresse $adresse;
 
     public function __construct()
     {
