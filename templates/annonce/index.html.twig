@@ -64,7 +64,11 @@
                             <tr>
                                 <td><a href="{{ path('annonce_show_unit', {id: annonce.id, slug: annonce.slug})}}">{{ annonce.name }}</a></td>
                                 <td>{{ annonce.entreprise }}</td>
-                                <td>{{ annonce.adresse|join }}</td>
+                                <td>
+                                    {% for lieu in annonce.adresse %}
+                                        {{ lieu.city }}<br>{{ lieu.zipcode }}
+                                    {% endfor %}
+                                </td>
                                 <td>{{ annonce.createdAt|date('d/m/Y') }}</td>
                                 <td>
                                     <div class="form-check form-switch">

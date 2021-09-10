@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block javascripts %}
+    {% include ('adresse/jquery.html.twig') %}
     <script async defer src="https://hcaptcha.com/1/api.js?hl={{ app.request.locale }}"></script>
     {% include 'partials/hcaptcha_callback_script.html.twig' %}
 {% endblock %}
@@ -25,4 +26,5 @@
         </section>
     </main>
     {% include 'adresse/_script.html.twig' %}
+    {{ render(controller('App\\Controller\\AdresseController::addEntiteCreateEntreprise',{'entite' : 'entreprise' })) }}
 {% endblock %}

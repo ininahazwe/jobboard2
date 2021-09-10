@@ -21,19 +21,18 @@ use Symfony\Component\Routing\Annotation\Route;
 class AnnonceController extends AbstractController
 {
     #[Route('/index', name: 'annonce_index')]
-    public function index(Request $request, AnnonceRepository $annonceRepository, PaginatorInterface $paginator, AdresseRepository $adresseRepository): Response
+    public function index(Request $request, AnnonceRepository $annonceRepository, PaginatorInterface $paginator): Response
     {
         $data = $annonceRepository->findAllActiveQuery($this->getUser());
 
         $annonces = $paginator->paginate(
             $data,
             $request->query->getInt('page', 1),
-            50
+            100
         );
 
         return $this->render('annonce/index.html.twig', [
             'annonces' => $annonces,
-            'adresses' => $adresseRepository->findAll()
         ]);
     }
 

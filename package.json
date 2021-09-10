@@ -37,6 +37,7 @@
         "datatables.net-editor-server": "^2.0.4",
         "flip-toolkit": "^7.0.13",
         "jquery-ui": "^1.12.1",
-        "postcss-loader": "^5.2.0"
+        "postcss-loader": "^5.2.0",
+        "tom-select": "^2.0.0-rc.3"
     }
 }
