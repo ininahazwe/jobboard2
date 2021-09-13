@@ -24,6 +24,8 @@ class AnnuaireController extends AbstractController
     #[Route('/new', name: 'annuaire_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_RECRUTEUR');
+
         $annuaire = new Annuaire();
         $form = $this->createForm(AnnuaireType::class, $annuaire);
         $form->handleRequest($request);
@@ -55,6 +57,8 @@ class AnnuaireController extends AbstractController
     #[Route('/{id}/edit', name: 'annuaire_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Annuaire $annuaire): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_RECRUTEUR');
+
         $form = $this->createForm(AnnuaireType::class, $annuaire);
         $form->handleRequest($request);
 
@@ -75,6 +79,8 @@ class AnnuaireController extends AbstractController
     #[Route('/{id}', name: 'annuaire_delete', methods: ['POST'])]
     public function delete(Request $request, Annuaire $annuaire): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_RECRUTEUR');
+
         if ($this->isCsrfTokenValid('delete'.$annuaire->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($annuaire);

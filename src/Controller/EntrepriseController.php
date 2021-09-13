@@ -38,6 +38,8 @@ class EntrepriseController extends AbstractController
     #[Route('/', name: 'entreprise_index')]
     public function index(Request $request, EntrepriseRepository $entrepriseRepository, PaginatorInterface $paginator, AdresseRepository $adresseRepository): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_RECRUTEUR');
+
         $data = $entrepriseRepository->findAllEntreprise($this->getUser());
         $adresses = $adresseRepository->findAll();
 
@@ -63,6 +65,8 @@ class EntrepriseController extends AbstractController
     #[Route('/attente', name: 'entreprise_attente', methods: ['GET'])]
     public function entrepriseEnAttente(EntrepriseRepository $entrepriseRepository, Request $request, AdresseRepository $adresseRepository): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_RECRUTEUR');
+
         return $this->render('entreprise/attente.html.twig', [
             'entreprises' => $entrepriseRepository->getEntreprisesEnAttente(),
             'adresses' => $adresseRepository->findAll(),
@@ -73,6 +77,8 @@ class EntrepriseController extends AbstractController
     #[Route('/acceptees', name: 'entreprise_acceptees', methods: ['GET'])]
     public function entreprisesAcceptees(EntrepriseRepository $entrepriseRepository, Request $request, AdresseRepository $adresseRepository): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_RECRUTEUR');
+
         return $this->render('entreprise/acceptees.html.twig', [
             'entreprises' => $entrepriseRepository->getEntreprisesAcceptees(),
             'adresses' => $adresseRepository->findAll(),
@@ -83,6 +89,8 @@ class EntrepriseController extends AbstractController
     #[Route('/refusees', name: 'entreprise_refusees', methods: ['GET'])]
     public function entreprisesRefusees(EntrepriseRepository $entrepriseRepository, Request $request, AdresseRepository $adresseRepository): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_RECRUTEUR');
+
         return $this->render('entreprise/refusees.html.twig', [
             'entreprises' => $entrepriseRepository->getEntreprisesRefusees(),
             'adresses' => $adresseRepository->findAll(),
@@ -104,6 +112,8 @@ class EntrepriseController extends AbstractController
     #[Route('/new', name: 'entreprise_new', methods: ['GET', 'POST'])]
     public function new(Request $request, ModeleOffreCommercialeRepository $modeleOffreCommercialeRepository, EntrepriseRepository $entrepriseRepository, Mailer $mailer): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_RECRUTEUR');
+
         $user = $this->getUser();
 
         $entreprise = new Entreprise();
@@ -160,6 +170,8 @@ class EntrepriseController extends AbstractController
     #[Route('/{slug}', name: 'entreprise_show', methods: ['GET'])]
     public function show($slug, EntrepriseRepository $entrepriseRepository): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_RECRUTEUR');
+
         $user = $this->getUser();
 
         $entreprise = $entrepriseRepository->findOneBy(['slug' => $slug]);
@@ -172,6 +184,8 @@ class EntrepriseController extends AbstractController
     #[Route('/{id}/offres', name: 'entreprise_offres_commerciales', methods: ['GET', 'POST'])]
     public function offreCommercialeShow(Request $request, Entreprise $entreprise, ModeleOffreCommercialeRepository $modeleOffreCommercialeRepository): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_RECRUTEUR');
+
         $offre = new Offre();
 
         $form = $this->createForm(OffreType::class, $offre);
@@ -197,6 +211,8 @@ class EntrepriseController extends AbstractController
     #[Route('/{slug}/annonces', name: 'entreprise_annonces', methods: ['GET', 'POST'])]
     public function AnnoncesShowByEntreprise(Request $request, $slug, EntrepriseRepository $entrepriseRepository, AnnonceRepository $annonceRepository): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_RECRUTEUR');
+
         $annonces = $annonceRepository->getAnnoncesEntreprise();
         $entreprise = $entrepriseRepository->findOneBy(['slug' => $slug]);
         return $this->render('entreprise/annonces_par_entreprise.html.twig', [
@@ -211,6 +227,8 @@ class EntrepriseController extends AbstractController
     #[Route('/{id}/save/offre', name: 'entreprise_save_offre', methods: ['GET', 'POST'])]
     public function creationOffre(Request $request, Entreprise $entreprise): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_RECRUTEUR');
+
         $modeleId = $request->get('modeleId');
         if (!$modeleId){
             return $this->redirect($this->generateUrl('entreprise_offres_commerciales', ['id'=>$entreprise->getId()]));
@@ -225,6 +243,8 @@ class EntrepriseController extends AbstractController
     #[Route('/{id}/edit', name: 'entreprise_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Entreprise $entreprise): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_RECRUTEUR');
+
         $form = $this->createForm(EntrepriseType::class, $entreprise);
         $form->handleRequest($request);
 
@@ -252,6 +272,8 @@ class EntrepriseController extends AbstractController
     #[Route('/{id}/factures', name: 'entreprise_factures')]
     public function factures(Request $request, Entreprise $entreprise, FactureRepository $factureRepository): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_RECRUTEUR');
+
         $factures = $factureRepository->findBy([
             'entreprise' => $entreprise,
         ]);
@@ -264,6 +286,8 @@ class EntrepriseController extends AbstractController
     #[Route('/{id}/recruteur', name: 'entreprise_recruteurs', methods: ['GET', 'POST'])]
     public function recruteurs(Request $request, Entreprise $entreprise): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_RECRUTEUR');
+
         $user = new User();
 
         $entityManager = $this->getDoctrine()->getManager();
@@ -296,6 +320,8 @@ class EntrepriseController extends AbstractController
     #[Route('/{id}/recruteur/create', name: 'entreprise_recruteurs_create', methods: ['GET', 'POST'])]
     public function recruteurCreate(Request $request, Entreprise $entreprise, UserRepository $userRepository, UserPasswordEncoderInterface $passwordEncoder, Mailer $mailer): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_RECRUTEUR');
+
         $userExist = $userRepository->findOneBy(['email' =>$request->get('user[email]')]);
         $password = $userRepository->genererMDP();
 
@@ -381,6 +407,8 @@ class EntrepriseController extends AbstractController
     #[Route('/{id}/recruteur/generateMDP/{userID}', name: 'entreprise_recruteurs_generateMDP', methods: ['GET', 'POST'])]
     public function generateMDPRecruteurs($userID, Request $request, Entreprise $entreprise, UserRepository $userRepository, UserPasswordEncoderInterface $passwordEncoder, Mailer $mailer): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_RECRUTEUR');
+
         $password = $userRepository->genererMDP();
         $user = $userRepository->find($userID);
 
@@ -430,6 +458,8 @@ class EntrepriseController extends AbstractController
     #[Route('/{id}/recruteur/deleteRecruteur/{userID}', name: 'entreprise_recruteurs_delete', methods: ['GET', 'POST'])]
     public function deleteRecruteur($userID, Request $request, Entreprise $entreprise, UserRepository $userRepository, UserPasswordEncoderInterface $passwordEncoder, MailerInterface $mailer): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_RECRUTEUR');
+
         $user = $userRepository->find($userID);
         $entityManager = $this->getDoctrine()->getManager();
         if ($entreprise->getRecruteurs()->contains($user)){
@@ -451,6 +481,8 @@ class EntrepriseController extends AbstractController
     #[Route('/{id}', name: 'entreprise_delete', methods: ['POST'])]
     public function delete(Request $request, Entreprise $entreprise): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_RECRUTEUR');
+
         if ($this->isCsrfTokenValid('delete'.$entreprise->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($entreprise);
@@ -486,6 +518,8 @@ class EntrepriseController extends AbstractController
      */
     public function saveOffreModele($id, $idModel)
     {
+        $this->denyAccessUnlessGranted('ROLE_RECRUTEUR');
+
         $entityManager = $this->getDoctrine()->getManager();
         $entreprise = $entityManager->getRepository('App:Entreprise')->find($id);
         $modele = $entityManager->getRepository('App:ModeleOffreCommerciale')->find($idModel);
@@ -598,6 +632,8 @@ class EntrepriseController extends AbstractController
     #[Route('/{id}/rejeter', name: 'entreprise_rejeter', methods: ['GET'])]
     public function rejeter($id, Request $request, Entreprise $entreprise): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN_HANDICV');
+
         $entityManager = $this->getDoctrine()->getManager();
         $entreprise = $entityManager->getRepository('App:Entreprise')->find($id);
         $entreprise->setModeration(Entreprise::REFUSEE);

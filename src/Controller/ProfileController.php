@@ -18,6 +18,8 @@ class ProfileController extends AbstractController
     #[Route('/', name: 'profile_index', methods: ['GET'])]
     public function index(ProfileRepository $profileRepository, UserRepository $userRepository): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CANDIDAT');
+
         return $this->render('profile/index.html.twig', [
             'profiles' => $profileRepository->findAll(),
             'users' => $userRepository->findAll(),
@@ -27,6 +29,8 @@ class ProfileController extends AbstractController
     #[Route('/candidats', name: 'candidats', methods: ['GET'])]
     public function candidats(UserRepository $userRepository): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CANDIDAT');
+
         return $this->render('user/candidats.html.twig', [
             'users' => $userRepository->getAllcandidats(),
         ]);
@@ -35,6 +39,8 @@ class ProfileController extends AbstractController
     #[Route('/recruteurs', name: 'recruteurs', methods: ['GET'])]
     public function recruteurs(UserRepository $userRepository): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CANDIDAT');
+
         return $this->render('user/recruteurs.html.twig', [
             'users' => $userRepository->getAllRecruteurs(),
         ]);
@@ -43,6 +49,8 @@ class ProfileController extends AbstractController
     #[Route('/super-recruteurs', name: 'super-recruteurs', methods: ['GET'])]
     public function superRecruteurs(UserRepository $userRepository): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CANDIDAT');
+
         return $this->render('user/super_recruteurs.html.twig', [
             'users' => $userRepository->getAllSuperRecruteurs(),
         ]);
@@ -51,6 +59,8 @@ class ProfileController extends AbstractController
     #[Route('/users-en-attente', name: 'user-attente', methods: ['GET'])]
     public function usersEnAttente(UserRepository $userRepository): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CANDIDAT');
+
         return $this->render('user/super_recruteurs.html.twig', [
             'users' => $userRepository->getUserEnAttente(),
         ]);
@@ -59,6 +69,8 @@ class ProfileController extends AbstractController
     #[Route('/new', name: 'profile_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CANDIDAT');
+
         $entityManager = $this->getDoctrine()->getManager();
 
        /* $existeProfile = $entityManager->getRepository('App\Entity\Profile')->findOneBy(array('user' => $this->getUser()->getId()));
@@ -95,6 +107,8 @@ class ProfileController extends AbstractController
     #[Route('/{id}', name: 'profile_show', methods: ['GET'])]
     public function show(Profile $profile): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CANDIDAT');
+
         return $this->render('profile/show.html.twig', [
             'profile' => $profile,
         ]);
@@ -103,6 +117,8 @@ class ProfileController extends AbstractController
     #[Route('/{id}/edit', name: 'profile_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Profile $profile): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CANDIDAT');
+
         $form = $this->createForm(ProfileType::class, $profile);
         $form->handleRequest($request);
 
@@ -124,6 +140,8 @@ class ProfileController extends AbstractController
     #[Route('/{id}', name: 'profile_delete', methods: ['POST'])]
     public function delete(Request $request, Profile $profile): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CANDIDAT');
+
         if ($this->isCsrfTokenValid('delete'.$profile->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($profile);

@@ -40,7 +40,7 @@ class RegistrationFormType extends HoneyPotType
                 ]
             ])
             ->add('password', RepeatedPasswordType::class, [
-                'required' => false,
+                'required' => false
             ])
             ->add('agreeTerms', CheckboxType::class, [
                 'label'             => "J'accepte les conditions d'utilisation",

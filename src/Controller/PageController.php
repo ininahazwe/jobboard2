@@ -17,6 +17,8 @@ class PageController extends AbstractController
     #[Route('/', name: 'page_index', methods: ['GET', 'POST'])]
     public function index(PageRepository $pageRepository, Request $request): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN_HANDICV');
+
         $pages = $pageRepository->findAll();
 
         return $this->render('page/index.html.twig', [
@@ -27,6 +29,8 @@ class PageController extends AbstractController
     #[Route('/new', name: 'page_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN_HANDICV');
+
         $page = new Page();
         $form = $this->createForm(PageType::class, $page);
         $form->handleRequest($request);
@@ -54,6 +58,8 @@ class PageController extends AbstractController
     #[Route('/{id}/edit', name: 'page_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Page $page): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN_HANDICV');
+
         $form = $this->createForm(PageType::class, $page);
         $form->handleRequest($request);
 
@@ -82,6 +88,8 @@ class PageController extends AbstractController
     #[Route('/{id}', name: 'page_delete', methods: ['POST'])]
     public function delete(Request $request, Page $page): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN_HANDICV');
+
         if ($this->isCsrfTokenValid('delete'.$page->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($page);

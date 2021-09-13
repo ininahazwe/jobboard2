@@ -38,8 +38,6 @@
                                 <th>Tout la journée</th>
                                 <th>Url</th>
                                 <th>Adresse</th>
-                                <th>Code Postal</th>
-                                <th>Ville</th>
                                 <th>Organisateur</th>
                                 <th>actions</th>
                             </tr>
@@ -53,9 +51,11 @@
                                     <td>{{ agenda.dateFin|date('d-m-Y') }}</td>
                                     <td>{{ agenda.allDay ? 'Oui' : 'Non'}}</td>
                                     <td><a target="_blank" href="{{ agenda.weblink }}">Lien</a></td>
-                                    <td>{{ agenda.address }}</td>
-                                    <td>{{ agenda.codePostal }}</td>
-                                    <td>{{ agenda.city }}</td>
+                                    <td>
+                                        {% for lieu in agenda.adresse %}
+                                            {{ lieu.city }}<br>{{ lieu.zipcode }}
+                                        {% endfor %}
+                                    </td>
                                     <td>{{ agenda.organizer }}</td>
                                     <td>
                                         <a href="{{ path('agenda_edit', {'id': agenda.id}) }}"><i class="fas fa-edit"></i></a>

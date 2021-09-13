@@ -24,6 +24,8 @@ class CandidatureController extends AbstractController
     #[Route('/', name: 'candidature_index', methods: ['GET'])]
     public function index(CandaditureRepository $candaditureRepository): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CANDIDAT');
+
         return $this->render('candidature/index.html.twig', [
             'candidatures' => $candaditureRepository->getAllCandidatures($this->getUser()),
         ]);
@@ -32,6 +34,8 @@ class CandidatureController extends AbstractController
     #[Route('/{id}', name: 'candidature_show', methods: ['GET'])]
     public function show(Candidature $candidature): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_RECRUTEUR');
+
         return $this->render('candidature/show.html.twig', [
             'candidature' => $candidature,
         ]);

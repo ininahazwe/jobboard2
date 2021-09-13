@@ -16,6 +16,8 @@ class DictionnaireController extends AbstractController
     #[Route('/', name: 'dictionnaire_index', methods: ['GET'])]
     public function index(DictionnaireRepository $dictionnaireRepository, Request $request): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN_HANDICV');
+
         $dictionnaire = $dictionnaireRepository->findAll();
 
         return $this->render('dictionnaire/index.html.twig', [
@@ -26,6 +28,8 @@ class DictionnaireController extends AbstractController
     #[Route('/new', name: 'dictionnaire_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN_HANDICV');
+
         $dictionnaire = new Dictionnaire();
         $form = $this->createForm(DictionnaireType::class, $dictionnaire);
         $form->handleRequest($request);
@@ -49,6 +53,8 @@ class DictionnaireController extends AbstractController
     #[Route('/{id}', name: 'dictionnaire_show', methods: ['GET'])]
     public function show(Dictionnaire $dictionnaire): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN_HANDICV');
+
         return $this->render('dictionnaire/show.html.twig', [
             'dictionnaire' => $dictionnaire,
         ]);
@@ -57,6 +63,8 @@ class DictionnaireController extends AbstractController
     #[Route('/{id}/edit', name: 'dictionnaire_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Dictionnaire $dictionnaire): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN_HANDICV');
+
         $form = $this->createForm(DictionnaireType::class, $dictionnaire);
         $form->handleRequest($request);
 

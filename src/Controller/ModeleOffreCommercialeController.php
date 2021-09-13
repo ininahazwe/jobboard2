@@ -17,6 +17,8 @@ class ModeleOffreCommercialeController extends AbstractController
     #[Route('/', name: 'modele_offre_commerciale_index', methods: ['GET'])]
     public function index(Request $request, ModeleOffreCommercialeRepository $modeleOffreCommercialeRepository, PaginatorInterface $paginator): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_RECRUTEUR');
+
         $data = $modeleOffreCommercialeRepository->findAll();
         $modeles = $paginator->paginate(
             $data,
@@ -31,6 +33,8 @@ class ModeleOffreCommercialeController extends AbstractController
     #[Route('/new', name: 'modele_offre_commerciale_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_RECRUTEUR');
+
         $modeleOffreCommerciale = new ModeleOffreCommerciale();
         $form = $this->createForm(ModeleOffreCommercialeType::class, $modeleOffreCommerciale);
         $form->handleRequest($request);
@@ -54,6 +58,8 @@ class ModeleOffreCommercialeController extends AbstractController
     #[Route('/{id}', name: 'modele_offre_commerciale_show', methods: ['GET'])]
     public function show(ModeleOffreCommerciale $modeleOffreCommerciale): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_RECRUTEUR');
+
         return $this->render('modele_offre_commerciale/show.html.twig', [
             'modele_offre_commerciale' => $modeleOffreCommerciale,
         ]);
@@ -62,6 +68,8 @@ class ModeleOffreCommercialeController extends AbstractController
     #[Route('/{id}/edit', name: 'modele_offre_commerciale_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, ModeleOffreCommerciale $modeleOffreCommerciale): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_RECRUTEUR');
+
         $form = $this->createForm(ModeleOffreCommercialeType::class, $modeleOffreCommerciale);
         $form->handleRequest($request);
 
@@ -82,6 +90,8 @@ class ModeleOffreCommercialeController extends AbstractController
     #[Route('/{id}', name: 'modele_offre_commerciale_delete', methods: ['POST'])]
     public function delete(Request $request, ModeleOffreCommerciale $modeleOffreCommerciale): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_RECRUTEUR');
+
         if ($this->isCsrfTokenValid('delete'.$modeleOffreCommerciale->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($modeleOffreCommerciale);

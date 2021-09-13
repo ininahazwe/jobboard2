@@ -8,7 +8,7 @@
                 <div class="d-flex justify-content-between">
                     <a href="https://www.youtube.com/watch?v=jDDaplaOz7Q" target="_blank" class="col-md-4 glightbox btn-watch-video"><i class="bi bi-play-circle"></i><span>Vidéo de présentation</span></a>
                     {% if not app.user %}
-                    <a href="{{ path('access_register') }}" class="col-md-4 btn-get-started scrollto">Créer un compte</a>
+                    <a href="{{ path('access_login') }}" class="col-md-4 btn-get-started scrollto">Créer un compte</a>
                     <a href="{{ path('entreprise_creation') }}" class="col-md-4 btn-get-started scrollto">Créer une entreprise</a>
                     {% endif %}
                 </div>

@@ -182,4 +182,20 @@ class AnnonceRepository extends ServiceEntityRepository
         ;
         return $query->getQuery()->getResult();
     }
+
+    /**
+     * Returns number of "Annonces" per day
+     * @return void
+     */
+    public function countByDate(){
+        // $query = $this->createQueryBuilder('a')
+        //     ->select('SUBSTRING(a.created_at, 1, 10) as dateAnnonces, COUNT(a) as count')
+        //     ->groupBy('dateAnnonces')
+        // ;
+        // return $query->getQuery()->getResult();
+        $query = $this->getEntityManager()->createQuery("
+            SELECT SUBSTRING(a.created_at, 1, 10) as dateAnnonces, COUNT(a) as count FROM App\Entity\Annonces a GROUP BY dateAnnonces
+        ");
+        return $query->getResult();
+    }
 }

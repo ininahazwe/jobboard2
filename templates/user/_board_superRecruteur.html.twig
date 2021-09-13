@@ -66,7 +66,7 @@
                     </select>
                 </div>
                 <div class="chart-container">
-                    {{ render_chart(chart) }}
+                    {{ render_chart(chart, {'data-controller': 'mychart'}) }}
                 </div>
             </div><!--//app-card-body-->
         </div><!--//app-card-->
@@ -95,7 +95,7 @@
                     </select>
                 </div>
                 <div class="chart-container">
-                    {{ render_chart(chart) }}
+                    {{ render_chart(chart, {'class': 'my-chart'}) }}
                 </div>
             </div><!--//app-card-body-->
         </div><!--//app-card-->

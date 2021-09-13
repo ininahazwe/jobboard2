@@ -37,7 +37,9 @@ class UserController extends AbstractController
 
     ): Response
     {
-        $entreprise = $entrepriseRepository->getEntrepriseActive();
+        $this->denyAccessUnlessGranted('ROLE_CANDIDAT');
+
+        $entreprises = $entrepriseRepository->getEntrepriseActive();
         $blogs =$blogRepository->getBlogLimitedDashBoard();
         $annonces = $annonceRepository->findActiveQuery();
         $candidatures =$candaditureRepository->getCountOnDashboard();
@@ -45,17 +47,19 @@ class UserController extends AbstractController
 
         $labels = [];
         $data = [];
-        foreach($annonces as $annonce){
-            $labels = $annonce->getCreatedAt()->format('d/m/Y');
-            $data = count($annonce->getId());
+
+        foreach($entreprises as $entreprise){
+            $labels[] = $entreprise->getName();
+            $data[] = $entreprise->getNumberAnnonces();
         }
-        $chart = $chartBuilder->createChart(Chart::TYPE_LINE);
-        $chart->setData([
+
+        $chartAnnonces = $chartBuilder->createChart(Chart::TYPE_LINE);
+        $chartAnnonces->setData([
             'labels' => $labels,
             'datasets' => [
                 [
-                    'label' => 'Test',
-                    'backgroundColor' => 'rgb(21, 163, 98)',
+                    'label' => 'Annonces publiées',
+                    'backgroundColor' => 'rgb(237, 253, 246)',
                     'borderColor' => 'rgb(21, 163, 98)',
                     'data' => $data,
                 ],
@@ -65,18 +69,20 @@ class UserController extends AbstractController
         $user = $this->getUser();
         return $this->render('user/index.html.twig', [
             'user' => $user,
-            'entreprises' => $entreprise,
+            'entreprises' => $entreprises,
             'blogs' => $blogs,
             'annonces' => $annonces,
             'candidatures' => $candidatures,
             'agendas' => $agendas,
-            'chart' => $chart
+            'chart' => $chartAnnonces,
         ]);
     }
 
     #[Route('/edit', name: 'app_profile_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Mailer $mailer): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CANDIDAT');
+
         $user= $this->getUser();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
@@ -125,6 +131,8 @@ class UserController extends AbstractController
     #[Route('/pass_modifier', name: 'pass_modifier', methods: ['GET', 'POST'])]
     public function editPass(Request $request, UserPasswordEncoderInterface $passwordEncoder, Mailer $mailer): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CANDIDAT');
+
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         if($request->isMethod('POST')){

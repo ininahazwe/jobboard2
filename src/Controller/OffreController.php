@@ -16,6 +16,8 @@ class OffreController extends AbstractController
     #[Route('/', name: 'offre_index', methods: ['GET'])]
     public function index(OffreRepository $entrepriseOffreRepository): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_RECRUTEUR');
+
         return $this->render('offre/index.html.twig', [
             'offres' => $entrepriseOffreRepository->findAll(),
         ]);
@@ -24,6 +26,8 @@ class OffreController extends AbstractController
     #[Route('/new', name: 'offre_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_RECRUTEUR');
+
         $entrepriseOffre = new Offre();
         $form = $this->createForm(OffreType::class, $entrepriseOffre);
         $form->handleRequest($request);
@@ -47,6 +51,8 @@ class OffreController extends AbstractController
     #[Route('/{id}', name: 'offre_show', methods: ['GET'])]
     public function show(Offre $entrepriseOffre): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_RECRUTEUR');
+
         return $this->render('offre/show.html.twig', [
             'offre' => $entrepriseOffre,
         ]);
@@ -55,6 +61,8 @@ class OffreController extends AbstractController
     #[Route('/{id}/edit', name: 'offre_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Offre $entrepriseOffre): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_RECRUTEUR');
+
         $form = $this->createForm(OffreType::class, $entrepriseOffre);
         $form->handleRequest($request);
 
@@ -75,6 +83,8 @@ class OffreController extends AbstractController
     #[Route('/{id}', name: 'offre_delete', methods: ['POST'])]
     public function delete(Request $request, Offre $entrepriseOffre): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_RECRUTEUR');
+
         if ($this->isCsrfTokenValid('delete'.$entrepriseOffre->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($entrepriseOffre);

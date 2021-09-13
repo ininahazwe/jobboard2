@@ -16,6 +16,8 @@ class MenuController extends AbstractController
     #[Route('/', name: 'menu_index', methods: ['GET'])]
     public function index(Request $request, MenuRepository $menuRepository): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN_HANDICV');
+
         $menus = $menuRepository->findAll();
 
         return $this->render('menu/index.html.twig', [
@@ -26,6 +28,8 @@ class MenuController extends AbstractController
     #[Route('/new', name: 'menu_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN_HANDICV');
+
         $menu = new Menu();
         $form = $this->createForm(MenuType::class, $menu);
         $form->handleRequest($request);
@@ -57,6 +61,8 @@ class MenuController extends AbstractController
     #[Route('/{id}', name: 'menu_show', methods: ['GET'])]
     public function show(Menu $menu): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN_HANDICV');
+
         return $this->render('menu/show.html.twig', [
             'menu' => $menu,
         ]);
@@ -65,6 +71,8 @@ class MenuController extends AbstractController
     #[Route('/{id}/edit', name: 'menu_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Menu $menu): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN_HANDICV');
+
         $form = $this->createForm(MenuType::class, $menu);
         $form->handleRequest($request);
 
@@ -87,6 +95,8 @@ class MenuController extends AbstractController
     #[Route('/{id}', name: 'menu_delete', methods: ['POST'])]
     public function delete(Request $request, Menu $menu): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN_HANDICV');
+
         if ($this->isCsrfTokenValid('delete'.$menu->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($menu);
