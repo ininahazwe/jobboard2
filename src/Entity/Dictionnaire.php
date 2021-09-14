@@ -92,14 +92,14 @@ class Dictionnaire
     private Collection $annuaires;
 
     /**
-     * @ORM\OneToMany(targetEntity=Blog::class, mappedBy="categorie")
-     */
-    private Collection $blogs;
-
-    /**
      * @ORM\OneToMany(targetEntity=User::class, mappedBy="civilite")
      */
     private Collection $users;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Blog::class, mappedBy="categorie")
+     */
+    private Collection $blog;
 
     public function __construct()
     {
@@ -108,8 +108,8 @@ class Dictionnaire
         $this->annonces_type_contrat = new ArrayCollection();
         $this->annonces_location = new ArrayCollection();
         $this->annuaires = new ArrayCollection();
-        $this->blogs = new ArrayCollection();
         $this->users = new ArrayCollection();
+        $this->blog = new ArrayCollection();
     }
 
     public function setId($id)
@@ -475,36 +475,6 @@ class Dictionnaire
     /**
      * @return Collection
      */
-    public function getBlogs(): Collection
-    {
-        return $this->blogs;
-    }
-
-    public function addBlog(Blog $blog): self
-    {
-        if (!$this->blogs->contains($blog)) {
-            $this->blogs[] = $blog;
-            $blog->setCategorie($this);
-        }
-
-        return $this;
-    }
-
-    public function removeBlog(Blog $blog): self
-    {
-        if ($this->blogs->removeElement($blog)) {
-            // set the owning side to null (unless already changed)
-            if ($blog->getCategorie() === $this) {
-                $blog->setCategorie(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|User[]
-     */
     public function getUsers(): Collection
     {
         return $this->users;
@@ -527,6 +497,33 @@ class Dictionnaire
             if ($user->getCivilite() === $this) {
                 $user->setCivilite(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getBlog(): Collection
+    {
+        return $this->blog;
+    }
+
+    public function addBlog(Blog $blog): self
+    {
+        if (!$this->blog->contains($blog)) {
+            $this->blog[] = $blog;
+            $blog->addCategorie($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBlog(Blog $blog): self
+    {
+        if ($this->blog->removeElement($blog)) {
+            $blog->removeCategorie($this);
         }
 
         return $this;

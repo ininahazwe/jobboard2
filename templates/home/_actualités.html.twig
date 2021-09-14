@@ -14,7 +14,7 @@
                         <div class="col">
                             <div class="card flex-md-row mb-4 box-shadow h-md-250" data-aos="zoom-in" data-aos-delay="100">
                                 <div class="card-body d-flex flex-column align-items-start">
-                                    <div class="d-inline-block mb-2 text-primary">{{ actualite.categorie }}</div>
+                                    <div class="d-inline-block mb-2 text-primary">{{ actualite.categorie|join('-') }}</div>
                                     <h3 class="mb-0">
                                         <a class="text-dark" href="{{ path('article_show', {slug: actualite.slug}) }}">{{ actualite.title|length > 50 ? actualite.title|slice(0, 50) ~ '...' : actualite.title }}</a>
                                     </h3>

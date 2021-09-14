@@ -1,31 +1,29 @@
-<div class="tab-pane fade" id="orders-paid" role="tabpanel" aria-labelledby="orders-paid-tab">
-    <div class="app-card app-card-orders-table mb-5">
+<div class="tab-pane fade show active" id="orders-all" role="tabpanel" aria-labelledby="orders-all-tab">
+    <div class="app-card app-card-orders-table shadow-sm mb-5">
         <div class="app-card-body">
             <div class="table-responsive">
-                <table class="table" id="#datatableAttente">
+                <table class="table" id="datatable">
                     <thead>
                     <tr>
-                        <th>Name</th>
+                        <th>Nom</th>
                         <th>Entreprises</th>
                         <th>Adresse</th>
                         <th>Date de publication</th>
-                        <th>Date de dépublication</th>
                         <th>Statut</th>
-                        <th></th>
+                        <th>Actions</th>
                     </tr>
                     </thead>
                     <tbody>
-                    {% for annonce in attente %}
+                    {% for annonce in annonces %}
                         <tr>
                             <td><a href="{{ path('annonce_show_unit', {id: annonce.id, slug: annonce.slug})}}">{{ annonce.name }}</a></td>
                             <td>{{ annonce.entreprise }}</td>
                             <td>
-                                {% for adress in annonce.adresse %}
-                                    {{ adress.city }}
+                                {% for lieu in annonce.adresse %}
+                                    {{ lieu.city }}<br>{{ lieu.zipcode }}
                                 {% endfor %}
                             </td>
                             <td>{{ annonce.createdAt|date('d/m/Y') }}</td>
-                            <td>{{ annonce.dateLimiteCandidature|date('d/m/Y') }}</td>
                             <td>
                                 <div class="form-check form-switch">
                                     <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" {{ (annonce.isActive) ? 'checked' : ''}} data-id="{{annonce.id}}"/>
@@ -53,33 +51,7 @@
                     {% endfor %}
                     </tbody>
                 </table>
-            </div>
-        </div>
-    </div>
+            </div><!--//table-responsive-->
+        </div><!--//app-card-body-->
+    </div><!--//app-card-->
 </div>
-<script>
-    $(document).ready( function () {
-        $('#datatableAttente').DataTable({
-            "language": {
-                "sProcessing": "Traitement en cours ...",
-                "sLengthMenu": "Afficher _MENU_ lignes",
-                "sZeroRecords": "Aucun résultat trouvé",
-                "sEmptyTable": "Aucune donnée disponible",
-                "sInfo": "Lignes _START_ à _END_ sur _TOTAL_",
-                "sInfoEmpty": "Aucune ligne affichée",
-                "sInfoFiltered": "(Filtrer un maximum de_MAX_)",
-                "sInfoPostFix": "",
-                "sSearch": "Chercher:",
-                "sUrl": "",
-                "sInfoThousands": ",",
-                "sLoadingRecords": "Chargement...",
-                "oPaginate": {
-                    "sFirst": "Premier", "sLast": "Dernier", "sNext": "Suivant", "sPrevious": "Précédent"
-                },
-                "oAria": {
-                    "sSortAscending": ": Trier par ordre croissant", "sSortDescending": ": Trier par ordre décroissant"
-                }
-            }
-        });
-    });
-</script>

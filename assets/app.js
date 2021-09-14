@@ -3,8 +3,9 @@ import 'datatables.net';
 import 'datatables.net-bs4';
 import './bootstrap';
 import 'jquery';
-import 'jquery-ui'
-import Filter from './modules/Filter'
+import 'jquery-ui';
+import Filter from './modules/Filter';
+import 'tom-select';
 
 $(document).ready( function () {
     $('#datatable').DataTable({
@@ -32,7 +33,6 @@ $(document).ready( function () {
 });
 
 new Filter(document.querySelector('.js-filter'))
-
 
 // Font Awesome
 require('@fortawesome/fontawesome-free/css/all.min.css');

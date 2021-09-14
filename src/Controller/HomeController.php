@@ -262,10 +262,14 @@ class HomeController extends AbstractController
         ]);
     }
 
-    #[Route('/agenda/{id}-{slug}', name: 'agenda_show_unit', methods: ['GET'])]
+    #[Route('/agenda/{id}/{slug}', name: 'agenda_show_unit', methods: ['GET'])]
     public function showAgenda($id, $slug, AgendaRepository $agendaRepository, Request $request): Response
     {
         $agenda = $agendaRepository->findOneBy(['slug' => $slug, 'id' => $id]);
+
+        if (!$agenda) {
+            throw $this->createNotFoundException("toto");
+        }
 
         return $this->render('agenda/show_unit.html.twig', [
             'agenda' => $agenda,

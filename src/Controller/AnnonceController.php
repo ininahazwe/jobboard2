@@ -21,8 +21,12 @@ class AnnonceController extends AbstractController
     public function index(AnnonceRepository $annonceRepository): Response
     {
         $annonces = $annonceRepository->findAllActiveQuery($this->getUser());
+        $annoncesArchives = $annonceRepository->getAnnoncesArchivees();
+        $annoncesAttente = $annonceRepository->getAnnoncesAttente();
         return $this->render('annonce/index.html.twig', [
             'annonces' => $annonces,
+            'archives' => $annoncesArchives,
+            'attente' => $annoncesAttente
         ]);
     }
 
@@ -126,54 +130,14 @@ class AnnonceController extends AbstractController
     }
 
     #[Route('/selection', name: 'annonce_favoris')]
-    public function showFavoris(Request $request, AnnonceRepository $annonceRepository, PaginatorInterface $paginator): Response
+    public function showFavoris(Request $request, AnnonceRepository $annonceRepository): Response
     {
-        $data = $annonceRepository->findAnnoncesEnFavori($this->getUser());
-        //$data = $this->getUser()->getFavoris();
-
-        $annonces = $paginator->paginate(
-            $data,
-            $request->query->getInt('page', 1),
-            100
-        );
+        $annonces = $annonceRepository->findAnnoncesEnFavori($this->getUser());
 
         return $this->render('annonce/favoris.html.twig', [
             'annonces' => $annonces,
         ]);
     }
-
-    #[Route('/archives', name: 'annonce_archives')]
-    public function showArchives(Request $request, AnnonceRepository $annonceRepository, PaginatorInterface $paginator): Response
-    {
-        $data = $annonceRepository->getAnnoncesArchivees();
-
-        $annonces = $paginator->paginate(
-            $data,
-            $request->query->getInt('page', 1),
-            100
-        );
-
-        return $this->render('annonce/archives.html.twig', [
-            'annonces' => $annonces,
-        ]);
-    }
-
-    #[Route('/enattente', name: 'annonce_attente')]
-    public function showEnAttente(Request $request, AnnonceRepository $annonceRepository, PaginatorInterface $paginator): Response
-    {
-        $data = $annonceRepository->getAnnoncesAttente();
-
-        $annonces = $paginator->paginate(
-            $data,
-            $request->query->getInt('page', 1),
-            100
-        );
-
-        return $this->render('annonce/attente.html.twig', [
-            'annonces' => $annonces,
-        ]);
-    }
-
 
     #[Route('/{id}', name: 'annonce_delete')]
     public function delete(Request $request, Annonce $annonce): Response

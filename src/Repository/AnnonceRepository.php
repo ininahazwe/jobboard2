@@ -178,7 +178,7 @@ class AnnonceRepository extends ServiceEntityRepository
     public function getAnnoncesAttente(): mixed
     {
         $query = $this->createQueryBuilder('a')
-            ->andWhere('a.isActive < 0')
+            ->andWhere('a.isActive = 0')
         ;
         return $query->getQuery()->getResult();
     }
