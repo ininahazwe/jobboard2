@@ -1,4 +1,20 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            {{ form_row(form.title) }}
+            {{ form_row(form.content) }}
+            {{ form_row(form.metaTitle) }}
+            {{ form_row(form.metaDescription) }}
+        </div>
+        <div class="col-md-4">
+            {{ form_row(form.slug) }}
+            {{ form_row(form.style) }}
+            {{ form_row(form.type) }}
+            <br>
+            {{ form_row(form.files) }}
+        </div>
+    </div>
     <input type="submit" value="Enregistrer" class="bouton solid" />
+</div>
 {{ form_end(form) }}

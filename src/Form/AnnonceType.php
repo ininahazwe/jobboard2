@@ -18,7 +18,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class AnnonceType extends AbstractType
 {
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $user = $options['user'];

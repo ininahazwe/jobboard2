@@ -201,6 +201,7 @@ class EntrepriseController extends AbstractController
         }
 
         $modeles = $modeleOffreCommercialeRepository->findAll();
+
         return $this->render('entreprise/offres_commerciales.html.twig', [
             'entreprise' =>$entreprise,
             'modeles' => $modeles,

@@ -129,6 +129,25 @@ class AnnonceController extends AbstractController
         return $this->redirectToRoute('annonces_show_all');
     }
 
+    #[Route('/attente', name: 'annonce_attente')]
+    public function attente(AnnonceRepository $annonceRepository): Response
+    {
+        $annonces = $annonceRepository->getAnnoncesAttente($this->getUser());
+        return $this->render('annonce/attente.html.twig', [
+            'annonces' => $annonces,
+        ]);
+    }
+
+    #[Route('/archives', name: 'annonce_archives')]
+    public function archives(AnnonceRepository $annonceRepository): Response
+    {
+        $annonces = $annonceRepository->getAnnoncesArchivees($this->getUser());
+        return $this->render('annonce/archives.html.twig', [
+            'annonces' => $annonces,
+        ]);
+    }
+
+
     #[Route('/selection', name: 'annonce_favoris')]
     public function showFavoris(Request $request, AnnonceRepository $annonceRepository): Response
     {

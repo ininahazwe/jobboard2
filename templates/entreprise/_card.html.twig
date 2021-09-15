@@ -18,7 +18,7 @@
             </div><!--//app-card-body-->
             <div class="app-card-footer p-4 mt-auto">
                 {% if entreprise.annoncesEntreprise|length >= 1 %}
-                    <span class="">{{ pluralize(entreprise.annoncesEntreprise|length, 'annonce') }}</span>
+                    <span class="badge bg-success">{{ pluralize(entreprise.annoncesEntreprise|length, 'annonce') }}</span>
                 {% endif %}
             </div><!--//app-card-footer-->
         </div><!--//app-card-->

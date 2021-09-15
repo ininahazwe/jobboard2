@@ -19,21 +19,27 @@
         <section class="inner-page">
             <div class="container">
                 <div class="row">
-                    <div class="col-md-2">
-                        <div class="d-flex flex-column">
-                            {{ include('agenda/menu.html.twig') }}
-                        </div>
+                    <div class="col-md-3">
+                        {% include('layouts/_dash_sidebar.html.twig') %}
                     </div>
-                    <div class="col-md-10">
-                        <div class="float-right">
-                            <a class="btn btn-primary btn-sm mt-1" href="{{ path('agenda_new') }}">Ajouter</a>
-                        </div>
-                        <table class="table" id="datatable">
+                    <div class="col-md-9">
+                        <a class="btn app-btn-primary mb-4" href="{{ path('agenda_new') }}">
+                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-file-earmark-arrow-down me-2" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M8 0a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2H9v6a1 1 0 1 1-2 0V9H1a1 1 0 0 1 0-2h6V1a1 1 0 0 1 1-1z"/>
+                            </svg>Ajouter
+                        </a>
+                        <nav id="orders-table-tab" class="orders-table-tab app-nav-tabs nav shadow-sm flex-column flex-sm-row mb-4">
+                            <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('agenda_index') }}" role="tab" aria-controls="orders-all" aria-selected="false">Tous</a>
+                            <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('agenda_en_cours') }}" role="tab" aria-controls="orders-paid" aria-selected="false">En cours</a>
+                            <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('agenda_a_venir') }}" role="tab" aria-controls="orders-pending" aria-selected="false">A venir</a>
+                            <a class="flex-sm-fill text-sm-center nav-link active" href="{{ path('agenda_archives') }}" role="tab" aria-controls="orders-pending" aria-selected="true">Archivés</a>
+                        </nav>
+                        <div id="swup" class="transition-fade">
+                            <table class="table" id="datatable">
                             <thead>
                             <tr>
                                 <th>Nom</th>
                                 <th>Description</th>
-                                <th>Date de début</th>
                                 <th>Date de fin</th>
                                 <th>Tout la journée</th>
                                 <th>Url</th>
@@ -45,15 +51,14 @@
                             <tbody>
                             {% for agenda in agendas %}
                                 <tr>
-                                    <td><a href="{{ path('agenda_show', {'id': agenda.id}) }}">{{ agenda.title }}</a></td>
+                                    <td><a href="{{ path('agenda_show', {'id': agenda.id, 'slug': agenda.slug}) }}">{{ agenda.title }}</a></td>
                                     <td>{{ agenda.description|slice(0, 120)|raw }}</td>
-                                    <td>{{ agenda.dateDebut|date('d-m-Y') }}</td>
                                     <td>{{ agenda.dateFin|date('d-m-Y') }}</td>
                                     <td>{{ agenda.allDay ? 'Oui' : 'Non'}}</td>
                                     <td><a target="_blank" href="{{ agenda.weblink }}">Lien</a></td>
                                     <td>
-                                        {% for lieu in agenda.adresse %}
-                                            {{ lieu.city }}<br>{{ lieu.zipcode }}
+                                        {% for adresse in agenda.adresse %}
+                                            {{ adresse.city }}<br>{{ adresse.zipcode }}<br>{{ adresse.departement }}
                                         {% endfor %}
                                     </td>
                                     <td>{{ agenda.organizer }}</td>
@@ -69,6 +74,7 @@
                             {% endfor %}
                             </tbody>
                         </table>
+                        </div>
                     </div>
                 </div>
             </div>

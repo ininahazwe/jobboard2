@@ -9,11 +9,9 @@
             <div class="container">
                 <ol>
                     <li><a href="{{ path('app_home') }}">Home</a></li>
-                    {% if app.user %}
                     <li><a href="{{ path('app_profile') }}">Dashboard</a></li>
                     <li><a href="{{ path('entreprise_index') }}">Entreprises</a></li>
                     <li>Lecture</li>
-                    {% endif %}
                 </ol>
                 <h1>{{ entreprise.name }}</h1>
             </div>
@@ -31,26 +29,16 @@
                             </svg>Editer
                         </a>
                         <nav id="orders-table-tab" class="orders-table-tab app-nav-tabs nav shadow-sm flex-column flex-sm-row mb-4">
-                            <a class="flex-sm-fill text-sm-center nav-link active" id="orders-all-tab" data-bs-toggle="tab" href="#orders-all" role="tab" aria-controls="orders-all" aria-selected="true">Infos générales</a>
-                            <a class="flex-sm-fill text-sm-center nav-link"  id="orders-paid-tab" data-bs-toggle="tab" href="#orders-paid" role="tab" aria-controls="orders-paid" aria-selected="false">En attente de publication</a>
-                            <a class="flex-sm-fill text-sm-center nav-link" id="orders-pending-tab" data-bs-toggle="tab" href="#orders-pending" role="tab" aria-controls="orders-pending" aria-selected="false">Archivées</a>
+                            <a class="flex-sm-fill text-sm-center nav-link active" href="{{ path('entreprise_show', {slug: entreprise.slug}) }}" role="tab" aria-controls="orders-all" aria-selected="true">Infos générales</a>
+                            <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('entreprise_offres_commerciales', {id: entreprise.id}) }}" role="tab" aria-controls="orders-paid" aria-selected="false">Offres commerciales</a>
+                            <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('entreprise_recruteurs', {id: entreprise.id}) }}" role="tab" aria-controls="orders-pending" aria-selected="false">Recruteurs</a>
+                            <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('entreprise_factures', {id: entreprise.id}) }}" role="tab" aria-controls="orders-factures" aria-selected="false">Factures</a>
+                            <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('entreprise_annonces', {slug: entreprise.slug}) }}" role="tab" aria-controls="orders-annonces" aria-selected="false">Annonces</a>
                         </nav>
                         <div class="tab-content" id="orders-table-tab-content">
                             <!--Toutes-->
                             {% include('entreprise/infos_generales.html.twig') %}
                             <!--//Toutes-->
-                            <!--Offres-->
-                            {#{% include('entreprise/offres_commerciales.html.twig') %}#}
-                            <!--//Offres-->
-                            <!--Recruteurs-->
-                            {#{% include('entreprise/recruteurs.html.twig') %}#}
-                            <!--//Recruteurs-->
-                            <!--Factures-->
-                            {#{% include('entreprise/factures.html.twig') %}#}
-                            <!--//Factures-->
-                            <!--Annonces-->
-                            {#{% include('entreprise/annonces_par_entreprise.html.twig') %}#}
-                            <!--//Annonces-->
                         </div>
                     </div>
                 </div>

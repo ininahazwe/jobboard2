@@ -1,287 +1,327 @@
-<div class="tab-pane fade" id="infos" role="tabpanel" aria-labelledby="orders-paid-tab">
-    <div class="app-card app-card-orders-table mb-5">
-        <div class="app-card-body">
-            <div class="table-responsive">
-                <div class="float-right">
-                    Nombre de recruteurs : {{ nbRecruteurs }} / {% if nbMaxRecruteurs == 0  %}Illimité{% else %}{{ nbMaxRecruteurs }}{% endif %}
-                </div>
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>Nom</th>
-                        <th>Prénom</th>
-                        <th>Email</th>
-                        <th>Téléphone</th>
-                        <th>actions</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {%  if entreprise.recruteurs|length or entreprise.superRecruteurs|length %}
-                        {% for user in entreprise.recruteurs %}
-                            <tr>
-                                <td>{{ user.firstname }}</td>
-                                <td>{{ user.lastname }}</td>
-                                <td>{{ user.email }}</td>
-                                <td>{{ user.telephone }}</td>
-                                <td>
-                                    <a href="{{ path('entreprise_recruteurs_generateMDP', {id: entreprise.id, userID: user.id}) }}">Générer un nouveau mot de passe</a>
-                                    <a> | </a>
-                                    <a href="{{ path('entreprise_recruteurs_delete', {id: entreprise.id, userID: user.id}) }}">Supprimer</a>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                        {% for user in entreprise.superRecruteurs %}
-                            <tr>
-                                <td>{{ user.firstname }}</td>
-                                <td>{{ user.lastname }}</td>
-                                <td>{{ user.email }} <b><small>(Super recruteur)</small></b></td>
-                                <td>{{ user.telephone }}</td>
-                                <td>
-                                    <a href="{{ path('entreprise_recruteurs_generateMDP', {id: entreprise.id, userID: user.id}) }}">Générer un nouveau mot de passe</a>
-                                    <a> | </a>
-                                    <a href="{{ path('entreprise_recruteurs_delete', {id: entreprise.id, userID: user.id}) }}">Supprimer</a>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    {% else %}
-                        <tr>
-                            <td colspan="12">no records found</td>
-                        </tr>
-                    {% endif %}
-                    </tbody>
-                </table>
-                {% if nbRecruteurs < nbMaxRecruteurs or nbMaxRecruteurs == 0 %}
-                    <div>
-                        <button type="button" class="open-modal btn btn-primary" data-open="modal1">
-                            Ajouter un nouveau recruteur
-                        </button>
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ entreprise.name }} | Recruteurs{% endblock %}
+
+{% block body %}
+    <main id="main">
+        <!-- ======= Breadcrumbs ======= -->
+        <section id="breadcrumbs" class="breadcrumbs">
+            <div class="container">
+                <ol>
+                    <li><a href="{{ path('app_home') }}">Home</a></li>
+                    <li><a href="{{ path('app_profile') }}">Dashboard</a></li>
+                    <li><a href="{{ path('entreprise_index') }}">Entreprises</a></li>
+                    <li>Recruteurs</li>
+                </ol>
+                <h1>Gestion des recruteurs</h1>
+            </div>
+        </section><!-- End Breadcrumbs -->
+        <section class="inner-page">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3">
+                        {% include('layouts/_dash_sidebar.html.twig') %}
                     </div>
-                    <!-- Modal -->
-                    <div class="modal" id="modal1" data-animation="slideInOutDown">
-                        <div class="modal-dialog w-75">
-                            <header class="modal-header">
-                                Ajouter un nouveau recruteur
-                                <button class="close-modal" aria-label="close modal" data-close>
-                                    ✕
+                    <div class="col-md-9">
+                        <a class="btn app-btn-primary mb-4" href="{{ path('entreprise_edit', {'id': entreprise.id}) }}">
+                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-file-earmark-arrow-down me-2" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
+                            </svg>Editer
+                        </a>
+                        <nav id="orders-table-tab" class="orders-table-tab app-nav-tabs nav shadow-sm flex-column flex-sm-row mb-4">
+                            <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('entreprise_show', {slug: entreprise.slug}) }}" role="tab" aria-controls="orders-all" aria-selected="false">Infos générales</a>
+                            <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('entreprise_offres_commerciales', {id: entreprise.id}) }}" role="tab" aria-controls="orders-paid" aria-selected="false">Offres commerciales</a>
+                            <a class="flex-sm-fill text-sm-center nav-link active" href="{{ path('entreprise_recruteurs', {id: entreprise.id}) }}" role="tab" aria-controls="orders-pending" aria-selected="true">Recruteurs</a>
+                            <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('entreprise_factures', {id: entreprise.id}) }}" role="tab" aria-controls="orders-factures" aria-selected="false">Factures</a>
+                            <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('entreprise_annonces', {slug: entreprise.slug}) }}" role="tab" aria-controls="orders-annonces" aria-selected="false">Annonces</a>
+                        </nav>
+                        <div class="tab-content" id="orders-table-tab-content">
+                            <div class="float-right">
+                                Nombre de recruteurs : {{ nbRecruteurs }} / {% if nbMaxRecruteurs == 0  %}Illimité{% else %}{{ nbMaxRecruteurs }}{% endif %}
+                            </div>
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>Nom</th>
+                                    <th>Prénom</th>
+                                    <th>Email</th>
+                                    <th>Téléphone</th>
+                                    <th>actions</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {%  if entreprise.recruteurs|length or entreprise.superRecruteurs|length %}
+                                    {% for user in entreprise.recruteurs %}
+                                        <tr>
+                                            <td>{{ user.firstname }}</td>
+                                            <td>{{ user.lastname }}</td>
+                                            <td>{{ user.email }}</td>
+                                            <td>{{ user.telephone }}</td>
+                                            <td>
+                                                <a href="{{ path('entreprise_recruteurs_generateMDP', {id: entreprise.id, userID: user.id}) }}">Générer un nouveau mot de passe</a>
+                                                <a> | </a>
+                                                <a href="{{ path('entreprise_recruteurs_delete', {id: entreprise.id, userID: user.id}) }}">Supprimer</a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    {% for user in entreprise.superRecruteurs %}
+                                        <tr>
+                                            <td>{{ user.firstname }}</td>
+                                            <td>{{ user.lastname }}</td>
+                                            <td>{{ user.email }} <b><small>(Super recruteur)</small></b></td>
+                                            <td>{{ user.telephone }}</td>
+                                            <td>
+                                                <a href="{{ path('entreprise_recruteurs_generateMDP', {id: entreprise.id, userID: user.id}) }}">Générer un nouveau mot de passe</a>
+                                                <a> | </a>
+                                                <a href="{{ path('entreprise_recruteurs_delete', {id: entreprise.id, userID: user.id}) }}">Supprimer</a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="12">no records found</td>
+                                    </tr>
+                                {% endif %}
+                                </tbody>
+                            </table>
+                        {% if nbRecruteurs < nbMaxRecruteurs or nbMaxRecruteurs == 0 %}
+                            <div>
+                                <button type="button" class="btn app-btn-primary mb-4" data-open="modal1">
+                                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-file-earmark-arrow-down me-2" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M8 0a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2H9v6a1 1 0 1 1-2 0V9H1a1 1 0 0 1 0-2h6V1a1 1 0 0 1 1-1z"/>
+                                    </svg>Enregistrer un recruteur
                                 </button>
-                            </header>
-                            <section class="modal-content">
-                                <form action="{{ path('entreprise_recruteurs_create',{'id' : entreprise.id }) }}" method="post" id="user-form">
-                                    {{ form_widget(form) }}
-                                    <label for="super_recruteur" class="col-form-label col-sm-2">Super Recruteur</label>
-                                    <div class="col-sm-10">
-                                        <input type="checkbox" name="super_recruteur" id="super_recruteur"/>
-                                    </div>
-                                    <br/>
-                                    <button class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
-                                </form>
-                            </section>
+                            </div>
+                            <!-- Modal -->
+                            <div class="modal" id="modal1" data-animation="slideInOutDown">
+                                <div class="modal-dialog w-75">
+                                    <header class="modal-header">
+                                        Ajouter un nouveau recruteur
+                                        <button class="close-modal" aria-label="close modal" data-close>
+                                            ✕
+                                        </button>
+                                    </header>
+                                    <section class="modal-content">
+                                        <form action="{{ path('entreprise_recruteurs_create',{'id' : entreprise.id }) }}" method="post" id="user-form">
+                                            {{ form_widget(form) }}
+                                            <div class="form-check mb-3">
+                                                <input class="form-check-input" type="checkbox" value="" id="super_recruteur" name="super_recruteur">
+                                                <label class="form-check-label" for="super_recruteur">
+                                                    Super Recruteur
+                                                </label>
+                                            </div><!--//form-check-->
+
+                                            <br/>
+                                            <button class="bouton solid">{{ button_label|default('Enregistrer') }}</button>
+                                        </form>
+                                    </section>
+                                </div>
+                            </div>
+                        {% endif %}
                         </div>
                     </div>
-                {% endif %}
+                </div>
             </div>
-        </div>
-    </div>
-</div>
-<script type="application/javascript">
-    var openEls = document.querySelectorAll("[data-open]");
-    var closeEls = document.querySelectorAll("[data-close]");
-    var isVisible = "is-visible";
+        </section>
+    </main>
+    <script type="application/javascript">
+        var openEls = document.querySelectorAll("[data-open]");
+        var closeEls = document.querySelectorAll("[data-close]");
+        var isVisible = "is-visible";
 
-    for (var el of openEls) {
-        el.addEventListener("click", function() {
-            var modalId = this.dataset.open;
-            document.getElementById(modalId).classList.add(isVisible);
-        });
-    }
-
-    for (var el of closeEls) {
-        el.addEventListener("click", function() {
-            this.parentElement.parentElement.parentElement.classList.remove(isVisible);
-        });
-    }
-
-    document.addEventListener("click", e => {
-        if (e.target === document.querySelector(".modal.is-visible")) {
-            document.querySelector(".modal.is-visible").classList.remove(isVisible);
+        for (var el of openEls) {
+            el.addEventListener("click", function() {
+                var modalId = this.dataset.open;
+                document.getElementById(modalId).classList.add(isVisible);
+            });
         }
-    });
 
-    document.addEventListener("keyup", e => {
-        // if we press the ESC
-        if (e.key === "Escape" && document.querySelector(".modal.is-visible")) {
-            document.querySelector(".modal.is-visible").classList.remove(isVisible);
+        for (var el of closeEls) {
+            el.addEventListener("click", function() {
+                this.parentElement.parentElement.parentElement.classList.remove(isVisible);
+            });
         }
-    });
 
-</script>
-<style>
-    /* RESET RULES
+        document.addEventListener("click", e => {
+            if (e.target === document.querySelector(".modal.is-visible")) {
+                document.querySelector(".modal.is-visible").classList.remove(isVisible);
+            }
+        });
+
+        document.addEventListener("keyup", e => {
+            // if we press the ESC
+            if (e.key === "Escape" && document.querySelector(".modal.is-visible")) {
+                document.querySelector(".modal.is-visible").classList.remove(isVisible);
+            }
+        });
+
+    </script>
+    <style>
+        /* RESET RULES
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
-    :root {
-        --lightgray: #efefef;
-        --blue: steelblue;
-        --white: #fff;
-        --black: rgba(0, 0, 0, 0.8);
-        --bounceEasing: cubic-bezier(0.51, 0.92, 0.24, 1.15);
-    }
-    .btn-group {
-        text-align: center;
-    }
-    /* MODAL
-    –––––––––––––––––––––––––––––––––––––––––––––––––– */
-    .modal {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 1rem;
-        background: var(--black);
-        cursor: pointer;
-        visibility: hidden;
-        opacity: 0;
-        transition: all 0.35s ease-in;
-    }
+        :root {
+            --lightgray: #efefef;
+            --blue: steelblue;
+            --white: #fff;
+            --black: rgba(0, 0, 0, 0.8);
+            --bounceEasing: cubic-bezier(0.51, 0.92, 0.24, 1.15);
+        }
+        .btn-group {
+            text-align: center;
+        }
+        /* MODAL
+        –––––––––––––––––––––––––––––––––––––––––––––––––– */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            background: var(--black);
+            cursor: pointer;
+            visibility: hidden;
+            opacity: 0;
+            transition: all 0.35s ease-in;
+        }
 
-    .modal.is-visible {
-        visibility: visible;
-        opacity: 1;
-    }
+        .modal.is-visible {
+            visibility: visible;
+            opacity: 1;
+        }
 
-    .modal-dialog {
-        position: relative;
-        max-width: 800px;
-        max-height: 80vh;
-        border-radius: 5px;
-        background: var(--white);
-        overflow: auto;
-        cursor: default;
-    }
+        .modal-dialog {
+            position: relative;
+            max-width: 800px;
+            max-height: 80vh;
+            border-radius: 5px;
+            background: var(--white);
+            overflow: auto;
+            cursor: default;
+        }
 
-    .modal-dialog > * {
-        padding: 1rem;
-    }
+        .modal-dialog > * {
+            padding: 1rem;
+        }
 
-    .modal-header,
-    .modal-footer {
-        background: var(--lightgray);
-    }
+        .modal-header,
+        .modal-footer {
+            background: var(--lightgray);
+        }
 
-    .modal-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
 
-    .modal-header .close-modal {
-        font-size: 1.5rem;
-    }
+        .modal-header .close-modal {
+            font-size: 1.5rem;
+        }
 
-    .modal p + p {
-        margin-top: 1rem;
-    }
+        .modal p + p {
+            margin-top: 1rem;
+        }
 
 
-    /* ANIMATIONS
-    –––––––––––––––––––––––––––––––––––––––––––––––––– */
-    [data-animation] .modal-dialog {
-        opacity: 0;
-        transition: all 0.5s var(--bounceEasing);
-    }
+        /* ANIMATIONS
+        –––––––––––––––––––––––––––––––––––––––––––––––––– */
+        [data-animation] .modal-dialog {
+            opacity: 0;
+            transition: all 0.5s var(--bounceEasing);
+        }
 
-    [data-animation].is-visible .modal-dialog {
-        opacity: 1;
-        transition-delay: 0.2s;
-    }
+        [data-animation].is-visible .modal-dialog {
+            opacity: 1;
+            transition-delay: 0.2s;
+        }
 
-    [data-animation="slideInOutDown"] .modal-dialog {
-        transform: translateY(100%);
-    }
+        [data-animation="slideInOutDown"] .modal-dialog {
+            transform: translateY(100%);
+        }
 
-    [data-animation="slideInOutTop"] .modal-dialog {
-        transform: translateY(-100%);
-    }
+        [data-animation="slideInOutTop"] .modal-dialog {
+            transform: translateY(-100%);
+        }
 
-    [data-animation="slideInOutLeft"] .modal-dialog {
-        transform: translateX(-100%);
-    }
-
-    [data-animation="slideInOutRight"] .modal-dialog {
-        transform: translateX(100%);
-    }
-
-    [data-animation="zoomInOut"] .modal-dialog {
-        transform: scale(0.2);
-    }
-
-    [data-animation="rotateInOutDown"] .modal-dialog {
-        transform-origin: top left;
-        transform: rotate(-1turn);
-    }
-
-    [data-animation="mixInAnimations"].is-visible .modal-dialog {
-        animation: mixInAnimations 2s 0.2s linear forwards;
-    }
-
-    [data-animation="slideInOutDown"].is-visible .modal-dialog,
-    [data-animation="slideInOutTop"].is-visible .modal-dialog,
-    [data-animation="slideInOutLeft"].is-visible .modal-dialog,
-    [data-animation="slideInOutRight"].is-visible .modal-dialog,
-    [data-animation="zoomInOut"].is-visible .modal-dialog,
-    [data-animation="rotateInOutDown"].is-visible .modal-dialog {
-        transform: none;
-    }
-
-    @keyframes mixInAnimations {
-        0% {
+        [data-animation="slideInOutLeft"] .modal-dialog {
             transform: translateX(-100%);
         }
 
-        10% {
-            transform: translateX(0);
+        [data-animation="slideInOutRight"] .modal-dialog {
+            transform: translateX(100%);
         }
 
-        20% {
-            transform: rotate(20deg);
+        [data-animation="zoomInOut"] .modal-dialog {
+            transform: scale(0.2);
         }
 
-        30% {
-            transform: rotate(-20deg);
+        [data-animation="rotateInOutDown"] .modal-dialog {
+            transform-origin: top left;
+            transform: rotate(-1turn);
         }
 
-        40% {
-            transform: rotate(15deg);
+        [data-animation="mixInAnimations"].is-visible .modal-dialog {
+            animation: mixInAnimations 2s 0.2s linear forwards;
         }
 
-        50% {
-            transform: rotate(-15deg);
+        [data-animation="slideInOutDown"].is-visible .modal-dialog,
+        [data-animation="slideInOutTop"].is-visible .modal-dialog,
+        [data-animation="slideInOutLeft"].is-visible .modal-dialog,
+        [data-animation="slideInOutRight"].is-visible .modal-dialog,
+        [data-animation="zoomInOut"].is-visible .modal-dialog,
+        [data-animation="rotateInOutDown"].is-visible .modal-dialog {
+            transform: none;
         }
 
-        60% {
-            transform: rotate(10deg);
+        @keyframes mixInAnimations {
+            0% {
+                transform: translateX(-100%);
+            }
+
+            10% {
+                transform: translateX(0);
+            }
+
+            20% {
+                transform: rotate(20deg);
+            }
+
+            30% {
+                transform: rotate(-20deg);
+            }
+
+            40% {
+                transform: rotate(15deg);
+            }
+
+            50% {
+                transform: rotate(-15deg);
+            }
+
+            60% {
+                transform: rotate(10deg);
+            }
+
+            70% {
+                transform: rotate(-10deg);
+            }
+
+            80% {
+                transform: rotate(5deg);
+            }
+
+            90% {
+                transform: rotate(-5deg);
+            }
+
+            100% {
+                transform: rotate(0deg);
+            }
         }
-
-        70% {
-            transform: rotate(-10deg);
-        }
-
-        80% {
-            transform: rotate(5deg);
-        }
-
-        90% {
-            transform: rotate(-5deg);
-        }
-
-        100% {
-            transform: rotate(0deg);
-        }
-    }
-</style>
-
-
+    </style>
+{% endblock %}
 

@@ -18,12 +18,14 @@
     </section><!-- End Breadcrumbs -->
     <section class="inner-page">
         <div class="container">
-
-        {{ include('modele_offre_commerciale/_form.html.twig', {'button_label': 'Enregistrer'}) }}
-
-        <a href="{{ path('modele_offre_commerciale_index') }}">back to list</a>
-
-        {{ include('modele_offre_commerciale/_delete_form.html.twig') }}
+            <div class="row">
+                <div class="col-md-3">
+                    {% include('layouts/_dash_sidebar.html.twig') %}
+                </div>
+                <div class="col-md-9">
+                    {{ include('modele_offre_commerciale/_form.html.twig', {'button_label': 'Enregistrer'}) }}
+                </div>
+            </div>
         </div>
     </section>
 </main>
