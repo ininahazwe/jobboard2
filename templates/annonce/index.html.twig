@@ -57,7 +57,7 @@
                         <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('annonce_attente') }}" role="tab" aria-controls="orders-paid" aria-selected="false">En attente de publication</a>
                         <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('annonce_archives') }}" role="tab" aria-controls="orders-pending" aria-selected="false">Archivées</a>
                     </nav>
-                    <div id="swup" class="transition-fade">
+                    <div class="tab-content" id="orders-table-tab-content">
                         <!--Toutes-->
                         {% include('annonce/toutes.html.twig') %}
                         <!--//Toutes-->

@@ -19,7 +19,7 @@
         {{ encore_entry_link_tags('app') }}
         {% include 'layouts/css.html.twig' %}
         {% include 'partials/scripts.html.twig' %}
-        {{ encore_entry_script_tags('app') }}
+
 
         {% block stylesheets %}
 
@@ -35,6 +35,7 @@
         {% endblock %}
         {{ render(controller('App\\Controller\\HomeController::footerIndex')) }}
         {# {{ render(controller('App\\Controller\\HomeController::bodyIndex')) }} #}
+        {{ encore_entry_script_tags('app') }}
     </body>
 </html>
 
