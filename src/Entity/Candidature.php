@@ -18,6 +18,9 @@ class Candidature
     const TYPE_EXTERNE = 1;
     const TYPE_MAIL = 2;
     const TYPE_INTERNE = 3;
+    const EN_ATTENTE = 0;
+    const ACCEPTEE = 1;
+    const REFUSEE = 2;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -73,6 +76,11 @@ class Candidature
      * @ORM\OneToOne(targetEntity=Messages::class, mappedBy="candidature", cascade={"persist", "remove"})
      */
     private ?Messages $messages;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private ?int $statut;
 
     public function __construct()
     {
@@ -252,6 +260,20 @@ class Candidature
         }
     }
 
+    /**
+     * @return string|void
+     */
+    public static function getStatutName()
+    {
+        if ($statut = '0'){
+            return 'En attente';
+        }else if($statut = '1'){
+            return 'Acceptée';
+        }else if($statut = '2'){
+            return 'Refusée';
+        }
+    }
+
     public function getMessages(): ?Messages
     {
         return $this->messages;
@@ -270,6 +292,18 @@ class Candidature
         }
 
         $this->messages = $messages;
+
+        return $this;
+    }
+
+    public function getStatut(): ?int
+    {
+        return $this->statut;
+    }
+
+    public function setStatut(?int $statut): self
+    {
+        $this->statut = $statut;
 
         return $this;
     }

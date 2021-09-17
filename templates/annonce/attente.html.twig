@@ -32,55 +32,56 @@
                     </nav>
                     <div class="tab-content" id="orders-table-tab-content">
                         <table class="table" id="datatable">
-                        <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Entreprises</th>
-                            <th>Ville</th>
-                            <th>Date de publication</th>
-                            <th>Date de dépublication</th>
-                            <th>Statut</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for annonce in annonces %}
-                            <tr>
-                                <td><a href="{{ path('annonce_show_unit', {id: annonce.id, slug: annonce.slug})}}">{{ annonce.name }}</a></td>
-                                <td>{{ annonce.entreprise }}</td>
-                                <td>
-                                    {% for adresse in annonce.adresse %}
-                                        {{ adresse.city }}
-                                    {% endfor %}
-                                </td>
-                                <td>{{ annonce.createdAt|date('d/m/Y') }}</td>
-                                <td>{{ annonce.dateLimiteCandidature|date('d/m/Y') }}</td>
-                                <td>
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" {{ (annonce.isActive) ? 'checked' : ''}} data-id="{{annonce.id}}"/>
-                                        <label class="form-switch mt-2">
-                                            <span class="slider"></span>
-                                            {% if annonce.isActive  ? 'checked'%}
-                                                publiée
-                                            {% else %}
-                                                non publiée
-                                            {% endif %}
-                                        </label>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="d-flex justify-content-around">
-                                        <a href="{{ path('annonce_edit', {'id': annonce.id}) }}" class="d-flex align-items-center"><i class="fas fa-edit"></i></a>
-                                        {{ include('annonce/_delete_form.html.twig') }}
-                                    </div>
-                                </td>
-                            </tr>
-                        {% else %}
-                            <tr>
-                                <td colspan="4">no records found</td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Entreprises</th>
+                                    <th>Ville</th>
+                                    <th>Date de publication</th>
+                                    <th>Date de dépublication</th>
+                                    <th>Statut</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for annonce in annonces %}
+                                <tr>
+                                    <td><a href="{{ path('annonce_show_unit', {id: annonce.id, slug: annonce.slug})}}">{{ annonce.name }}</a></td>
+                                    <td>{{ annonce.entreprise }}</td>
+                                    <td>
+                                        {% for adresse in annonce.adresse %}
+                                            {{ adresse.city }}
+                                        {% endfor %}
+                                    </td>
+                                    <td>{{ annonce.createdAt|date('d/m/Y') }}</td>
+                                    <td>{{ annonce.dateLimiteCandidature|date('d/m/Y') }}</td>
+                                    <td>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" {{ (annonce.isActive) ? 'checked' : ''}} data-id="{{annonce.id}}"/>
+                                            <label class="form-switch mt-2">
+                                                <span class="slider"></span>
+                                                {% if annonce.isActive  ? 'checked'%}
+                                                    publiée
+                                                {% else %}
+                                                    non publiée
+                                                {% endif %}
+                                            </label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex justify-content-around">
+                                            <a href="{{ path('annonce_edit', {'id': annonce.id}) }}" class="d-flex align-items-center"><i class="fas fa-edit"></i></a>
+                                            {{ include('annonce/_delete_form.html.twig') }}
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="4">no records found</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

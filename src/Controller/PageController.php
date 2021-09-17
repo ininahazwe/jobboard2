@@ -115,6 +115,7 @@ class PageController extends AbstractController
         $img = new File();
         $img->setName($fichier);
         $img->setNameFile($name);
+        $img->setType(File::TYPE_AVATAR);
         $page->addFile($img);
     }
 }

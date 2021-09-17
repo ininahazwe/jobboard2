@@ -37,7 +37,3 @@ new Filter(document.querySelector('.js-filter'))
 // Font Awesome
 require('@fortawesome/fontawesome-free/css/all.min.css');
 require('@fortawesome/fontawesome-free/js/all.js');
-
-// Swup
-import Swup from 'swup'
-const swup = new Swup();

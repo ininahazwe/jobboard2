@@ -12,7 +12,12 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class File
 {
+    const TYPE_AVATAR = 1;
+    const TYPE_CV = 2;
+    const TYPE_MOTIVATION = 3;
+
     use ResourceId;
+    use Timestapable;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -66,6 +71,16 @@ class File
      * @ORM\ManyToOne(targetEntity=Blog::class, inversedBy="Images")
      */
     private ?Blog $blog;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private ?int $type;
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTimeImmutable('now');
+    }
 
     public function getName(): ?string
     {
@@ -186,4 +201,30 @@ class File
 
         return $this;
     }
+
+    public function getType(): ?int
+    {
+        return $this->type;
+    }
+
+    public function setType(?int $type): self
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+    /**
+     * @return string|void
+     */
+    public static function getTypeName()
+    {
+        if ($type = '1'){
+            return 'Avatar';
+        }else if($type = '2'){
+            return 'CV';
+        }else if($type = '3'){
+            return 'Lettre de motivation';
+        }
+    }
+
 }

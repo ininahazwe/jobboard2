@@ -14,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotNull;
+use Symfony\UX\Dropzone\Form\DropzoneType;
 
 class ProfileType extends AbstractType
 {
@@ -102,7 +103,13 @@ class ProfileType extends AbstractType
             ->add('isAmenagement', CheckboxType::class, [
                 'required' => false
             ])
-            ->add('cv', TextType::class)
+            ->add('cv', DropzoneType::class, [
+                'label' => false,
+                'multiple' => false,
+                'mapped' => false,
+                'required' => false
+            ])
+            ->add('portfolio', TextType::class)
         ;
     }
 

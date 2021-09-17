@@ -30,9 +30,9 @@
                             <hr>
                             <i class="fas fa-search-location"></i><br>
                             {{ agenda.organizer }}<br>
-                            {{ agenda.address }}<br>
-                            {{ agenda.codePostal}}<br>
-                            {{ agenda.city }}<br>
+                            {% for adresse in agenda.adresse %}
+                                {{ adresse.city }}<br>{{ adresse.zipcode }}<br>{{ adresse.departement }}
+                            {% endfor %}
                             <hr>
                             <i class="fas fa-link"></i><br>
                             <a href="{{ agenda.webLink }}" target="_blank">{{ agenda.organizer }}</a>

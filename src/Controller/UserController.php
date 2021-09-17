@@ -92,7 +92,7 @@ class UserController extends AbstractController
             if($form->get('files')->getData()){
                 $this->uploadFile($form->get('files')->getData(), $user);
             }
-            $user->setUpdatedAt(new \DateTimeImmutable('now'));
+            $user->updateTimestamps();
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
@@ -119,7 +119,8 @@ class UserController extends AbstractController
             ]);
 
             $this->addFlash('success', 'Mise à jour réussie');
-            return $this->redirectToRoute('app_profile', [], Response::HTTP_SEE_OTHER);
+
+            return $this->redirectToRoute('user_parametres', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('user/edit_user.html.twig', [
@@ -151,7 +152,7 @@ class UserController extends AbstractController
             // On vérifie si les 2 mots de passe sont identiques
             if($request->request->get('password') == $request->request->get('password2')){
                 $user->setPassword($passwordEncoder->encodePassword($user, $request->request->get('password')));
-                $user->setUpdatedAt(new DateTime('now'));
+                $user->updateTimestamps();
                 $em->flush();
                 $this->addFlash('success', 'Mise à jour réussie');
 
@@ -242,6 +243,7 @@ class UserController extends AbstractController
         $img = new File();
         $img->setName($fichier);
         $img->setNameFile($name);
+        $img->setType(File::TYPE_AVATAR);
         $user->addFiles($img);
     }
 

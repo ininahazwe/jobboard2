@@ -17,31 +17,6 @@
     </section><!-- End Breadcrumbs -->
     <section class="inner-page">
         <div class="container">
-           {# <div class="row">
-                <div class="col-md-3">
-                    {%  if app.user.isSuperAdmin() %}
-                        <div class="p-3 border bg-light">
-                            <b>{{ pluralize(annonces|length, 'annonce') }} enregistrées </b>
-                        </div>
-                    {% else %}
-                        {% if app.user.getNbrAnnoncesMaxi() > annonces.totalItemCount %}
-                            <a class="btn btn-primary btn-sm mb-4" href="{{ path('annonce_new') }}">Ajouter</a><br/>
-                        {% endif %}
-                        <div class="p-3 border bg-light">
-                            <b>{{ pluralize(annonces|length, 'annonce') }} enregistrées </b>
-                        </div>
-                        <div class="p-3 border bg-light">
-                            {% for entreprise in app.user.getEntrepriseAll() %}
-                                <b>{{ entreprise.name }} : </b>{{ entreprise.getNumberAnnonces() }}/{{ entreprise.getMaxAnnonces() }} annonces<br>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                    {% include('annonce/menu.html.twig') %}
-                    <br>
-                </div>
-                <div class="col-md-9">
-                </div>
-            </div>#}
             <div class="row">
                 <div class="col-md-3">
                     {% include('layouts/_dash_sidebar.html.twig') %}

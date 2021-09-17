@@ -14,6 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class ModeleOffreCommerciale
 {
     use ResourceId;
+    use Timestapable;
 
     /**
      * @ORM\Column(type="string", length=255)

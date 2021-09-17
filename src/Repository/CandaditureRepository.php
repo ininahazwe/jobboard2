@@ -86,4 +86,85 @@ class CandaditureRepository extends ServiceEntityRepository
             ->getQuery()->getScalarResult();
     }
 
+    public function getCandidaturesAcceptees($user)
+    {
+        $query = $this->createQueryBuilder('c');
+        if($user->isSuperAdmin()){
+            $query
+                ->orderBy('c.createdAt', 'DESC')
+                ->andWhere('c.statut = 1');
+        } elseif ($user->isSuperRecruteur() || $user->isRecruteur()){
+            $entreprises = $user->getEntrepriseAll();
+            $query
+                ->orderBy('c.createdAt', 'DESC')
+                ->andWhere('c.entreprise IN(:entreprises)')
+                ->andWhere('c.statut = 1')
+                ->setParameter('entreprises', $entreprises)
+            ;
+        }elseif($user->isCandidat()){
+            $query
+                ->orderBy('c.createdAt', 'DESC')
+                ->andWhere('c.candidat = :user')
+                ->setParameter('user', $user)
+            ;
+        }else{
+            return null;
+        }
+        return $query->getQuery()->getResult();
+    }
+
+    public function getCandidaturesRefusees($user)
+    {
+        $query = $this->createQueryBuilder('c');
+        if($user->isSuperAdmin()){
+            $query
+                ->orderBy('c.createdAt', 'DESC')
+                ->andWhere('c.statut = 2');
+        } elseif ($user->isSuperRecruteur() || $user->isRecruteur()){
+            $entreprises = $user->getEntrepriseAll();
+            $query
+                ->orderBy('c.createdAt', 'DESC')
+                ->andWhere('c.entreprise IN(:entreprises)')
+                ->andWhere('c.statut = 2')
+                ->setParameter('entreprises', $entreprises)
+            ;
+        }elseif($user->isCandidat()){
+            $query
+                ->orderBy('c.createdAt', 'DESC')
+                ->andWhere('c.candidat = :user')
+                ->setParameter('user', $user)
+            ;
+        }else{
+            return null;
+        }
+        return $query->getQuery()->getResult();
+    }
+
+    public function getCandidaturesAttente($user)
+    {
+        $query = $this->createQueryBuilder('c');
+        if($user->isSuperAdmin()){
+            $query
+                ->orderBy('c.createdAt', 'DESC')
+                ->andWhere('c.statut = 0');
+        } elseif ($user->isSuperRecruteur() || $user->isRecruteur()){
+            $entreprises = $user->getEntrepriseAll();
+            $query
+                ->orderBy('c.createdAt', 'DESC')
+                ->andWhere('c.entreprise IN(:entreprises)')
+                ->andWhere('c.statut = 0')
+                ->setParameter('entreprises', $entreprises)
+            ;
+        }elseif($user->isCandidat()){
+            $query
+                ->orderBy('c.createdAt', 'DESC')
+                ->andWhere('c.candidat = :user')
+                ->setParameter('user', $user)
+            ;
+        }else{
+            return null;
+        }
+        return $query->getQuery()->getResult();
+    }
+
 }

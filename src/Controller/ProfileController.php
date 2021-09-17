@@ -73,14 +73,6 @@ class ProfileController extends AbstractController
 
         $entityManager = $this->getDoctrine()->getManager();
 
-       /* $existeProfile = $entityManager->getRepository('App\Entity\Profile')->findOneBy(array('user' => $this->getUser()->getId()));
-
-        if ($existeProfile){
-            $profile = $existeProfile;
-        }else{
-            $profile = new Profile();
-        }*/
-
         $profile = new Profile();
 
         $form = $this->createForm(ProfileType::class, $profile);
@@ -123,6 +115,8 @@ class ProfileController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $profile->updateTimestamps();
 
             $this->getDoctrine()->getManager()->flush();
 

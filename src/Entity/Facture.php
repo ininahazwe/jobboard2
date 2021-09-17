@@ -18,11 +18,7 @@ class Facture
     const METHODE_AUTRE = 4;
 
     use ResourceId;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private ?\DateTimeInterface $createdAt;
+    use Timestapable;
 
     /**
      * @ORM\ManyToOne(targetEntity=Entreprise::class, inversedBy="factures")
@@ -82,18 +78,12 @@ class Facture
     public function __construct()
     {
         $this->offre = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable('now');
     }
 
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
     }
 
     public function getEntreprise(): ?Entreprise

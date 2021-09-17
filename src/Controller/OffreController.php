@@ -67,6 +67,7 @@ class OffreController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $entrepriseOffre->updateTimestamps();
             $this->getDoctrine()->getManager()->flush();
 
             $this->addFlash('success', 'Mise à jour réussie');

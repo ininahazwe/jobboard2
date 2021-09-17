@@ -24,78 +24,80 @@
                         {% include('layouts/_dash_sidebar.html.twig') %}
                     </div>
                     <div class="col-md-9">
+                        {% if app.user %}
                         <a class="btn app-btn-primary mb-4" href="{{ path('profile_edit', {'id': profile.id}) }}">
                             <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-file-earmark-arrow-down me-2" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
                             </svg>Editer
                         </a>
+                        {% endif %}
                         <table class="table">
-        <tbody>
-            <tr>
-                <th>Description</th>
-                <td>{{ app.user.profile.description }}</td>
-            </tr>
-            <tr>
-                <th>Birthdate</th>
-                <td>{{ app.user.profile.birthdate ? app.user.profile.birthdate|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>IsRqth</th>
-                <td>{{ app.user.profile.isRqth ? 'Yes' : 'No' }}</td>
-            </tr>
-            <tr>
-                <th>Adresse</th>
-                <td>
-                    {% for adresse in app.user.profile %}
-                        {{ adresse.adresse }}<br>
-                        {{ adresse.city }}<br>
-                        {{ adresse.zipcode }}<br>
-                        {{ adresse.departemet }}
-                    {% endfor %}
-                </td>
-            </tr>
-            <tr>
-                <th>Diplome</th>
-                <td>{{ app.user.profile.diplome }}</td>
-            </tr>
-            <tr>
-                <th>Experiences</th>
-                <td>{{ app.user.profile.experiences }}</td>
-            </tr>
-            <tr>
-                <th>ZoneDeRecherche</th>
-                <td>{{ app.user.profile.zoneDeRecherche }}</td>
-            </tr>
-            <tr>
-                <th>Metiers</th>
-                <td>{{ app.user.profile.metiers }}</td>
-            </tr>
-            <tr>
-                <th>IsVisible</th>
-                <td>{{ app.user.profile.isVisible ? 'Yes' : 'No' }}</td>
-            </tr>
-            <tr>
-                <th>IsAmenagement</th>
-                <td>{{ app.user.profile.isAmenagement ? 'Yes' : 'No' }}</td>
-            </tr>
-            <tr>
-                <th>Cv</th>
-                <td>{{ app.user.profile.cv }}</td>
-            </tr>
-            <tr>
-                <th>Id</th>
-                <td>{{ app.user.profile.id }}</td>
-            </tr>
-            <tr>
-                <th>CreatedAt</th>
-                <td>{{ app.user.profile.createdAt ? app.user.profile.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>UpdatedAt</th>
-                <td>{{ app.user.profile.updatedAt ? app.user.profile.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
+                            <tbody>
+                                <tr>
+                                    <th>Description</th>
+                                    <td>{{ app.user.profile.description }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Birthdate</th>
+                                    <td>{{ app.user.profile.birthdate ? app.user.profile.birthdate|date('Y-m-d H:i:s') : '' }}</td>
+                                </tr>
+                                <tr>
+                                    <th>IsRqth</th>
+                                    <td>{{ app.user.profile.isRqth ? 'Yes' : 'No' }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Adresse</th>
+                                    <td>
+                                        {% for adresse in app.user.profile %}
+                                            {{ adresse.adresse }}<br>
+                                            {{ adresse.city }}<br>
+                                            {{ adresse.zipcode }}<br>
+                                            {{ adresse.departemet }}
+                                        {% endfor %}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Diplome</th>
+                                    <td>{{ app.user.profile.diplome }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Experiences</th>
+                                    <td>{{ app.user.profile.experiences }}</td>
+                                </tr>
+                                <tr>
+                                    <th>ZoneDeRecherche</th>
+                                    <td>{{ app.user.profile.zoneDeRecherche }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Metiers</th>
+                                    <td>{{ app.user.profile.metiers }}</td>
+                                </tr>
+                                <tr>
+                                    <th>IsVisible</th>
+                                    <td>{{ app.user.profile.isVisible ? 'Yes' : 'No' }}</td>
+                                </tr>
+                                <tr>
+                                    <th>IsAmenagement</th>
+                                    <td>{{ app.user.profile.isAmenagement ? 'Yes' : 'No' }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Cv</th>
+                                    <td>{{ app.user.profile.cv }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Id</th>
+                                    <td>{{ app.user.profile.id }}</td>
+                                </tr>
+                                <tr>
+                                    <th>CreatedAt</th>
+                                    <td>{{ app.user.profile.createdAt ? app.user.profile.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                                </tr>
+                                <tr>
+                                    <th>UpdatedAt</th>
+                                    <td>{{ app.user.profile.updatedAt ? app.user.profile.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

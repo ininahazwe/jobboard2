@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\ProfileRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Constraints\DateTime;
 
 
@@ -80,6 +81,12 @@ class Profile
      * @ORM\OneToOne(targetEntity=Adresse::class, cascade={"persist", "remove"})
      */
     private ?Adresse $adresse;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\Url
+     */
+    private ?string $portfolio;
 
     public function __construct()
     {
@@ -247,6 +254,18 @@ class Profile
     public function setAdresse(?Adresse $adresse): self
     {
         $this->adresse = $adresse;
+
+        return $this;
+    }
+
+    public function getPortfolio(): ?string
+    {
+        return $this->portfolio;
+    }
+
+    public function setPortfolio(?string $portfolio): self
+    {
+        $this->portfolio = $portfolio;
 
         return $this;
     }

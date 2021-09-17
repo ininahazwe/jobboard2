@@ -11,14 +11,10 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Dompdf\Dompdf;
 use Dompdf\Options;
-use Exception;
-use Knp\Component\Pager\PaginatorInterface;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
-use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Twig\Environment;
 use Twig\Error\LoaderError;
@@ -209,6 +205,7 @@ class FactureController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $facture->updateTimestamps();
             $this->getDoctrine()->getManager()->flush();
 
             $this->addFlash('success', 'Mise à jour réussie');

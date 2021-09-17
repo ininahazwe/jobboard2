@@ -49,6 +49,7 @@ class Dictionnaire
     const TYPE_CATEGORIE_CIVILITE = 'civilite';
 
     use ResourceId;
+    use Timestapable;
 
     /**
      * @ORM\Column(type="string", length=128, nullable=false)

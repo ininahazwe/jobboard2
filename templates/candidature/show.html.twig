@@ -18,48 +18,59 @@
     </section><!-- End Breadcrumbs -->
     <section class="inner-page">
         <div class="container">
-            <div class="col-md-12">
-                <table class="table">
-                    <tbody>
-                        <tr>
-                            <th>L'offre</th>
-                            <td>
-                            {% for annonce in candidature.annonces %}
-                                <a href="{{ path('annonce_show_unit', {id: annonce.id, slug: annonce.slug})}}">{{ annonce.name }}</a>
-                            {% endfor %}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Nom de l'entreprise</th>
-                            <td><a href="{{ path('entreprise_show_unit', {id: candidature.entreprise.id, slug: candidature.entreprise.slug})}}">{{ candidature.entreprise }}</a></td>
-                        </tr>
-                        <tr>
-                            <th>Recruteur</th>
-                            <td>
-                                {% if candidature.recruteur %}
-                                {{ candidature.recruteur.fullname }}
-                                {% endif %}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Candidat</th>
-                            <td><a href="{{ path('profile_show', {id: candidature.candidat.id}) }}">{{ candidature.candidat.fullname }}</a></td>
-                        </tr>
-                        <tr>
-                            <th>Lettre de motivation</th>
-                            <td>{{ candidature.motivation }}</td>
-                        </tr>
-                        <tr>
-                            <th>Envoyé le</th>
-                            <td>{{ candidature.createdAt ? candidature.createdAt|date('d-m-Y') : '' }}</td>
-                        </tr>
-                        <tr>
-                            <th>Statut</th>
-                            <td>En cours de traitement...
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="row">
+                <div class="col-md-3">
+                    {% include('layouts/_dash_sidebar.html.twig') %}
+                </div>
+                <div class="col-md-9">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <th>L'offre</th>
+                                <td>
+                                {% for annonce in candidature.annonces %}
+                                    <a href="{{ path('annonce_show_unit', {id: annonce.id, slug: annonce.slug})}}">{{ annonce.name }}</a>
+                                {% endfor %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Nom de l'entreprise</th>
+                                <td><a href="{{ path('entreprise_show_unit', {id: candidature.entreprise.id, slug: candidature.entreprise.slug})}}">{{ candidature.entreprise }}</a></td>
+                            </tr>
+                            <tr>
+                                <th>Recruteur</th>
+                                <td>
+                                    {% if candidature.recruteur %}
+                                    {{ candidature.recruteur.fullname() }}
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Candidat</th>
+                                <td>
+                                    {% if candidature.candidat.profile %}
+                                    <a href="{{ path('profile_show', {id: candidature.candidat.id}) }}">{{ candidature.candidat.fullname }}</a>
+                                    {% else %}
+                                    Profil non renseigné
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Lettre de motivation</th>
+                                <td>{{ candidature.motivation }}</td>
+                            </tr>
+                            <tr>
+                                <th>Envoyé le</th>
+                                <td>{{ candidature.createdAt ? candidature.createdAt|date('d-m-Y') : '' }}</td>
+                            </tr>
+                            <tr>
+                                <th>Statut</th>
+                                <td>{{ candidature.getStatutName() }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </section>

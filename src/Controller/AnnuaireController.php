@@ -63,6 +63,7 @@ class AnnuaireController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $annuaire->updateTimestamps();
             $this->getDoctrine()->getManager()->flush();
 
             $this->addFlash('success', 'Mise à jour réussie');

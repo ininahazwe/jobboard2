@@ -74,6 +74,7 @@ class ModeleOffreCommercialeController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $modeleOffreCommerciale->updateTimestamps();
             $this->getDoctrine()->getManager()->flush();
 
             $this->addFlash('success', 'Mise à jour réussie');

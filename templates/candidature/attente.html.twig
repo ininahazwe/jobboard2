@@ -25,12 +25,13 @@
                 <div class="col-md-9">
                     <nav id="orders-table-tab" class="orders-table-tab app-nav-tabs nav shadow-sm flex-column flex-sm-row mb-4">
                         {% if app.user.isSuperAdmin() or app.user.isSuperRecruteur() or app.user.isRecruteur() %}
-                            <a class="flex-sm-fill text-sm-center nav-link active" href="{{ path('candidature_index') }}" role="tab" aria-controls="orders-all" aria-selected="true">Toutes</a>
-                            <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('candidature_attente') }}" role="tab" aria-controls="orders-paid" aria-selected="false">En attente</a>
+                            <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('candidature_index') }}" role="tab" aria-controls="orders-all" aria-selected="false">Toutes</a>
+                            <a class="flex-sm-fill text-sm-center nav-link active" href="{{ path('candidature_attente') }}" role="tab" aria-controls="orders-paid" aria-selected="true">En attente</a>
                             <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('candidature_acceptees') }}" role="tab" aria-controls="orders-pending" aria-selected="false">Acceptées</a>
                             <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('candidature_refusees') }}" role="tab" aria-controls="orders-pending" aria-selected="false">Refusées</a>
                         {% endif %}
                     </nav>
+
                     <div class="tab-content" id="orders-table-tab-content">
                         <div class="table-responsive">
                             <table class="table" id="datatable">
@@ -40,7 +41,7 @@
                                     <th class="cell">Infos offre</th>
                                     <th class="cell">Date de candidature</th>
                                     <th class="cell">Voir</th>
-                                    <th class="cell">Statut</th>
+                                    <th class="cell">Actions</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -70,13 +71,10 @@
                                             </a>
                                         </td>
                                         <td class="cell">
-                                            {% if candidature.statut is same as 0 %}
-                                            <div class="btn-group">
-                                                <a class="btn-sm btn-success" href="{{ path('candidature_accepter', {'id': candidature.id}) }}">Accepter</a>
-                                                <a class="btn-sm btn-danger" href="{{ path('candidature_refuser', {'id': candidature.id}) }}">Refuser</a>
+                                            <div class="form-check form-switch">
+                                                <button class="btn-sm btn-success">Accepter</button>
+                                                <button class="btn-sm btn-danger">Refuser</button>
                                             </div>
-                                                {% else %}Acceptée
-                                            {% endif %}
                                         </td>
                                     </tr>
                                 {% else %}
@@ -87,7 +85,7 @@
                                 </tbody>
                             </table>
                         </div><!--//table-responsive-->
-                    </div><!--//tab-content-->
+                    </div>
                 </div>
             </div>
         </div>

@@ -13,9 +13,11 @@
             {{ form_row(form.experiences) }}
             {{ form_row(form.metiers) }}
             {{ form_row(form.zoneDeRecherche) }}
-            {{ form_row(form.cv) }}
+            {{ form_row(form.portfolio) }}
         </div>
         <div class="col-md-6">
+            <h3>CV</h3>
+            {{ form_row(form.cv) }}
             <h3>Adresse</h3>
             <div id="adresse" data-prototype="{{ form_row(form.adresse.vars.prototype)|e('html_attr') }}">
                 {{ form_row(form.adresse) }}
