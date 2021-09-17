@@ -35,7 +35,7 @@ export default class Filter {
             }
         }
         if(this.moreNav) {
-            this.pagination.innerHTML = '<button class="btn-sm btn-primary">Voir plus</button>'
+            this.pagination.innerHTML = '<button class="bouton solid">Voir plus</button>'
             this.pagination.querySelector('button').addEventListener('click', this.loadMore.bind(this))
         } else {
             this.pagination.addEventListener('click', aClickListener)

@@ -48,7 +48,7 @@
                                 </tr>
                                 <tr>
                                     <th>Toute la journée</th>
-                                    <td>{{ agenda.allDay }}</td>
+                                    <td>{{ agenda.allDay ? 'Oui' : 'Non'}}</td>
                                 </tr>
                                 <tr>
                                     <th>Weblink</th>
@@ -61,7 +61,9 @@
                                 <tr>
                                     <th>Adresse</th>
                                     <td>
-                                        {{ agenda.adresse }}
+                                        {% for adresse in agenda.adresse %}
+                                        {{ adresse.city }}<br>{{ adresse.zipcode }}<br>{{ adresse.departement }}
+                                        {% endfor %}
                                     </td>
                                 </tr>
                             </tbody>

@@ -3,7 +3,7 @@
     window.onload = () => {
         collection = document.querySelector("#adresse");
         span = collection.querySelector("span");
-        boutonAjout = document.createElement("button");
+        boutonAjout = document.createElement("a");
         boutonAjout.className = "btn app-btn-primary";
         boutonAjout.innerText = "Ajouter une adresse";
         let nouveauBouton = span.append(boutonAjout);
@@ -22,7 +22,7 @@
         let content = document.createElement("html");
         content.innerHTML = prototype;
         let newForm = content.querySelector("div");
-        let boutonSuppr = document.createElement("button");
+        let boutonSuppr = document.createElement("a");
         boutonSuppr.type = "button";
         boutonSuppr.className = "btn-sm btn-danger mt-2";
         boutonSuppr.id = "delete-adresse-" + index;

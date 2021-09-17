@@ -65,7 +65,7 @@
                             {% if entreprise.numeroSiren %}<b>Siren:</b> {{ entreprise.numeroSiren }}{% endif %}<br>
                             {% if entreprise.numeroSiret %}<b>Siret:</b> {{ entreprise.numeroSiret }}{% endif %}<br>
                             <b>Adresse:</b><br>
-                            {% for adresse in adresses %}
+                            {% for adresse in entreprise.adresse %}
                                 {{ adresse.city }}<br>{{ adresse.zipcode }}<br>{{ adresse.departement }}
                             {% endfor %}
                         </div>

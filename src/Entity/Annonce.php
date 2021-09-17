@@ -134,7 +134,7 @@ class Annonce
     private Collection $favoris;
 
     /**
-     * @ORM\OneToMany(targetEntity=Adresse::class, mappedBy="annonce")
+     * @ORM\OneToMany(targetEntity=Adresse::class, mappedBy="annonce", cascade={"persist"})
      */
     private Collection $adresse;
 

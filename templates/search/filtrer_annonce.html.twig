@@ -45,6 +45,16 @@
             <div class="accordion-body">{{ form_row(form.experience) }}</div>
         </div>
     </div>
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="flush-headingFive">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseFive" aria-expanded="false" aria-controls="flush-collapseFive">
+                Par ville
+            </button>
+        </h2>
+        <div id="flush-collapseFive" class="accordion-collapse collapse" aria-labelledby="flush-headingFive" data-bs-parent="#accordionFlushExample">
+            <div class="accordion-body">{{ form_row(form.city) }}</div>
+        </div>
+    </div>
 </div>
 
 <input type="submit" value="Filtrer" class="bouton solid" />

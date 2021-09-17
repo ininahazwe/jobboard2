@@ -2,6 +2,7 @@
 
 namespace App\Data;
 
+use App\Entity\Adresse;
 use App\Entity\Annonce;
 use App\Entity\Dictionnaire;
 use App\Entity\Entreprise;
@@ -42,5 +43,10 @@ class SearchDataAnnonces
      * @var Dictionnaire[]
      */
     public array $experience = [];
+
+    /**
+     * @var Adresse[]
+     */
+    public array $city = [];
 
 }

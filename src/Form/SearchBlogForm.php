@@ -58,6 +58,6 @@ class SearchBlogForm extends AbstractType
 
     public function getName(): string
     {
-        return 'search_agenda';
+        return 'search_blog';
     }
 }

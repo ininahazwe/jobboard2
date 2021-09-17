@@ -42,7 +42,7 @@ class SearchEntrepriseForm extends AbstractType
                     return $query;
                 }
             ])
-            ->add('ville', EntityType::class, [
+            ->add('city', EntityType::class, [
                 'required' => false,
                 'label' => false,
                 'expanded' => true,
@@ -72,6 +72,6 @@ class SearchEntrepriseForm extends AbstractType
 
     public function getBlockPrefix(): string
     {
-        return '';
+        return 'search_entreprise';
     }
 }

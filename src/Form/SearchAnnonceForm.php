@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Data\SearchDataAnnonces;
+use App\Entity\Adresse;
 use App\Entity\Dictionnaire;
 use App\Entity\Entreprise;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -83,6 +84,22 @@ class SearchAnnonceForm extends AbstractType
                         ->where('d.type = :type')
                         ->setParameter('type', Dictionnaire::TYPE_EXPERIENCE);
 
+                    return $query;
+                }
+            ])
+            ->add('city', EntityType::class, [
+                'required' => false,
+                'label' => false,
+                'expanded' => true,
+                'multiple'=> true,
+                'class' => Adresse::class,
+                'query_builder' => function($repository) {
+                    $ids = $repository->getAdressesEntrepriseActifs();
+                    $query = $repository->createQueryBuilder('a')
+                        ->select('a')
+                        ->where('a.entreprise IN (:ids)')
+                        ->setParameter('ids', $ids)
+                    ;
                     return $query;
                 }
             ])
