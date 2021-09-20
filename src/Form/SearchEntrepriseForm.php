@@ -42,7 +42,7 @@ class SearchEntrepriseForm extends AbstractType
                     return $query;
                 }
             ])
-            ->add('city', EntityType::class, [
+            ->add('adresse', EntityType::class, [
                 'required' => false,
                 'label' => false,
                 'expanded' => true,

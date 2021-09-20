@@ -233,7 +233,7 @@ class EntrepriseRepository extends ServiceEntityRepository
         return $entreprises;
     }
 
-    public function getEntreprisesAnnoncesPubliees()
+    public function getEntreprisesAnnoncesPubliees(): array
     {
         $ids = array();
         $now = new \DateTime('now');
@@ -296,10 +296,10 @@ class EntrepriseRepository extends ServiceEntityRepository
                 ->setParameter('secteur', $search->secteur);
         }
 
-        if(!empty($search->ville)){
+        if(!empty($search->adresse)){
             $query = $query
-                ->andWhere('s.id IN (:ville)')
-                ->setParameter('ville', $search->ville);
+                ->andWhere('s.id IN (:adresse)')
+                ->setParameter('adresse', $search->adresse);
         }
 
         return $query;

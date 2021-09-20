@@ -87,17 +87,17 @@ class SearchAnnonceForm extends AbstractType
                     return $query;
                 }
             ])
-            ->add('city', EntityType::class, [
+            ->add('adresse', EntityType::class, [
                 'required' => false,
                 'label' => false,
                 'expanded' => true,
                 'multiple'=> true,
                 'class' => Adresse::class,
                 'query_builder' => function($repository) {
-                    $ids = $repository->getAdressesEntrepriseActifs();
+                    $ids = $repository->getAdressesAnnoncesActives();
                     $query = $repository->createQueryBuilder('a')
                         ->select('a')
-                        ->where('a.entreprise IN (:ids)')
+                        ->where('a.annonce IN (:ids)')
                         ->setParameter('ids', $ids)
                     ;
                     return $query;

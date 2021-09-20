@@ -146,6 +146,12 @@ class AnnonceRepository extends ServiceEntityRepository
                 ->andWhere('c.id IN (:experience)')
                 ->setParameter('experience', $search->experience);
         }
+        if(!empty($search->adresse)){
+            $query
+                ->innerJoin('a.adresse', 'c')
+                ->andWhere('c.id IN (:adresse)')
+                ->setParameter('adresse', $search->adresse);
+        }
 
         return $query;
     }

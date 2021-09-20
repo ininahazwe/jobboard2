@@ -47,6 +47,6 @@ class SearchDataAnnonces
     /**
      * @var Adresse[]
      */
-    public array $city = [];
+    public array $adresse = [];
 
 }

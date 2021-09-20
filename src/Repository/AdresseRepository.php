@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Adresse;
+use App\Entity\Annonce;
 use App\Entity\Entreprise;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -31,6 +32,22 @@ class AdresseRepository extends ServiceEntityRepository
         foreach($result as $entreprise){
             if($entreprise->getAdresse()){
                 $ids[] = $entreprise->getId();
+            }
+        }
+        return $ids;
+    }
+
+    public function getAdressesAnnoncesActives(): array
+    {
+        $ids = array();
+        $query = $this->getEntityManager()->getRepository(Annonce::class)->createQueryBuilder('a')
+            ->where('a.isActive = 1')
+        ;
+
+        $result = $query->getQuery()->getResult();
+        foreach($result as $annonce){
+            if($annonce->getAdresse()){
+                $ids[] = $annonce->getId();
             }
         }
         return $ids;
