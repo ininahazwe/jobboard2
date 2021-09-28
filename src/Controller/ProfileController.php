@@ -2,15 +2,17 @@
 
 namespace App\Controller;
 
+use App\Entity\File;
 use App\Entity\Profile;
 use App\Form\ProfileType;
 use App\Repository\ProfileRepository;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Validator\Constraints\DateTime;
 
 #[Route('/cms/utilisateurs')]
 class ProfileController extends AbstractController
@@ -79,6 +81,10 @@ class ProfileController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            if ($form->get('cv')->getData()){
+              $this->uploadFile($form->get('cv')->getData(), $profile, $this->getUser(), $this->getParameter('files_directory'));
+            }
             $profile->setUser($this->getUser());
             $profile->getUser()->setModeration('1');
 
@@ -87,7 +93,7 @@ class ProfileController extends AbstractController
 
             $this->addFlash('success', 'Ajout réussi');
 
-            return $this->redirectToRoute('app_profile', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('user_parametres', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('profile/new.html.twig', [
@@ -115,6 +121,10 @@ class ProfileController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            if ($form->get('cv')->getData()){
+              $this->uploadFile($form->get('cv')->getData(), $profile, $this->getUser(), $this->getParameter('files_directory'));
+            }
 
             $profile->updateTimestamps();
 
@@ -144,9 +154,14 @@ class ProfileController extends AbstractController
 
         return $this->redirectToRoute('profile_index');
     }
-    #[Route('/success/login', name: 'success_login')]
-    public function successLogin(Request $request)
-    {
+
+  /**
+   * @param Request $request
+   * @return RedirectResponse
+   */
+  #[Route('/success/login', name: 'success_login')]
+    public function successLogin(Request $request): RedirectResponse
+  {
         $new = $request->get('new', false);
         if ($this->getUser()){
             if ($new){
@@ -155,5 +170,45 @@ class ProfileController extends AbstractController
             return $this->redirectToRoute('app_profile');
         }
         return $this->redirectToRoute('access_register');
+    }
+
+    /**
+     * @param $file
+     * @param $profile
+     */
+    public function uploadFile($file, $profile, $user, $parameter)
+    {
+        $image = $file;
+        $fichier = md5(uniqid()) . '.' . $image->guessExtension();
+        $name = $image->getClientOriginalName();
+        $image->move(
+          $parameter,
+          $fichier
+        );
+        $img = new File();
+        $img->setName($fichier);
+        $img->setNameFile($name);
+        $img->setType(File::TYPE_CV);
+        $img->setUser($user);
+        $profile->addCv($img);
+    }
+
+    #[Route('/supprime/file/{id}', name: 'blog_delete_files', methods: ['DELETE'])]
+    public function deleteImage(File $file, Request $request): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+
+        if($this->isCsrfTokenValid('delete'.$file->getId(), $data['_token'])){
+          $nom = $file->getName();
+          unlink($this->getParameter('files_directory').'/'.$nom);
+
+          $em = $this->getDoctrine()->getManager();
+          $em->remove($file);
+          $em->flush();
+
+          return new JsonResponse(['success' => 1]);
+        }else{
+          return new JsonResponse(['error' => 'Token Invalide'], 400);
+        }
     }
 }

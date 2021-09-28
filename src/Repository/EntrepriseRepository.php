@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Data\SearchData;
+use App\Data\SearchDataEntreprise;
 use App\Entity\Annonce;
 use App\Entity\Entreprise;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -261,10 +261,10 @@ class EntrepriseRepository extends ServiceEntityRepository
     //Recherche méthode GrafikArt
 
     /**
-     * @param SearchData $search
+     * @param SearchDataEntreprise $search
      * @return PaginationInterface
      */
-    public function findSearch(SearchData $search): PaginationInterface
+    public function findSearch(SearchDataEntreprise $search): PaginationInterface
     {
         $query = $this->getSearchQuery($search)->getQuery();
 
@@ -275,7 +275,7 @@ class EntrepriseRepository extends ServiceEntityRepository
         );
     }
 
-    public function getSearchQuery (SearchData $search): QueryBuilder
+    public function getSearchQuery (SearchDataEntreprise $search): QueryBuilder
     {
         $query = $this
             ->createQueryBuilder('e')
@@ -297,8 +297,9 @@ class EntrepriseRepository extends ServiceEntityRepository
         }
 
         if(!empty($search->adresse)){
-            $query = $query
-                ->andWhere('s.id IN (:adresse)')
+            $query
+                ->innerJoin('e.adresse', 'c')
+                ->andWhere('c.id IN (:adresse)')
                 ->setParameter('adresse', $search->adresse);
         }
 

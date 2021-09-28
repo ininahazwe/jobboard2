@@ -58,7 +58,7 @@
                             <b>Type de contrat:</b> {{ annonce.typeContrat|join('-') }}<br>
                             <b>Expérience souhaitée:</b> {{ annonce.experience }}<br>
                             <b>Diplôme requis:</b> {{ annonce.diplome }}<br>
-                            <b>Adresse:</b> {{ annonce.adresse|join() }} <br>
+                            <b>Ville:</b> {% for adresse in annonce.adresse%} {{ adresse.city }} ({{ adresse.zipcode }}) {% endfor %}<br>
                         </div>
                         <div class="portfolio-description">
                             <b>Date de publication:</b> {{ annonce.createdAt|date('d-m-Y') }}<br>

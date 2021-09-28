@@ -1,5 +1,5 @@
 <nav id="app-nav-main" class="app-nav app-nav-main flex-grow-1">
-    <ul class="app-menu list-unstyled accordion" id="menu-accordion">
+    <ul class="app-menu list-unstyled accordion menu-accordion" id="menu-accordion">
         {% if app.user.isSuperAdmin() %}
             {% include('layouts/_dash_sidebar_super_admin.html.twig') %}
         {% endif %}
@@ -16,9 +16,9 @@
 </nav><!--//app-nav-->
 <div class="app-sidepanel-footer">
     <nav class="app-nav app-nav-footer">
-        <ul class="app-menu footer-menu list-unstyled">
+        <ul class="app-menu footer-menu list-unstyled menu-accordion">
             <li class="nav-item">
-                <a class="nav-link" href="{{ path('user_parametres') }}" data-info="user_parametres">
+                <a class="nav-link" href="{{ path('user_parametres') }}" data-info="user_parametres,profile_edit">
 							        <span class="nav-icon">
 							            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-gear"
                                              fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -38,7 +38,7 @@
 <script type="text/javascript">
    const url = "{{ app.request.attributes.get('_route') }}";
 
-    $ ('#menu-accordion .nav-link').each(function(){
+    $ ('.menu-accordion .nav-link').each(function(){
         const infoUrl = $(this).data('info');
         const result = infoUrl.search(url);
 

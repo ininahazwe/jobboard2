@@ -43,67 +43,6 @@
 </div><!--//row-->
 <div class="row g-4 mb-4">
     <div class="col-12 col-lg-6">
-        <div class="app-card app-card-chart h-100 shadow-sm">
-            <div class="app-card-header p-3">
-                <div class="row justify-content-between align-items-center">
-                    <div class="col-auto">
-                        <h4 class="app-card-title">Annonces</h4>
-                    </div><!--//col-->
-                    <div class="col-auto">
-                        <div class="card-header-action">
-                            <a href="#">Plus de charts</a>
-                        </div><!--//card-header-actions-->
-                    </div><!--//col-->
-                </div><!--//row-->
-            </div><!--//app-card-header-->
-            <div class="app-card-body p-3 p-lg-4">
-                <div class="mb-3 d-flex">
-                    <select class="form-select form-select-sm ms-auto d-inline-flex w-auto">
-                        <option value="1" selected>Cette semaine</option>
-                        <option value="2">Aujourd'hui</option>
-                        <option value="3">Ce mois</option>
-                        <option value="3">Cette année</option>
-                    </select>
-                </div>
-                <div class="chart-container">
-                    {{ render_chart(chart, {'data-controller': 'mychart'}) }}
-                </div>
-            </div><!--//app-card-body-->
-        </div><!--//app-card-->
-    </div><!--//col-->
-    <div class="col-12 col-lg-6">
-        <div class="app-card app-card-chart h-100 shadow-sm">
-            <div class="app-card-header p-3">
-                <div class="row justify-content-between align-items-center">
-                    <div class="col-auto">
-                        <h4 class="app-card-title">Candidatures</h4>
-                    </div><!--//col-->
-                    <div class="col-auto">
-                        <div class="card-header-action">
-                            <a href="#">Plus de charts</a>
-                        </div><!--//card-header-actions-->
-                    </div><!--//col-->
-                </div><!--//row-->
-            </div><!--//app-card-header-->
-            <div class="app-card-body p-3 p-lg-4">
-                <div class="mb-3 d-flex">
-                    <select class="form-select form-select-sm ms-auto d-inline-flex w-auto">
-                        <option value="1" selected>Cette semaine</option>
-                        <option value="2">Aujourd'hui</option>
-                        <option value="3">Ce mois</option>
-                        <option value="3">Cette année</option>
-                    </select>
-                </div>
-                <div class="chart-container">
-                    {{ render_chart(chart, {'class': 'my-chart'}) }}
-                </div>
-            </div><!--//app-card-body-->
-        </div><!--//app-card-->
-    </div><!--//col-->
-
-</div><!--//row-->
-<div class="row g-4 mb-4">
-    <div class="col-12 col-lg-6">
         <div class="app-card app-card-progress-list h-100 shadow-sm">
             <div class="app-card-header p-3">
                 <div class="row justify-content-between align-items-center">
@@ -163,11 +102,8 @@
                             </div><!--//col-->
                             <div class="col-auto">
                                 <div class="app-icon-holder">
-                                    <svg width="1em" height="1em" viewBox="0 0 16 16"
-                                         class="bi bi-chevron-right" fill="currentColor"
-                                         xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd"
-                                              d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-chevron-right" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
                                     </svg>
                                 </div><!--//icon-holder-->
                             </div><!--//col-->

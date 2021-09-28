@@ -48,7 +48,7 @@ class Entreprise
     private string $description;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Dictionnaire::class, inversedBy="entreprises_secteur")
+     * @ORM\ManyToOne(targetEntity=Dictionnaire::class, inversedBy="entreprise")
      */
     private ?Dictionnaire $secteur;
 

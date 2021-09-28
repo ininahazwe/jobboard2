@@ -89,6 +89,7 @@ class AnnonceType extends AbstractType
                 ]
             ])
             ->add('reference', TextType::class)
+
             ->add('dateLimiteCandidature', DateTimeType::class, [
                 'date_widget' => 'single_text',
                 'with_minutes' => false,

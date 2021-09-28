@@ -61,11 +61,6 @@ class Contact
      */
     private ?string $message;
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
     public function getFirstname(): ?string
     {
         return $this->firstname;

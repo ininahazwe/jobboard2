@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Data\SearchDataAgenda;
+use App\Entity\Adresse;
 use App\Entity\Dictionnaire;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -41,6 +42,22 @@ class SearchAgendaForm extends AbstractType
             ->add('virtuel', CheckboxType::class, [
                 'label' => 'Virtuel',
                 'required' => false,
+            ])
+            ->add('adresse', EntityType::class, [
+                'required' => false,
+                'label' => false,
+                'expanded' => true,
+                'multiple'=> true,
+                'class' => Adresse::class,
+                'query_builder' => function($repository) {
+                    $ids = $repository->getEvenementsActifs();
+                    $query = $repository->createQueryBuilder('a')
+                        ->select('a')
+                        ->where('a.agenda IN (:ids)')
+                        ->setParameter('ids', $ids)
+                    ;
+                    return $query;
+                }
             ])
         ;
     }

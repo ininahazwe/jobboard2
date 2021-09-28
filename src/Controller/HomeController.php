@@ -2,9 +2,10 @@
 
 namespace App\Controller;
 
-use App\Data\SearchData;
 use App\Data\SearchDataAgenda;
 use App\Data\SearchDataAnnonces;
+use App\Data\SearchDataEntreprise;
+use App\Entity\Adresse;
 use App\Entity\Annuaire;
 use App\Entity\Blog;
 use App\Entity\Entreprise;
@@ -52,16 +53,18 @@ class HomeController extends AbstractController
                           BlogRepository $blogRepository,
     ): Response
     {
-        $annonces = $annoncesRepo->findActiveAndLive(5);
+        $annonces = $annoncesRepo->findActiveAndLive();
         $offres = $modeleOffreCommercialeRepository->findAll();
         $entreprises = $entrepriseRepository->getEntrepriseHome(6);
+        $entrepriseScore = $entrepriseRepository->getEntreprisesAccepteesAvecAnnonces();
         $actualites = $blogRepository->getActuHandicapeBlog();
 
         return $this->render('home/index.html.twig', [
             'annonces' => $annonces,
             'modeles' => $offres,
             'entreprises' => $entreprises,
-            'actualites' => $actualites
+            'actualites' => $actualites,
+            'entrepriseScore' => $entrepriseScore
         ]);
     }
 
@@ -199,7 +202,7 @@ class HomeController extends AbstractController
     #[Route('/entreprises', name: 'entreprise_show_all', methods: ['GET'])]
     public function showAllEntreprises(EntrepriseRepository $entrepriseRepository, Request $request): Response
     {
-        $data = new SearchData();
+        $data = new SearchDataEntreprise();
         $data->page = $request->get('page', 1);
         $form = $this->createForm(SearchEntrepriseForm::class, $data);
         $form->handleRequest($request);
@@ -224,7 +227,7 @@ class HomeController extends AbstractController
     public function showEntreprise($id, $slug, EntrepriseRepository $entrepriseRepository, Request $request, AnnonceRepository $annonceRepository): Response
     {
         $entreprise = $entrepriseRepository->findOneBy(['slug' => $slug, 'id' => $id]);
-        $annonces = $annonceRepository->getAnnoncesEntreprise($entreprise);
+        $annonces = $annonceRepository->getAnnoncesEntreprise();
 
         return $this->render('entreprise/show_unit.html.twig', [
             'entreprise' => $entreprise,
@@ -364,7 +367,6 @@ class HomeController extends AbstractController
                                      EntrepriseRepository $entrepriseRepository,
                                      Mailer $mailer,
                                      UserPasswordEncoderInterface $passwordEncoder,
-                                     UserRepository $userRepository
     ): Response
     {
         $entreprise = new Entreprise();
@@ -385,16 +387,6 @@ class HomeController extends AbstractController
             $entreprise->setModeration(Entreprise::EN_ATTENTE);
             $entreprise->setRefClient($ref);
 
-            /*$adresse = new Adresse();
-
-            $adresse->setZipcode($form->get('zipcode')->getData());
-            $adresse->setCity($form->get('city')->getData());
-            $adresse->setAdresse($form->get('adresse')->getData());
-            $adresse->setComplement($form->get('complement')->getData());
-            $adresse->setDepartement($form->get('department')->getData());
-
-            $entityManager->persist($adresse);*/
-
             $user = new User();
 
             $user->setEmail($form->get('email')->getData());
@@ -413,7 +405,22 @@ class HomeController extends AbstractController
             $entityManager->persist($user);
 
             $entreprise->addSuperRecruteur($user);
-            //$entreprise->addAdresse($adresse);
+
+            foreach($form->get('adresse')->getData() as $_adresse)
+            {
+
+                $adresse = new Adresse();
+                $adresse->setCity($_adresse->getCity());
+                $adresse->setZipcode($_adresse->getZipcode());
+                $adresse->setDepartement($_adresse->getDepartement());
+                $adresse->setAdresse($_adresse->getAdresse());
+                $adresse->setComplement($_adresse->getComplement());
+
+                $entreprise->addAdresse($adresse);
+                $entityManager->persist($adresse);
+
+          }
+
 
             $entityManager->persist($entreprise);
 
@@ -426,6 +433,7 @@ class HomeController extends AbstractController
             ]);
 
             $twig = new Environment($loader);
+
             $message = $twig->render('email',['user' => $this->getUser(), 'entreprise' => $entreprise ]);
 
             $mailer->send([
@@ -433,7 +441,7 @@ class HomeController extends AbstractController
                 'subject'         => $email->getSubject(),
                 'html_template'   => 'emails/email_vide.html.twig',
                 'context'         => [
-                    'message' => $message
+                    'message' => $message,
                 ]
             ]);
 

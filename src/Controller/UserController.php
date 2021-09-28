@@ -11,8 +11,8 @@ use App\Repository\BlogRepository;
 use App\Repository\CandaditureRepository;
 use App\Repository\EntrepriseRepository;
 use App\Service\Mailer;
-use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -41,29 +41,71 @@ class UserController extends AbstractController
 
         $entreprises = $entrepriseRepository->getEntrepriseActive();
         $blogs =$blogRepository->getBlogLimitedDashBoard();
-        $annonces = $annonceRepository->findActiveQuery();
-        $candidatures =$candaditureRepository->getCountOnDashboard();
+        $annonces = $annonceRepository->findActiveAndLive();
+        $candidatures =$candaditureRepository->findAll();
         $agendas =$agendaRepository->getAgendasEnCours();
+        $entityManager = $this->getDoctrine()->getManager();
 
-        $labels = [];
-        $data = [];
+      $labelsAnnonces = [];
+      $dataAnnonces = [];
+
+      $labelsCandidatures = [];
+      $dataCandidatures = [];
+
+        //Chart nombre annonces par entreprise
 
         foreach($entreprises as $entreprise){
-            $labels[] = $entreprise->getName();
-            $data[] = $entreprise->getNumberAnnonces();
+          if ($entreprise->getNumberAnnonces() > 0){
+            $labelsAnnonces[] = $entreprise->getName();
+            $dataAnnonces[] = $entreprise->getNumberAnnonces();
+          }
         }
 
         $chartAnnonces = $chartBuilder->createChart(Chart::TYPE_LINE);
         $chartAnnonces->setData([
-            'labels' => $labels,
+            'labels' => $labelsAnnonces,
             'datasets' => [
                 [
                     'label' => 'Annonces publiées',
                     'backgroundColor' => 'rgb(237, 253, 246)',
                     'borderColor' => 'rgb(21, 163, 98)',
-                    'data' => $data,
+                    'data' => $dataAnnonces,
                 ],
             ],
+        ]);
+        $chartAnnonces->setOptions([
+            'scales' => [
+              'yAxes' => [
+                'ticks' => [
+                  'precision' => 0,
+                  'beginAtZero' => true,
+                ]
+              ]
+            ]
+        ]);
+
+        //Chart candidatures reçues par entreprise
+
+        foreach($entreprises as $entreprise){
+          $allCandidatures = $entityManager->getRepository('App\Entity\Candidature')->hasCandidatureForEntreprise($entreprise);
+            if (count($allCandidatures) > 0){
+              $labelsCandidatures[] = $entreprise->getName();
+              $dataCandidatures[] = count($allCandidatures);
+            }
+
+        }
+
+        $chartCandidatures = $chartBuilder->createChart(Chart::TYPE_BAR_HORIZONTAL);
+        $chartCandidatures->setData([
+          'labels' => $labelsCandidatures,
+          'datasets' => [
+            [
+              'label' => 'Candidatures reçues',
+              'backgroundColor' => 'rgb(204, 227, 255)',
+              'borderColor' => 'rgb(78, 133, 228)',
+              'data' => $dataCandidatures,
+            ],
+          ],
         ]);
 
         $user = $this->getUser();
@@ -74,7 +116,8 @@ class UserController extends AbstractController
             'annonces' => $annonces,
             'candidatures' => $candidatures,
             'agendas' => $agendas,
-            'chart' => $chartAnnonces,
+            'chartAnnonces' => $chartAnnonces,
+            'chartCandidatures' => $chartCandidatures
         ]);
     }
 
@@ -127,6 +170,20 @@ class UserController extends AbstractController
             'user' => $user,
             'form' => $form->createView(),
         ]);
+    }
+
+    #[Route('/{id}/{userId}', name: 'app_profile_default_avatar')]
+    public function changeAvatar($id, $userId): Response
+    {
+      $entityManager = $this->getDoctrine()->getManager();
+      $image = $entityManager->getRepository(File::class)->find($id);
+      $user = $entityManager->getRepository(User::class)->find($userId);
+
+      $user->setAvatar($image);
+      $entityManager->persist($user);
+      $entityManager->flush();
+
+      return $this->redirectToRoute('app_profile_edit', [], Response::HTTP_SEE_OTHER);
     }
 
     #[Route('/pass_modifier', name: 'pass_modifier', methods: ['GET', 'POST'])]
@@ -245,6 +302,26 @@ class UserController extends AbstractController
         $img->setNameFile($name);
         $img->setType(File::TYPE_AVATAR);
         $user->addFiles($img);
+        $user->setAvatar($img);
+    }
+
+    #[Route('/supprime/file/{id}', name: 'user_delete_files', methods: ['DELETE'])]
+    public function deleteImage(File $file, Request $request): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+
+          if($this->isCsrfTokenValid('delete'.$file->getId(), $data['_token'])){
+            $nom = $file->getName();
+            unlink($this->getParameter('files_directory').'/'.$nom);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($file);
+            $em->flush();
+
+            return new JsonResponse(['success' => 1]);
+        }else{
+            return new JsonResponse(['error' => 'Token Invalide'], 400);
+        }
     }
 
     #[Route('/accepter/{id}', name: 'user_accepter')]

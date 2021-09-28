@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Email;
 use App\Entity\Entreprise;
 use App\Entity\File;
 use App\Entity\Offre;
@@ -210,12 +211,13 @@ class EntrepriseController extends AbstractController
     }
 
     #[Route('/{slug}/annonces', name: 'entreprise_annonces', methods: ['GET', 'POST'])]
-    public function AnnoncesShowByEntreprise(Request $request, $slug, EntrepriseRepository $entrepriseRepository, AnnonceRepository $annonceRepository): Response
+    public function AnnoncesShowByEntreprise(Request $request, $slug, Entreprise $entreprise, AnnonceRepository $annonceRepository): Response
     {
         $this->denyAccessUnlessGranted('ROLE_RECRUTEUR');
 
-        $annonces = $annonceRepository->getAnnoncesEntreprise();
-        $entreprise = $entrepriseRepository->findOneBy(['slug' => $slug]);
+        $annonces = $annonceRepository->findBy([
+          'entreprise' => $entreprise,
+        ]);
         return $this->render('entreprise/annonces_par_entreprise.html.twig', [
             'entreprise' =>$entreprise,
             'annonces' => $annonces
@@ -554,6 +556,7 @@ class EntrepriseController extends AbstractController
      */
     public function uploadFile($file, $entreprise)
     {
+        $user = $this->getUser();
         $image = $file;
         $fichier = md5(uniqid()) . '.' . $image->guessExtension();
         $name = $image->getClientOriginalName();
@@ -564,56 +567,54 @@ class EntrepriseController extends AbstractController
         $img = new File();
         $img->setName($fichier);
         $img->setNameFile($name);
-        $img->setType(File::TYPE_AVATAR);
+        $img->setType(File::TYPE_LOGO);
+        $img->setUser($user);
         $entreprise->addLogo($img);
     }
 
-    #[Route('/{id}/accepter/{token}', name: 'entreprise_accepter')]
-    public function accepterEntreprise(Entreprise $entreprise,
-                                       $id,
-                                       $token,
+    #[Route('/accepter/{id}', name: 'entreprise_accepter')]
+    public function accepterEntreprise($id ,
                                        Request $request,
-                                       UserPasswordEncoderInterface $passwordEncoder,
-                                       UserRepository $userRepository,
                                        Mailer $mailer,
                                        ModeleOffreCommercialeRepository $modeleOffreCommercialeRepository
     ): Response
     {
-        $user = $userRepository->findOneBy(['activation_token' => $token]);
-
-        if(!$user){
-            throw $this->createNotFoundException('Cet utilisateur n\'existe pas');
-        }
-
         $entityManager = $this->getDoctrine()->getManager();
-        $entreprise = $entityManager->getRepository(Entreprise::class)->find($id);
+        $entreprise = $entityManager->getRepository(Entreprise::class)->findOneBy(['id' => $id]);
         $entreprise->setModeration(Entreprise::ACCEPTEE);
         $entityManager->persist($entreprise);
+
 
         $recruteurs = $entreprise->getAllRecruteurs();
 
         foreach($recruteurs as $recruteur){
-            $recruteur->setActivationToken(null);
-            $recruteur->setModeration(User::ACCEPTEE);
+            $token = $recruteur->getActivationToken();
+
+            if($token){
+                $email = $entityManager->getRepository(Email::class)->findOneBy(['code' => 'EMAIL_VALIDATION_ENTREPRISE_RECRUTEUR']);
+
+                $loader = new ArrayLoader([
+                  'email' => $email->getContent(),
+                ]);
+
+
+                $lien = "http://". $_SERVER['HTTP_HOST'] . $this->redirect($this->generateUrl('access_verify_account', ['id' => $recruteur->getId(), 'token' => $token]))->getTargetUrl();
+
+
+                $twig = new Environment($loader);
+                $message = $twig->render('email',['recruteur' => $recruteur, 'entreprise' => $entreprise, 'token' => $token , 'lien' => $lien]);
+
+                $mailer->send([
+                  'recipient_email' => $recruteur->getEmail(),
+                  'subject'         => $email->getSubject(),
+                  'html_template'   => 'emails/email_vide.html.twig',
+                  'context'         => [
+                    'message' => $message,
+                  ]
+                ]);
+                $recruteur->setActivationToken(null);
+            }
             $entityManager->persist($recruteur);
-
-            $email = $entityManager->getRepository('App:Email')->findOneBy(['code' => 'EMAIL_VALIDATION_ENTREPRISE_RECRUTEUR']);
-
-            $loader = new ArrayLoader([
-                'email' => $email->getContent(),
-            ]);
-
-            $twig = new Environment($loader);
-            $message = $twig->render('email',['recruteur' => $recruteur, 'entreprise' => $entreprise ]);
-
-            $mailer->send([
-                'recipient_email' => $recruteur->getEmail(),
-                'subject'         => $email->getSubject(),
-                'html_template'   => 'emails/email_vide.html.twig',
-                'context'         => [
-                    'message' => $message
-                ]
-            ]);
         }
 
         $entityManager->flush();
@@ -640,7 +641,7 @@ class EntrepriseController extends AbstractController
         $entreprise = $entityManager->getRepository('App:Entreprise')->find($id);
         $entreprise->setModeration(Entreprise::REFUSEE);
         $entityManager->persist($entreprise);
-        $entityManager->flush();
+        //$entityManager->flush();
 
         $this->addFlash('danger', 'Rejet validé');
 

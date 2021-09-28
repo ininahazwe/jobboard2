@@ -7,6 +7,7 @@ use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\OrderBy;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -94,6 +95,12 @@ class User implements UserInterface
     private ?Profile $profile;
 
     /**
+     * @ORM\ManyToOne(targetEntity=File::class, inversedBy="avatar")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private ?File $avatar;
+
+    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private ?string $forgotPasswordToken;
@@ -137,6 +144,7 @@ class User implements UserInterface
 
     /**
      * @ORM\OneToMany(targetEntity=File::class, mappedBy="user", orphanRemoval=true, cascade={"persist"})
+     * @OrderBy({"id" = "ASC"})
      */
     private Collection $files;
 
@@ -156,7 +164,7 @@ class User implements UserInterface
     private Collection $messages;
 
     /**
-     * @ORM\OneToMany(targetEntity=Messages::class, mappedBy="sender", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Messages::class, mappedBy="sent", orphanRemoval=true)
      */
     private Collection $sent;
 
@@ -176,7 +184,7 @@ class User implements UserInterface
     private ?string $moderation;
 
     /**
-     * @ORM\OneToMany(targetEntity=Blog::class, mappedBy="auteur")
+     * @ORM\OneToMany(targetEntity=Blog::class, mappedBy="author")
      */
     private Collection $blogs;
 
@@ -365,6 +373,24 @@ class User implements UserInterface
 
         $this->profile = $profile;
 
+        return $this;
+    }
+
+    /**
+     * @return File|null
+     */
+    public function getAvatar(): ?File
+    {
+        return $this->avatar;
+    }
+
+    /**
+     * @param File|null $avatar
+     * @return User
+     */
+    public function setAvatar(?File $avatar): User
+    {
+        $this->avatar = $avatar;
         return $this;
     }
 
@@ -704,27 +730,14 @@ class User implements UserInterface
         $url = "";
         $files = array();
         foreach ($this->getFiles() as $file){
+          if($file->getType() == File::TYPE_AVATAR) {
             $files[] = $file->getName();
+          }
         }
 
         $file = end($files);
         $url = "uploads/" . $file;
         return $url ;
-    }
-
-    /**
-     * @return string
-     */
-    public function getNameLastFile(): string
-    {
-        $files = array();
-        foreach ($this->getFiles() as $file){
-            $files[] = $file->getNameFile();
-        }
-
-        $file = end($files);
-        $name = $file;
-        return $name ;
     }
 
     /**

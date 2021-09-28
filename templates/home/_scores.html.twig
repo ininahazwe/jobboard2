@@ -9,13 +9,13 @@
         <div class="row m-2">
             <div class="col-md-4">
                 <p><b>Les entreprises qui recrutent le plus</b></p>
-                {% for entreprise in entreprises %}
+                {% for entreprise in entrepriseScore %}
                     <div class="row bg-white m-1 p-1">
                         <div class="col">
                             <h5><a href="{{ path('entreprise_show_unit', {id:entreprise.id, slug:entreprise.slug}) }}">{{ entreprise.name }}</a></h5>
                         </div>
                         <div class="col text-end">
-                            {{ entreprise.getNumberAnnoncesActive() }}
+                          <span class="badge bg-secondary">{{ pluralize(entreprise.getNumberAnnonces(), 'annonce') }}</span>
                         </div>
                     </div>
                 {% endfor %}
@@ -23,13 +23,13 @@
 
             <div class="col-md-4">
                 <p><b>Les secteurs qui recrutent le plus</b></p>
-                {% for entreprise in entreprises %}
+                {% for entreprise in entrepriseScore %}
                     <div class="row bg-white m-1 p-1">
                         <div class="col">
                            {{ entreprise.secteur }}
                         </div>
                         <div class="col text-end">
-                            {{ entreprise.getAnnoncesEntreprise()|length }}
+                          <span class="badge bg-secondary">{{ pluralize(entreprise.getNumberAnnonces(), 'annonce') }}</span>
                         </div>
                     </div>
                 {% endfor %}
@@ -37,14 +37,12 @@
 
             <div class="col-md-4">
                 <p><b>Les villes proposant le plus d'offres</b></p>
-                {% for entreprise in entreprises %}
+              {% for annonce in annonces %}
                     <div class="row bg-white m-1 p-1">
                         <div class="col">
-
-                            {#{% if entreprise.city not in entreprises %}
-                                {{ entreprise.city }}
-                                {% set entreprises = entreprises|merge([entreprise.city]) %}
-                            {% endif %}#}
+                            {% for ville in annonce.adresse %}
+                              {{ ville.city }}
+                            {% endfor %}
                         </div>
                         <div class="col text-end">
 

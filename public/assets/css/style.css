@@ -181,7 +181,7 @@ h1, h2, h3, h4, h5, h6 {
 # Navigation Menu
 --------------------------------------------------------------*/
 /**
-* Desktop Navigation 
+* Desktop Navigation
 */
 .navbar {
   padding: 0;
@@ -301,7 +301,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /**
-* Mobile Navigation 
+* Mobile Navigation
 */
 .mobile-nav-toggle {
   color: #fff;
@@ -1923,4 +1923,22 @@ section {
 
 .color1{
   background-color: #8e9aaf;
+}
+
+/*Reveal on click*/
+
+#hover-area {
+  text-align:center;
+  margin: 0 auto;
+  display: block;
+  width:500px;
+  height:125px;
+}
+#reveal {
+  background: #fafafa;
+  width: 100%;
+  display: none;
+  border-radius: 3px;
+  box-shadow: 1px 1px 3px #555;
+  padding: 25px;
 }

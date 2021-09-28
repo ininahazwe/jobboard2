@@ -15,6 +15,8 @@ class File
     const TYPE_AVATAR = 1;
     const TYPE_CV = 2;
     const TYPE_MOTIVATION = 3;
+    const TYPE_ILLUSTRATION = 4;
+    const TYPE_LOGO = 5;
 
     use ResourceId;
     use Timestapable;
@@ -42,15 +44,9 @@ class File
     private ?User $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Dictionnaire::class, inversedBy="dictionnaire")
-     * @ORM\JoinColumn(nullable=true)
-     */
-    private ?Dictionnaire $dictionnaire;
-
-    /**
      * @ORM\Column(type="string", length=255)
      */
-    private ?string $nameFile;
+    private ?string $nameFile ="";
 
     /**
      * @ORM\ManyToOne(targetEntity=Annuaire::class, inversedBy="image")
@@ -68,7 +64,7 @@ class File
     private ?Candidature $candidature_motivation;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Blog::class, inversedBy="Images")
+     * @ORM\ManyToOne(targetEntity=Blog::class, inversedBy="images")
      */
     private ?Blog $blog;
 
@@ -76,6 +72,16 @@ class File
      * @ORM\Column(type="integer", nullable=true)
      */
     private ?int $type;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Profile::class, inversedBy="cv")
+     */
+    private ?Profile $profile;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private ?string $namefree;
 
     public function __construct()
     {
@@ -126,18 +132,6 @@ class File
     public function setUser(?User $user): self
     {
         $this->user = $user;
-
-        return $this;
-    }
-
-    public function getDictionnaire(): ?Dictionnaire
-    {
-        return $this->dictionnaire;
-    }
-
-    public function setDictionnaire(?Dictionnaire $dictionnaire): self
-    {
-        $this->dictionnaire = $dictionnaire;
 
         return $this;
     }
@@ -213,18 +207,66 @@ class File
 
         return $this;
     }
-    /**
-     * @return string|void
-     */
-    public static function getTypeName()
+
+  /**
+   * @return string
+   */
+  public function getTypeName(): string
     {
-        if ($type = '1'){
-            return 'Avatar';
-        }else if($type = '2'){
-            return 'CV';
-        }else if($type = '3'){
-            return 'Lettre de motivation';
-        }
+      $type = $this->type;
+      if ($type == 1){
+          return 'Avatar';
+      }else if($type == 2){
+          return 'CV';
+      }else if($type == 3){
+          return 'Lettre de motivation';
+      }else if($type == 4){
+          return 'Image d\'illustration';
+      }else if($type == 5){
+        return 'Logo';
+      }else{
+          return 'Non renseigné';
+      }
     }
+
+    public function getProfile(): ?Profile
+    {
+        return $this->profile;
+    }
+
+    public function setProfile(?Profile $profile): self
+    {
+        $this->profile = $profile;
+
+        return $this;
+    }
+
+    public function getNamefree(): ?string
+    {
+        return $this->namefree;
+    }
+
+    public function setNamefree(?string $namefree): self
+    {
+        $this->namefree = $namefree;
+
+        return $this;
+    }
+    public function __toString()
+    {
+        return $this->nameFile;
+    }
+    public function getFileSize(): ?string
+    {
+      $file = 'uploads/' . $this->name;
+
+      $bytes = filesize($file);
+
+      $label = array( 'B', 'KB', 'MB', 'GB', 'TB', 'PB' );
+      for( $i = 0; $bytes >= 1024 && $i < ( count( $label ) -1 ); $bytes /= 1024, $i++ );
+      return( round( $bytes, 0 ) . " " . $label[$i] );
+
+    }
+
 
 }

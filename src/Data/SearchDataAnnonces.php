@@ -45,6 +45,11 @@ class SearchDataAnnonces
     public array $experience = [];
 
     /**
+     * @var Dictionnaire[]
+     */
+    public array $secteur = [];
+
+    /**
      * @var Adresse[]
      */
     public array $adresse = [];

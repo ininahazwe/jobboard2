@@ -36,6 +36,7 @@
         "datatables.net-bs4": "^3.2.2",
         "datatables.net-editor-server": "^2.0.4",
         "flip-toolkit": "^7.0.13",
+        "grapesjs": "^0.17.25",
         "jquery-ui": "^1.12.1",
         "postcss-loader": "^5.2.0",
         "swup": "^2.0.14",

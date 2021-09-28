@@ -21,6 +21,7 @@ class RepeatedPasswordType extends AbstractType
             'invalid_message'       => "Veuillez saisir le même mot de passe",
             'required'              => true,
             'first_options'         => [
+                'label'         => 'Mot de de passe',
 /*                'label_attr'        => [
                     'title'         => 'Pour des raisons de sécurité, votre mot de passe doit contenir...',
                 ],*/
@@ -31,6 +32,7 @@ class RepeatedPasswordType extends AbstractType
                 ]
             ],
             'second_options'        => [
+                'label'         => 'Mot de de passe',
                 /*'label_attr'        => [
                     'title'         => "Confirmer le mot de passe"
                 ],*/

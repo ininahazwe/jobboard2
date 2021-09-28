@@ -2,6 +2,7 @@
 
 namespace App\Data;
 
+use App\Entity\Adresse;
 use App\Entity\Agenda;
 use App\Entity\Dictionnaire;
 
@@ -32,4 +33,8 @@ class SearchDataAgenda
      */
     public bool $virtuel = false;
 
+    /**
+     * @var Adresse[]
+     */
+    public array $adresse = [];
 }

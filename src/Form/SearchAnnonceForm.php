@@ -87,6 +87,24 @@ class SearchAnnonceForm extends AbstractType
                     return $query;
                 }
             ])
+
+            ->add('secteur', EntityType::class, [
+                'required'  => false,
+                'label' => false,
+                'expanded' => true,
+                'multiple' => true,
+                'class' => Dictionnaire::class,
+                'query_builder' => function($repository) {
+                  $query = $repository->createQueryBuilder('d')
+                    ->select('d')
+                    ->where('d.type = :type')
+                    ->setParameter('type', Dictionnaire::TYPE_SECTEUR)
+                  ;
+
+                  return $query;
+                }
+            ])
+
             ->add('adresse', EntityType::class, [
                 'required' => false,
                 'label' => false,

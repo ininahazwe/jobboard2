@@ -42,8 +42,6 @@
                             <thead>
                             <tr>
                                 <th>Name</th>
-                                <th>Description</th>
-                                <th>Entreprises</th>
                                 <th>Date de publication</th>
                                 <th>Active</th>
                                 <th>actions</th>
@@ -54,8 +52,6 @@
                             {% for annonce in annonces %}
                                 <tr>
                                     <td><a href="{{ path('annonce_show_unit', {id: annonce.id, slug: annonce.slug})}}">{{ annonce.name }}</a></td>
-                                    <td>{{ annonce.description|striptags|slice(0, 150) }}...</td>
-                                    <td>{{ annonce.entreprise }}</td>
                                     <td>{{ annonce.createdAt|date('d/m/Y') }}</td>
                                     <td>
                                         <div class="form-check form-switch">

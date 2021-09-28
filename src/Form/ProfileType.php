@@ -44,7 +44,8 @@ class ProfileType extends AbstractType
                 'with_minutes' => false
             ])
             ->add('isRqth', CheckboxType::class, [
-                'required' => false
+                'required' => false,
+                'label' => 'J\'ai le statut RQTH'
             ])
             ->add('adresse', CollectionType::class, [
                 'entry_type' => AdresseType::class,
@@ -70,7 +71,7 @@ class ProfileType extends AbstractType
             ])
             ->add('experiences', EntityType::class, [
                 'required'  => false,
-                'label' => 'Experience',
+                'label' => 'Expérience',
                 'expanded' => false,
                 'class' => 'App\Entity\Dictionnaire',
                 'query_builder' => function($repository) {
@@ -98,16 +99,22 @@ class ProfileType extends AbstractType
                 }
             ])
             ->add('isVisible', CheckboxType::class, [
-                'required' => false
+                'required' => false,
+                'label' => 'Rendre le profile visible aux recruteurs'
             ])
             ->add('isAmenagement', CheckboxType::class, [
-                'required' => false
+                'required' => false,
+                'label' => 'Besoin d\'aménagement?'
             ])
-            ->add('cv', DropzoneType::class, [
-                'label' => false,
-                'multiple' => false,
-                'mapped' => false,
-                'required' => false
+            ->add('cv',  DropzoneType::class, [
+              'attr' => [
+                'placeholder' => 'Choisir une image',
+                'data-controller' => 'mydropzone'
+              ],
+              'label' => false,
+              'multiple' => false,
+              'mapped' => false,
+              'required' => false,
             ])
             ->add('portfolio', TextType::class)
         ;

@@ -77,6 +77,20 @@ class CandaditureRepository extends ServiceEntityRepository
             ;
     }
 
+    public function hasCandidatureForEntreprise($entreprise)
+    {
+      $query = $this->createQueryBuilder('c')
+        ->orderBy('c.createdAt', 'DESC')
+        ->andWhere('c.entreprise = :entreprise');
+
+      $query
+        ->setParameter('entreprise', $entreprise)
+      ;
+
+      return $query->getQuery()
+        ->getResult()
+        ;
+    }
 
     public function getCountOnDashboard(): array|int|string
     {
@@ -167,4 +181,10 @@ class CandaditureRepository extends ServiceEntityRepository
         return $query->getQuery()->getResult();
     }
 
+    public function getCandidaturesEntreprise()
+    {
+      return $this->createQueryBuilder('c')
+        ->join('c.entreprise', 'e', 'WITH', 'e = a.id')
+        ->getQuery()->getResult();
+    }
 }

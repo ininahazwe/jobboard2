@@ -14,8 +14,6 @@ use Doctrine\ORM\Mapping as ORM;
 class Dictionnaire
 {
     const TYPE_CONTRACT = 'contract';
-    const TYPE_LOCATION = 'location';
-    const TYPE_LOCATION2 = 'location2';
     const TYPE_DIPLOMA = 'diploma';
     const TYPE_EXPERIENCE = 'experience';
     const TYPE_LANGUAGE = 'language';
@@ -61,12 +59,6 @@ class Dictionnaire
      */
     private string $value = '';
 
-
-    /**
-     * @ORM\OneToMany(targetEntity=File::class, mappedBy="dictionnaire", orphanRemoval=true, cascade={"persist"})
-     */
-    private Collection $files;
-
     /**
      * @ORM\OneToMany(targetEntity=Annonce::class, mappedBy="diplome")
      */
@@ -83,34 +75,58 @@ class Dictionnaire
     private Collection $annonces_type_contrat;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Annonce::class, mappedBy="Location")
-     */
-    private Collection $annonces_location;
-
-    /**
      * @ORM\OneToMany(targetEntity=Annuaire::class, mappedBy="categorie")
      */
     private Collection $annuaires;
 
     /**
-     * @ORM\OneToMany(targetEntity=User::class, mappedBy="civilite")
+     * @ORM\OneToMany(targetEntity=Profile::class, mappedBy="civilite")
      */
-    private Collection $users;
+    private Collection $profile;
 
     /**
      * @ORM\ManyToMany(targetEntity=Blog::class, mappedBy="categorie")
      */
     private Collection $blog;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Entreprise::class, mappedBy="secteur")
+     */
+    private Collection $entreprise;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Agenda::class, mappedBy="categorie")
+     */
+    private Collection $agenda;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Profile::class, mappedBy="metiers")
+     */
+    private Collection $metiers;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Profile::class, mappedBy="diplome")
+     */
+    private Collection $diplome;
+
+  /**
+   * @ORM\OneToMany(targetEntity=Profile::class, mappedBy="experiences")
+   */
+  private Collection $experiences;
+
     public function __construct()
     {
         $this->annonces = new ArrayCollection();
         $this->annonces_experience = new ArrayCollection();
         $this->annonces_type_contrat = new ArrayCollection();
-        $this->annonces_location = new ArrayCollection();
         $this->annuaires = new ArrayCollection();
-        $this->users = new ArrayCollection();
+        $this->profile = new ArrayCollection();
+        $this->metiers = new ArrayCollection();
+        $this->diplome = new ArrayCollection();
         $this->blog = new ArrayCollection();
+        $this->entreprise = new ArrayCollection();
+        $this->agenda = new ArrayCollection();
+        $this->experiences = new ArrayCollection();
     }
 
     public function setId($id)
@@ -228,33 +244,6 @@ class Dictionnaire
     /**
      * @return Collection
      */
-    public function getAnnoncesLocation(): Collection
-    {
-        return $this->annonces_location;
-    }
-
-    public function addAnnoncesLocation(Annonce $annoncesLocation): self
-    {
-        if (!$this->annonces_location->contains($annoncesLocation)) {
-            $this->annonces_location[] = $annoncesLocation;
-            $annoncesLocation->addLocation($this);
-        }
-
-        return $this;
-    }
-
-    public function removeAnnoncesLocation(Annonce $annoncesLocation): self
-    {
-        if ($this->annonces_location->removeElement($annoncesLocation)) {
-            $annoncesLocation->removeLocation($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection
-     */
     public function getAnnuaires(): Collection
     {
         return $this->annuaires;
@@ -282,9 +271,9 @@ class Dictionnaire
         return $this;
     }
 
+
     /**
-     * Get list of availability statuses
-     * @return array
+     * @return string[]
      */
     public static function getAvailabilityStatusList(): array
     {
@@ -355,77 +344,77 @@ class Dictionnaire
         }
     }
 
-    /**
-     * Get contract name by value
-     * @param $value
-     * @return string
-     */
-    public static function getContractNameByValue($value): string
-    {
-        if (is_array($value)) {
-            return '';
-        }
+//    /**
+//     * Get contract name by value
+//     * @param $value
+//     * @return string
+//     */
+//    public static function getContractNameByValue($value): string
+//    {
+//        if (is_array($value)) {
+//            return '';
+//        }
+//
+//        switch ($value) {
+//            case 1:
+//                return 'CDI';
+//            case 2:
+//                return 'CDD';
+//            case 3:
+//                return 'Interim';
+//            case 4:
+//                return 'Stage';
+//            case 5:
+//                return "Contrat d'apprentissage";
+//            case 6:
+//                return 'Contrat de professionalisation';
+//            case 7:
+//                return 'Autre';
+//            case 8:
+//                return 'Emploi saisonnier';
+//            default:
+//                return '';
+//        }
+//    }
 
-        switch ($value) {
-            case 1:
-                return 'CDI';
-            case 2:
-                return 'CDD';
-            case 3:
-                return 'Interim';
-            case 4:
-                return 'Stage';
-            case 5:
-                return "Contrat d'apprentissage";
-            case 6:
-                return 'Contrat de professionalisation';
-            case 7:
-                return 'Autre';
-            case 8:
-                return 'Emploi saisonnier';
-            default:
-                return '';
-        }
-    }
-
-    /**
-     * Get contract field value
-     * @param $value
-     * @return string
-     */
-    public static function getContractName($value): string
-    {
-        if (!is_array($value)) {
-            $value = explode('-', $value);
-        }
-
-        $result = array();
-        foreach ($value as $_value) {
-            switch ($_value) {
-                case 1:
-                    $result[] = 'CDI';
-                case 2:
-                    $result[] = 'CDD';
-                case 3:
-                    $result[] = 'Interim';
-                case 4:
-                    $result[] = 'Stage';
-                case 5:
-                    $result[] = "Contrat d'apprentissage";
-                case 6:
-                    $result[] = 'Contrat de professionalisation';
-                case 7:
-                    $result[] = 'Autre';
-                case 8:
-                    $result[] = 'Emploi saisonnier';
-                default:
-                    return '';
-            }
-
-            return join(',', $result);
-        }
-
-    }
+//    /**
+//     * Get contract field value
+//     * @param $value
+//     * @return string
+//     */
+//    public static function getContractName($value): string
+//    {
+//        if (!is_array($value)) {
+//            $value = explode('-', $value);
+//        }
+//
+//        $result = array();
+//        foreach ($value as $_value) {
+//            switch ($_value) {
+//                case 1:
+//                    $result[] = 'CDI';
+//                case 2:
+//                    $result[] = 'CDD';
+//                case 3:
+//                    $result[] = 'Interim';
+//                case 4:
+//                    $result[] = 'Stage';
+//                case 5:
+//                    $result[] = "Contrat d'apprentissage";
+//                case 6:
+//                    $result[] = 'Contrat de professionalisation';
+//                case 7:
+//                    $result[] = 'Autre';
+//                case 8:
+//                    $result[] = 'Emploi saisonnier';
+//                default:
+//                    return '';
+//            }
+//
+//            return join(',', $result);
+//        }
+//
+//    }
 
 
     public function __toString()
@@ -437,8 +426,6 @@ class Dictionnaire
     {
         return array(
             Dictionnaire::TYPE_CONTRACT => 'contract',
-            Dictionnaire::TYPE_LOCATION => 'location',
-            Dictionnaire::TYPE_LOCATION2 => 'Location2',
             Dictionnaire::TYPE_DIPLOMA => 'diploma',
             Dictionnaire::TYPE_EXPERIENCE => 'experience',
             Dictionnaire::TYPE_LANGUAGE => 'language',
@@ -476,27 +463,27 @@ class Dictionnaire
     /**
      * @return Collection
      */
-    public function getUsers(): Collection
+    public function getProfiles(): Collection
     {
-        return $this->users;
+        return $this->profile;
     }
 
-    public function addUser(User $user): self
+    public function addProfile(Profile $profile): self
     {
-        if (!$this->users->contains($user)) {
-            $this->users[] = $user;
-            $user->setCivilite($this);
+        if (!$this->profile->contains($profile)) {
+            $this->profile[] = $profile;
+            $profile->setCivilite($this);
         }
 
         return $this;
     }
 
-    public function removeUser(User $user): self
+    public function removeProfile(Profile $profile): self
     {
-        if ($this->users->removeElement($user)) {
+        if ($this->profile->removeElement($profile)) {
             // set the owning side to null (unless already changed)
-            if ($user->getCivilite() === $this) {
-                $user->setCivilite(null);
+            if ($profile->getCivilite() === $this) {
+                $profile->setCivilite(null);
             }
         }
 
@@ -529,4 +516,154 @@ class Dictionnaire
 
         return $this;
     }
+
+    /**
+     * @return Collection
+     */
+    public function getEntreprise(): Collection
+    {
+        return $this->entreprise;
+    }
+
+    public function addEntreprise(Entreprise $entreprise): self
+    {
+        if (!$this->entreprise->contains($entreprise)) {
+            $this->entreprise[] = $entreprise;
+            $entreprise->setSecteur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEntreprise(Entreprise $entreprise): self
+    {
+        if ($this->entreprise->removeElement($entreprise)) {
+            // set the owning side to null (unless already changed)
+            if ($entreprise->getSecteur() === $this) {
+                $entreprise->setSecteur(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getAgenda(): Collection
+    {
+        return $this->agenda;
+    }
+
+    public function addAgenda(Agenda $agenda): self
+    {
+        if (!$this->agenda->contains($agenda)) {
+            $this->agenda[] = $agenda;
+            $agenda->setCategorie($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAgenda(Agenda $agenda): self
+    {
+        if ($this->agenda->removeElement($agenda)) {
+            // set the owning side to null (unless already changed)
+            if ($agenda->getCategorie() === $this) {
+                $agenda->setCategorie(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getMetiers(): Collection
+    {
+        return $this->metiers;
+    }
+
+    public function addMetier(Profile $metiers): self
+    {
+        if (!$this->metiers->contains($metiers)) {
+            $this->metiers[] = $metiers;
+            $metiers->setMetiers($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMetier(Profile $metiers): self
+    {
+        if ($this->metiers->removeElement($metiers)) {
+            // set the owning side to null (unless already changed)
+            if ($metiers->getMetiers() === $this) {
+                $metiers->setMetiers(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getDiplomes(): Collection
+    {
+        return $this->diplome;
+    }
+
+    public function addDiplome(Profile $diplome): self
+    {
+        if (!$this->diplome->contains($diplome)) {
+            $this->diplome[] = $diplome;
+            $diplome->setDiplome($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDiplome(Profile $diplome): self
+    {
+        if ($this->diplome->removeElement($diplome)) {
+            // set the owning side to null (unless already changed)
+            if ($diplome->getDiplome() === $this) {
+                $diplome->setDiplome(null);
+            }
+        }
+
+        return $this;
+    }
+
+  /**
+   * @return Collection
+   */
+  public function getExperiences(): Collection
+  {
+    return $this->experiences;
+  }
+
+  public function addExperience(Profile $experience): self
+  {
+    if (!$this->experiences->contains($experience)) {
+      $this->experiences[] = $experience;
+      $experience->setExperiences($this);
+    }
+
+    return $this;
+  }
+
+  public function removeExperience(Profile $experience): self
+  {
+    if ($this->experiences->removeElement($experience)) {
+      // set the owning side to null (unless already changed)
+      if ($experience->getExperiences() === $this) {
+        $experience->setExperiences(null);
+      }
+    }
+
+    return $this;
+  }
 }

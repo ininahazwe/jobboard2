@@ -82,6 +82,11 @@ class Candidature
      */
     private ?int $statut;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private ?string $cv_ajoute;
+
     public function __construct()
     {
         $this->annonces = new ArrayCollection();
@@ -304,6 +309,32 @@ class Candidature
     public function setStatut(?int $statut): self
     {
         $this->statut = $statut;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNumberCandidatures(): mixed
+    {
+      $nombre = 0;
+      foreach($this->getEntreprise() as $candidature){
+        if ($candidature->isActive()){
+          $nombre = $nombre + 1;
+        }
+      }
+      return $nombre;
+    }
+
+    public function getCvAjoute(): ?string
+    {
+        return $this->cv_ajoute;
+    }
+
+    public function setCvAjoute(?string $cv_ajoute): self
+    {
+        $this->cv_ajoute = $cv_ajoute;
 
         return $this;
     }

@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Adresse;
+use App\Entity\Agenda;
 use App\Entity\Annonce;
 use App\Entity\Entreprise;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -40,14 +41,35 @@ class AdresseRepository extends ServiceEntityRepository
     public function getAdressesAnnoncesActives(): array
     {
         $ids = array();
+        $now = new \Datetime('now');
         $query = $this->getEntityManager()->getRepository(Annonce::class)->createQueryBuilder('a')
             ->where('a.isActive = 1')
+            ->andWhere('a.dateLimiteCandidature >= :date')
+            ->setParameter('date', $now)
         ;
 
         $result = $query->getQuery()->getResult();
         foreach($result as $annonce){
             if($annonce->getAdresse()){
                 $ids[] = $annonce->getId();
+            }
+        }
+        return $ids;
+    }
+
+    public function getEvenementsActifs(): array
+    {
+        $ids = array();
+        $now = new \Datetime('now');
+        $query = $this->getEntityManager()->getRepository(Agenda::class)->createQueryBuilder('a')
+            ->andWhere('a.dateDebut >= :date')
+            ->setParameter('date', $now)
+        ;
+
+        $result = $query->getQuery()->getResult();
+        foreach($result as $agenda){
+            if($agenda->getAdresse()){
+                $ids[] = $agenda->getId();
             }
         }
         return $ids;

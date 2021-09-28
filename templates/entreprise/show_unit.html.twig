@@ -20,11 +20,13 @@
 
                     <div class="col-lg-8">
                         <h2>Ses offres d'emploi</h2>
-                        {% if annonces|length < 1 %}
-                            <p>(Aucune offre n'est disponible pour le moment)</p>
-                        {% endif %}
+                      {% if entreprise.annoncesEntreprise|length >= 1 %}
+                        <span class="badge bg-success">{{ pluralize(entreprise.annoncesEntreprise|length, 'annonce') }}</span>
+                      {% elseif entreprise.annoncesEntreprise|length < 1%}
+                        <p>(Aucune offre n'est disponible pour le moment)</p>
+                      {% endif %}
 
-                        {% for offre in annonces %}
+                        {% for offre in entreprise.annoncesEntreprise %}
                                   <div class="row section-bg p-3 m-1">
                                     <div class="col-md-4">
                                         <h5>

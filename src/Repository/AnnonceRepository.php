@@ -4,7 +4,6 @@ namespace App\Repository;
 
 use App\Data\SearchDataAnnonces;
 use App\Entity\Annonce;
-use App\Entity\Dictionnaire;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -74,13 +73,21 @@ class AnnonceRepository extends ServiceEntityRepository
         return $query->getQuery()->getResult();
     }
 
-    public function getAnnoncesEntreprise()
+    /**
+     * @return array
+     */
+    public function findActiveAndLiveThisWeek(): array
     {
-        return $this->createQueryBuilder('a')
-            ->join('a.auteur', 'e', 'WITH', 'e = a.id')
-            ->getQuery()->getResult();
-    }
+        $now = new \DateTime('now');
+        $query = $this->createQueryBuilder('a')
+          ->where('a.isActive = 1')
+          ->andWhere('a.dateLimiteCandidature > :date')
+          ->andWhere('a.fecha BETWEEN :monday AND :sunday')
+          ->setParameter('date', $now)
+        ;
 
+      return $query->getQuery()->getResult();
+    }
     /**
      * @return QueryBuilder
      */
@@ -114,8 +121,6 @@ class AnnonceRepository extends ServiceEntityRepository
             ->andWhere('a.dateLimiteCandidature > :date')
             ->setParameter('date', $now);
 
-        //->join('a.contrat', 'c');
-
         if(!empty($search->q)){
             $query
                 ->andWhere('a.name LIKE :q')
@@ -130,21 +135,27 @@ class AnnonceRepository extends ServiceEntityRepository
         }
         if(!empty($search->contrat)){
             $query
-                ->innerJoin('a.type_contrat', 'c')
-                ->andWhere('c.id IN (:contrat)')
+                ->innerJoin('a.type_contrat', 'd')
+                ->andWhere('d.id IN (:contrat)')
                 ->setParameter('contrat', $search->contrat);
         }
         if(!empty($search->diplome)){
             $query
-                ->innerJoin('a.diplome', 'c')
-                ->andWhere('c.id IN (:diplome)')
+                ->innerJoin('a.diplome', 'd')
+                ->andWhere('d.id IN (:diplome)')
                 ->setParameter('diplome', $search->diplome);
         }
         if(!empty($search->experience)){
             $query
-                ->innerJoin('a.experience', 'c')
-                ->andWhere('c.id IN (:experience)')
+                ->innerJoin('a.experience', 'd')
+                ->andWhere('d.id IN (:experience)')
                 ->setParameter('experience', $search->experience);
+        }
+        if(!empty($search->secteur)){
+          $query
+            ->innerJoin('a.secteur', 'd')
+            ->andWhere('d.id IN (:secteur)')
+            ->setParameter('secteur', $search->secteur);
         }
         if(!empty($search->adresse)){
             $query
@@ -189,19 +200,20 @@ class AnnonceRepository extends ServiceEntityRepository
         return $query->getQuery()->getResult();
     }
 
-    /**
-     * Returns number of "Annonces" per day
-     * @return void
-     */
-    public function countByDate(){
-        // $query = $this->createQueryBuilder('a')
-        //     ->select('SUBSTRING(a.created_at, 1, 10) as dateAnnonces, COUNT(a) as count')
-        //     ->groupBy('dateAnnonces')
-        // ;
-        // return $query->getQuery()->getResult();
-        $query = $this->getEntityManager()->createQuery("
-            SELECT SUBSTRING(a.created_at, 1, 10) as dateAnnonces, COUNT(a) as count FROM App\Entity\Annonces a GROUP BY dateAnnonces
-        ");
-        return $query->getResult();
-    }
+   /* public function getSecteursActifs(): array
+    {
+        $ids = array();
+
+        $query = $this->getEntityManager()->getRepository(Annonce::class)->createQueryBuilder('a')
+        ;
+
+        $result = $query->getQuery()->getResult();
+        foreach($result as $annonce){
+          if($annonce->getSecteur()){
+              $ids[] = $annonce->getId();
+          }
+        }
+
+        return $ids;
+    }*/
 }

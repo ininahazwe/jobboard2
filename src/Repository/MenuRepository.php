@@ -37,10 +37,11 @@ class MenuRepository extends ServiceEntityRepository
         }else{
             $query->setParameter('type', Menu::TYPE_MENU_CANDIDAT);
         }
+      $query = $query->getQuery();
+
             return $query
 
             //->setMaxResults(10)
-            ->getQuery()
             ->getResult()
         ;
     }

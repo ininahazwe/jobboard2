@@ -2,7 +2,7 @@
 
 namespace App\Form;
 
-use App\Data\SearchData;
+use App\Data\SearchDataEntreprise;
 use App\Entity\Adresse;
 use App\Entity\Dictionnaire;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -64,7 +64,7 @@ class SearchEntrepriseForm extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => SearchData::class,
+            'data_class' => SearchDataEntreprise::class,
             'method' => 'GET',
             'csrf_protection' => false
         ]);

@@ -277,7 +277,7 @@ class FactureController extends AbstractController
             'Attachment' => false
         ]);
 
-        //return new Response();
+        return new Response();
     }
 
     /**
