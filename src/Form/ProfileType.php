@@ -108,7 +108,7 @@ class ProfileType extends AbstractType
             ])
             ->add('cv',  DropzoneType::class, [
               'attr' => [
-                'placeholder' => 'Choisir une image',
+                'placeholder' => 'Choisir un fichier',
                 'data-controller' => 'mydropzone'
               ],
               'label' => false,

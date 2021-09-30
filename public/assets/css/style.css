@@ -1925,6 +1925,16 @@ section {
   background-color: #8e9aaf;
 }
 
+/*Notification message d'erreur js*/
+
+div.notification.error{
+  border: 1px dashed red;
+  padding: 5px;
+}
+div.notification.error p{
+  margin-bottom: 0rem !important;
+}
+
 /*Reveal on click*/
 
 #hover-area {

@@ -40,14 +40,18 @@
                                     <th class="cell">Infos offre</th>
                                     <th class="cell">Date de candidature</th>
                                     <th class="cell">Voir</th>
+                                    {% if is_granted('ROLE_RECRUTEUR') %}
                                     <th class="cell">Statut</th>
+                                    {% endif %}
                                 </tr>
                                 </thead>
                                 <tbody>
                                 {% for candidature in candidatures %}
                                     <tr>
                                         <td class="cell">
+                                            {% if candidature.candidat %}
                                             <b>Nom et prénom : </b>{{ candidature.candidat.fullname()|upper }}<br>
+                                            {% endif %}
                                             <b>Date de candidature : </b>{{ candidature.createdAt ? candidature.createdAt|date('d-m-Y') : '' }}<br>
                                             {% if candidature.cv %}
                                                 <a href=""><i class="fas fa-download"></i> Télécharger son cv</a>
@@ -69,15 +73,14 @@
                                                 </svg>
                                             </a>
                                         </td>
+                                        {% if is_granted('ROLE_RECRUTEUR') %}
                                         <td class="cell">
-                                            {% if candidature.statut is same as 0 %}
-                                            <div class="btn-group">
-                                                <a class="btn-sm btn-success" href="{{ path('candidature_accepter', {'id': candidature.id}) }}">Accepter</a>
-                                                <a class="btn-sm btn-danger" href="{{ path('candidature_refuser', {'id': candidature.id}) }}">Refuser</a>
+                                            <div class="form-check form-switch">
+                                                <button class="btn-sm btn-success">Accepter</button>
+                                                <button class="btn-sm btn-danger">Refuser</button>
                                             </div>
-                                                {% else %}Acceptée
-                                            {% endif %}
                                         </td>
+                                        {% endif %}
                                     </tr>
                                 {% else %}
                                     <tr>

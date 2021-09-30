@@ -16,29 +16,24 @@ use Knp\Component\Pager\PaginatorInterface;
  * @method Annonce[]    findAll()
  * @method Annonce[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class AnnonceRepository extends ServiceEntityRepository
-{
+class AnnonceRepository extends ServiceEntityRepository {
     private PaginatorInterface $paginator;
 
-    public function __construct(ManagerRegistry $registry, PaginatorInterface $paginator)
-    {
+    public function __construct(ManagerRegistry $registry, PaginatorInterface $paginator) {
         parent::__construct($registry, Annonce::class);
         $this->paginator = $paginator;
     }
 
-    public function findAllActiveQuery($user)
-    {
+    public function findAllActiveQuery($user) {
         $query = $this->createQueryBuilder('a');
         if ($user->isSuperAdmin()) {
-            $query->addOrderBy('a.createdAt', 'DESC')
-                ;
+            $query->addOrderBy('a.createdAt', 'DESC');
             return $query->getQuery()->getResult();
         }
         $ids = $user->getEntrepriseIds();
         $query->andWhere('a.entreprise IN (:entreprises)')
-            ->addOrderBy('a.createdAt', 'DESC')
-            ->setParameter('entreprises', $ids)
-            ;
+                ->addOrderBy('a.createdAt', 'DESC')
+                ->setParameter('entreprises', $ids);
 
         return $query->getQuery()->getResult();
 
@@ -47,173 +42,149 @@ class AnnonceRepository extends ServiceEntityRepository
     /**
      * @return array
      */
-    public function findLatest(): array
-    {
+    public function findLatest(): array {
         return $this->findActiveQuery()
-            ->setMaxResults(4)
-            ->getQuery()
-            ->getResult();
+                ->setMaxResults(4)
+                ->getQuery()
+                ->getResult();
     }
 
     /**
      * @param null $limite
      * @return array
      */
-    public function findActiveAndLive($limite=null): array
-    {
+    public function findActiveAndLive($limite = null): array {
         $now = new \DateTime('now');
         $query = $this->createQueryBuilder('a')
-            ->andWhere('a.isActive = 1')
-            ->andWhere('a.dateLimiteCandidature > :date')
-            ->setParameter('date', $now)
-        ;
-        if($limite){
+                ->andWhere('a.isActive = 1')
+                ->andWhere('a.dateLimiteCandidature > :date')
+                ->setParameter('date', $now);
+        if ($limite) {
             $query->setMaxResults($limite);
         }
         return $query->getQuery()->getResult();
     }
 
     /**
-     * @return array
-     */
-    public function findActiveAndLiveThisWeek(): array
-    {
-        $now = new \DateTime('now');
-        $query = $this->createQueryBuilder('a')
-          ->where('a.isActive = 1')
-          ->andWhere('a.dateLimiteCandidature > :date')
-          ->andWhere('a.fecha BETWEEN :monday AND :sunday')
-          ->setParameter('date', $now)
-        ;
-
-      return $query->getQuery()->getResult();
-    }
-    /**
      * @return QueryBuilder
      */
-    public function findActiveQuery(): QueryBuilder
-    {
+    public function findActiveQuery(): QueryBuilder {
         return $this->createQueryBuilder('a')
-            ->where('a.isActive = 1');
+                ->where('a.isActive = 1');
     }
 
     /**
      * @param SearchDataAnnonces $search
      * @return PaginationInterface
      */
-    public function findSearch(SearchDataAnnonces $search): PaginationInterface
-    {
+    public function findSearch(SearchDataAnnonces $search): PaginationInterface {
         $query = $this->getSearchQuery($search)->getQuery()->getResult();
 
         return $this->paginator->paginate(
-            $query,
-            $search->page,
-            10
+                $query,
+                $search->page,
+                10
         );
     }
 
-    public function getSearchQuery (SearchDataAnnonces $search): QueryBuilder
-    {
+    public function getSearchQuery(SearchDataAnnonces $search): QueryBuilder {
         $now = new \DateTime('now');
         $query = $this
-            ->createQueryBuilder('a')
-            ->andWhere('a.isActive = 1')
-            ->andWhere('a.dateLimiteCandidature > :date')
-            ->setParameter('date', $now);
+                ->createQueryBuilder('a')
+                ->andWhere('a.isActive = 1')
+                ->andWhere('a.dateLimiteCandidature > :date')
+                ->setParameter('date', $now);
 
-        if(!empty($search->q)){
+        if (!empty($search->q)) {
             $query
-                ->andWhere('a.name LIKE :q')
-                ->setParameter('q', "%" . $search->q . "%");
+                    ->andWhere('a.name LIKE :q')
+                    ->setParameter('q', "%" . $search->q . "%");
         }
 
-        if(!empty($search->entreprises)){
+        if (!empty($search->entreprises)) {
             $query
-                ->innerJoin('a.entreprise', 'e')
-                ->andWhere('e.id IN (:entreprises)')
-                ->setParameter('entreprises', $search->entreprises);
+                    ->innerJoin('a.entreprise', 'e')
+                    ->andWhere('e.id IN (:entreprises)')
+                    ->setParameter('entreprises', $search->entreprises);
         }
-        if(!empty($search->contrat)){
+        if (!empty($search->contrat)) {
             $query
-                ->innerJoin('a.type_contrat', 'd')
-                ->andWhere('d.id IN (:contrat)')
-                ->setParameter('contrat', $search->contrat);
+                    ->innerJoin('a.type_contrat', 'd')
+                    ->andWhere('d.id IN (:contrat)')
+                    ->setParameter('contrat', $search->contrat);
         }
-        if(!empty($search->diplome)){
+        if (!empty($search->diplome)) {
             $query
-                ->innerJoin('a.diplome', 'd')
-                ->andWhere('d.id IN (:diplome)')
-                ->setParameter('diplome', $search->diplome);
+                    ->innerJoin('a.diplome', 'd')
+                    ->andWhere('d.id IN (:diplome)')
+                    ->setParameter('diplome', $search->diplome);
         }
-        if(!empty($search->experience)){
+        if (!empty($search->experience)) {
             $query
-                ->innerJoin('a.experience', 'd')
-                ->andWhere('d.id IN (:experience)')
-                ->setParameter('experience', $search->experience);
+                    ->innerJoin('a.experience', 'd')
+                    ->andWhere('d.id IN (:experience)')
+                    ->setParameter('experience', $search->experience);
         }
-        if(!empty($search->secteur)){
-          $query
-            ->innerJoin('a.secteur', 'd')
-            ->andWhere('d.id IN (:secteur)')
-            ->setParameter('secteur', $search->secteur);
-        }
-        if(!empty($search->adresse)){
+        if (!empty($search->secteur)) {
             $query
-                ->innerJoin('a.adresse', 'c')
-                ->andWhere('c.id IN (:adresse)')
-                ->setParameter('adresse', $search->adresse);
+                    ->innerJoin('a.secteur', 'd')
+                    ->andWhere('d.id IN (:secteur)')
+                    ->setParameter('se*', $search->secteur);
+        }
+
+        if (!empty($search->adresse)) {
+            $query
+                    ->innerJoin('a.adresse', 'c')
+                    ->andWhere('c.id IN (:adresse)')
+                    ->setParameter('adresse', $search->adresse);
         }
 
         return $query;
     }
 
-    public function findAnnoncesEnFavori($user)
-    {
+    public function findAnnoncesEnFavori($user) {
         $now = new \DateTime('now');
 
         $query = $this->createQueryBuilder('a')
-            ->andWhere('a.isActive = 1')
-            ->andWhere('a.dateLimiteCandidature >= :date')
-            ->innerJoin('a.favoris', 'u', 'WITH', 'u.id = :user')
-            ->setParameter('user', $user)
-            ->setParameter('date', $now);
+                ->andWhere('a.isActive = 1')
+                ->andWhere('a.dateLimiteCandidature >= :date')
+                ->innerJoin('a.favoris', 'u', 'WITH', 'u.id = :user')
+                ->setParameter('user', $user)
+                ->setParameter('date', $now);
 
         return $query
-            ->getQuery()->getResult();
+                ->getQuery()->getResult();
     }
 
-    public function getAnnoncesArchivees(): mixed
-    {
+    public function getAnnoncesArchivees(): mixed {
         $now = new \DateTime('now');
         $query = $this->createQueryBuilder('a')
-            ->andWhere('a.dateLimiteCandidature < :date')
-            ->setParameter('date', $now)
-        ;
+                ->andWhere('a.dateLimiteCandidature < :date')
+                ->setParameter('date', $now);
         return $query->getQuery()->getResult();
     }
 
-    public function getAnnoncesAttente(): mixed
-    {
+    public function getAnnoncesAttente(): mixed {
         $query = $this->createQueryBuilder('a')
-            ->andWhere('a.isActive = 0')
-        ;
+                ->andWhere('a.isActive = 0');
         return $query->getQuery()->getResult();
     }
 
-   /* public function getSecteursActifs(): array
-    {
+    public function getTypeContratAnnoncesActives(): array {
         $ids = array();
-
+        $now = new \Datetime('now');
         $query = $this->getEntityManager()->getRepository(Annonce::class)->createQueryBuilder('a')
-        ;
+                ->where('a.isActive = 1')
+                ->andWhere('a.dateLimiteCandidature >= :date')
+                ->setParameter('date', $now);
 
         $result = $query->getQuery()->getResult();
-        foreach($result as $annonce){
-          if($annonce->getSecteur()){
-              $ids[] = $annonce->getId();
-          }
+        foreach ($result as $annonce) {
+            if ($annonce->getAdresse()) {
+                $ids[] = $annonce->getId();
+            }
         }
-
         return $ids;
-    }*/
+    }
+
 }
