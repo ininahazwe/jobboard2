@@ -33,7 +33,7 @@
                         <tr>
                             <th>Nom</th>
                             <th>Description</th>
-                            <th>Ville</th>
+                            <th>Adresse</th>
                             <th>Telephone</th>
                             <th>Catégorie</th>
                             <th>actions</th>
@@ -44,9 +44,17 @@
                             <tr>
                                 <td><a href="{{ path('annuaire_show', {'slug': annuaire.slug}) }}">{{ annuaire.title }}</a></td>
                                 <td>{{ annuaire.content|slice(0, 120)|raw }}</td>
-                                <td>{{ annuaire.city }}</td>
+                                <td>
+                                    {% for adresse in annuaire.adresse %}
+                                        {{ adresse.city }}<br>{{ adresse.zipcode }}
+                                    {% endfor %}
+                                </td>
                                 <td>{{ annuaire.telephone }}</td>
-                                <td>{{ annuaire.categorie }}</td>
+                                <td>
+                                    {% for cat in annuaire.categorie %}
+                                        {{ cat.value }}
+                                    {% endfor %}
+                                </td>
                                 <td>
                                     <div class="d-flex justify-content-around">
                                         <a href="{{ path('annuaire_edit', {'id': annuaire.id}) }}" class="d-flex align-items-center"><i class="fas fa-edit"></i></a>
@@ -66,4 +74,6 @@
         </div>
     </section>
 </main>
+    {% include 'adresse/_script.html.twig' %}
+    {{ render(controller('App\\Controller\\AdresseController::addEntite',{'entite' : 'annuaire' })) }}
 {% endblock %}

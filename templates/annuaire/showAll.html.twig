@@ -15,20 +15,35 @@
         </section><!-- End Breadcrumbs -->
 
         <section class="inner-page">
-            <div class="container">
+            <div class="container js-filter">
                 <div class="row">
-                {% for annuaire in annuaires %}
-                    <div class="col-3">
-                        <div class="d-flex justify-content-between section-bg p-2 m-1">
-                            <a href="{{ path('annuaire_show_unit', {slug:annuaire.slug}) }}">{{ annuaire.title }}</a>
-                            <p style="font-size: 10px"> {{ annuaire.categorie}} </p>
+                    <div class="col-md-3">
+                        {% include 'search/filtrer_annuaire.html.twig' with {form: form} only %}
+                    </div>
+                    <div class="col-md-9">
+                        <div class="row js-filter-content">
+                            {% include 'annuaire/_annuaires.html.twig' %}
+                        </div>
+                        <div class="mt-4 js-filter-pagination">
+                            {% include 'annuaire/_pagination.html.twig' %}
                         </div>
                     </div>
-                {% endfor %}
                 </div>
             </div>
         </section>
     </main>
+    <style>
+        .grid{
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-gap: 20px;
+        }
+        .filter{
+            display: block;
+            position: sticky;
+            top: 20px;
+        }
+    </style>
 {% endblock %}
 
 

@@ -22,7 +22,7 @@ class Annuaire
      * @Assert\NotBlank()
      * @Assert\Length(
      *      min = 2,
-     *      max = 50,
+     *      max = 100,
      *      minMessage = "un minimum de {{ limit }} caractères est requis",
      *      maxMessage = "{{ limit }} caractères sont la limite"
      * )
@@ -33,7 +33,7 @@ class Annuaire
      * @ORM\Column(type="text")
      * @Assert\Length(
      *      min = 10,
-     *      max = 500,
+     *      max = 2000,
      *      minMessage = "un minimum de {{ limit }} caractères est requis",
      *      maxMessage = "{{ limit }} caractères sont la limite"
      * )
@@ -55,21 +55,6 @@ class Annuaire
     private ?string $web_link;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private ?string $addresse;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private ?string $code_postal;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private ?string $city;
-
-    /**
      * @ORM\OneToMany(targetEntity=File::class, mappedBy="annuaire")
      */
     private Collection $image;
@@ -83,10 +68,6 @@ class Annuaire
      */
     private ?string $telephone;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Dictionnaire::class, inversedBy="annuaires")
-     */
-    private ?Dictionnaire $categorie;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -96,10 +77,27 @@ class Annuaire
      */
     private ?string $email;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Adresse::class, mappedBy="annuaire", cascade={"persist"})
+     */
+    private Collection $adresse;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Dictionnaire::class, inversedBy="annuaires")
+     * @ORM\JoinTable(name="annuaire_categorie",
+     *      joinColumns={@ORM\JoinColumn(name="annuaire_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="dictionnaire_id", referencedColumnName="id")}
+     *      )
+     **/
+    private Collection $categorie;
+
     public function __construct()
     {
         $this->image = new ArrayCollection();
         $this->createdAt = new \DateTimeImmutable('now');
+        $this->adresse = new ArrayCollection();
+        $this->categorie = new ArrayCollection();
+
     }
 
     public function getTitle(): ?string
@@ -143,44 +141,8 @@ class Annuaire
         return $this;
     }
 
-    public function getAddresse(): ?string
-    {
-        return $this->addresse;
-    }
-
-    public function setAddresse(?string $addresse): self
-    {
-        $this->addresse = $addresse;
-
-        return $this;
-    }
-
-    public function getCodePostal(): ?string
-    {
-        return $this->code_postal;
-    }
-
-    public function setCodePostal(?string $code_postal): self
-    {
-        $this->code_postal = $code_postal;
-
-        return $this;
-    }
-
-    public function getCity(): ?string
-    {
-        return $this->city;
-    }
-
-    public function setCity(?string $city): self
-    {
-        $this->city = $city;
-
-        return $this;
-    }
-
     /**
-     * @return Collection|File[]
+     * @return Collection
      */
     public function getImage(): Collection
     {
@@ -221,18 +183,6 @@ class Annuaire
         return $this;
     }
 
-    public function getCategorie(): ?Dictionnaire
-    {
-        return $this->categorie;
-    }
-
-    public function setCategorie(?Dictionnaire $categorie): self
-    {
-        $this->categorie = $categorie;
-
-        return $this;
-    }
-
     public function getEmail(): ?string
     {
         return $this->email;
@@ -243,5 +193,90 @@ class Annuaire
         $this->email = $email;
 
         return $this;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getAdresse(): Collection
+    {
+        return $this->adresse;
+    }
+
+    public function addAdresse(Adresse $adresse): self
+    {
+        if (!$this->adresse->contains($adresse)) {
+            $this->adresse[] = $adresse;
+            $adresse->setAnnuaire($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAdresse(Adresse $adresse): self
+    {
+        if ($this->adresse->removeElement($adresse)) {
+            // set the owning side to null (unless already changed)
+            if ($adresse->getAnnuaire() === $this) {
+                $adresse->setAnnuaire(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getCategorie(): Collection
+    {
+        return $this->categorie;
+    }
+
+    public function addCategorie(Dictionnaire $categorie): self
+    {
+        if (!$this->categorie->contains($categorie)) {
+            $this->categorie[] = $categorie;
+        }
+
+        return $this;
+    }
+
+    public function removeCategorie(Dictionnaire $categorie): self
+    {
+        $this->categorie->removeElement($categorie);
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUrlLastFile(): string
+    {
+        $url = "";
+        $files = array();
+        foreach ($this->getImage() as $file){
+            $files[] = $file->getName();
+        }
+
+        $file = end($files);
+        $url = "uploads/" . $file;
+        return $url ;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNameLastFile(): string
+    {
+        $files = array();
+        foreach ($this->getImage() as $file){
+            $files[] = $file->getNameFile();
+        }
+
+        $file = end($files);
+        $name = $file;
+        return $name ;
     }
 }

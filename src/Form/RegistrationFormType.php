@@ -22,7 +22,8 @@ class RegistrationFormType extends HoneyPotType
                 'required'      => true,
                 'attr' => [
                     'autofocus' => true,
-                    'placeholder' => 'Email'
+                    'placeholder' => 'Email',
+                    'autocomplete' => 'disabled'
                 ]
             ])
             ->add('firstname', TextType::class, [

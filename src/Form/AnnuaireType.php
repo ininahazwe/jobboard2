@@ -7,11 +7,12 @@ use App\Entity\Dictionnaire;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\UX\Dropzone\Form\DropzoneType;
 
 class AnnuaireType extends AbstractType
 {
@@ -28,18 +29,6 @@ class AnnuaireType extends AbstractType
                 'label' => 'Url',
                 'required' => false
             ])
-            ->add('addresse', TextType::class, [
-                'label' => 'Adresse',
-                'required' => false
-            ])
-            ->add('code_postal', TextType::class, [
-                'label' => 'Code postal',
-                'required' => false
-            ])
-            ->add('city', TextType::class, [
-                'label' => 'Ville',
-                'required' => false
-            ])
             ->add('telephone', TextType::class, [
                 'label' => 'Téléphone',
                 'required' => false
@@ -51,6 +40,7 @@ class AnnuaireType extends AbstractType
             ->add('categorie', EntityType::class, [
                 'label' => 'Catégorie',
                 'class' => Dictionnaire::class,
+                'multiple' => true,
                 'query_builder' => function($repository) {
                     $query = $repository->createQueryBuilder('d')
                         ->select('d')
@@ -60,6 +50,20 @@ class AnnuaireType extends AbstractType
                     return $query;
                 }
             ])
+                ->add('image', DropzoneType::class, [
+                        'label' => 'Logo',
+                        'multiple' => false,
+                        'mapped' => false,
+                        'required' => false
+                ])
+                ->add('adresse', CollectionType::class, [
+                        'entry_type' => AdresseType::class,
+                        'label' => 'Adresse',
+                        'entry_options' => ['label' => false],
+                        'allow_add' => true,
+                        'allow_delete' => true,
+                        'by_reference' => false
+                ])
         ;
     }
 

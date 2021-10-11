@@ -1,4 +1,4 @@
-<form method="post" action="{{ path('annuaire_delete', {'id': annuaire.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+<form method="post" action="{{ path('annuaire_delete', {'id': annuaire.id}) }}" onsubmit="return confirm('êtes-vous sûr de vouloir supprimer cet élément?');">
     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ annuaire.id) }}">
     <button class="btn"><i class="fas fa-trash"></i></button>
 </form>

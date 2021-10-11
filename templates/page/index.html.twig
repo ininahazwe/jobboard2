@@ -31,11 +31,8 @@
                     <table class="table" id="datatable">
                         <thead>
                         <tr>
-                            <th>Title</th>
-                            <th>Content</th>
-                            <th>Style</th>
+                            <th>Titre</th>
                             <th>Type</th>
-                            <th>Slug</th>
                             <th>Images</th>
                             <th>actions</th>
                         </tr>
@@ -44,8 +41,6 @@
                         {% for page in pages %}
                             <tr>
                                 <td><a href="{{ path('page_show', {slug: page.slug})}}">{{ page.title }}</a></td>
-                                <td>{{ page.content|slice(0, 250)|raw }}...</td>
-                                <td>{{ page.style }}</td>
                                 <td>
                                     {% if page.type  == '1' %}
                                         Page Candidat
@@ -55,7 +50,6 @@
                                         Page Autre
                                     {% endif %}
                                 </td>
-                                <td>{{ page.slug }}</td>
                                 <td>
                                     {% if page.files|length %}
                                         <img class="card-img-top mx-auto" style="width:100px" src="{{ asset(page.getUrlLastFile()) }}" alt="{{ page.getNameLastFile() }}">

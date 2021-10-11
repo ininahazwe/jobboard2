@@ -324,16 +324,18 @@ class UserController extends AbstractController
         }
     }
 
-    #[Route('/accepter/{id}', name: 'user_accepter')]
-    public function activer(User $user): Response
+    #[Route('/{id}', name: 'user_delete', methods: ['POST'])]
+    public function delete(Request $request, User $user): Response
     {
-        $user->setModeration(!$user->getModeration());
+        $this->denyAccessUnlessGranted('ROLE_CANDIDAT');
 
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($user);
-        $em->flush();
+        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($user);
+            $entityManager->flush();
+        }
 
-        return new Response(User::ACCEPTEE);
+        return $this->redirectToRoute('profile_index');
     }
 
     #[Route('/parametres', name: 'user_parametres')]

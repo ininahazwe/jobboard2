@@ -29,4 +29,6 @@
         </div>
     </section>
 </main>
+    {% include 'adresse/_script.html.twig' %}
+    {{ render(controller('App\\Controller\\AdresseController::addEntite',{'entite' : 'annuaire' })) }}
 {% endblock %}

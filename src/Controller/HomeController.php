@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Data\SearchDataAgenda;
 use App\Data\SearchDataAnnonces;
+use App\Data\SearchDataAnnuaire;
 use App\Data\SearchDataEntreprise;
 use App\Entity\Adresse;
 use App\Entity\Annuaire;
@@ -16,6 +17,7 @@ use App\Form\ContactType;
 use App\Form\CreationEntrepriseType;
 use App\Form\SearchAgendaForm;
 use App\Form\SearchAnnonceForm;
+use App\Form\SearchAnnuaireForm;
 use App\Form\SearchEntrepriseForm;
 use App\Repository\AgendaRepository;
 use App\Repository\AnnonceRepository;
@@ -27,13 +29,13 @@ use App\Repository\MenuRepository;
 use App\Repository\ModeleOffreCommercialeRepository;
 use App\Repository\UserRepository;
 use App\Service\Mailer;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Twig\Environment;
@@ -87,17 +89,15 @@ class HomeController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $contact = $form->getData();
 
-            $email = (new TemplatedEmail())
-                ->from($contact->getEmail())
-                ->to('handicv@gmail.com')
-                ->subject($contact->getSubject())
-                ->text($contact->getMessage())
-                ->htmlTemplate('emails/contact.html.twig')
-                ->context([
-                    'contact' => $contact
-                ]);
+            $message = (new Email())
+                    ->from($contact->getEmail())
+                    ->to('handicv@gmail.com')
+                    ->subject($contact->getSubject())
+                    ->text('Sender : '.$contact['email'].\PHP_EOL.
+                            $contact['Message'],
+                            'text/plain');
 
-            $mailer->send($email);
+            $mailer->send($message);
 
             $this->addFlash('success', 'Envoi réussi');
 
@@ -227,7 +227,7 @@ class HomeController extends AbstractController
     public function showEntreprise($id, $slug, EntrepriseRepository $entrepriseRepository, Request $request, AnnonceRepository $annonceRepository): Response
     {
         $entreprise = $entrepriseRepository->findOneBy(['slug' => $slug, 'id' => $id]);
-        $annonces = $annonceRepository->getAnnoncesEntreprise();
+        $annonces = $annonceRepository->findAll();
 
         return $this->render('entreprise/show_unit.html.twig', [
             'entreprise' => $entreprise,
@@ -277,10 +277,26 @@ class HomeController extends AbstractController
 
     /*Affichage de l'annuaire*/
     #[Route('/annuaire', name: 'annuaire_show_all', methods: ['GET'])]
-    public function showAllAnnuaire(AnnuaireRepository $annuaireRepository): Response
+    public function showAllAnnuaires(AnnuaireRepository $annuaireRepository, Request $request): Response
     {
+        $data = new SearchDataAnnuaire();
+        $data->page = $request->get('page', 1);
+        $form = $this->createForm(SearchAnnuaireForm::class, $data);
+        $form->handleRequest($request);
+
+        $annuaires = $annuaireRepository->findSearch($data);
+
+        if($request->get('ajax')){
+            return new JsonResponse([
+                    'content' => $this->renderView('annuaire/_annuaires.html.twig', ['annuaires' => $annuaires]),
+                    'pagination' => $this->renderView('annuaire/_pagination.html.twig', ['annuaires' => $annuaires]),
+                    'pages' => ceil($annuaires->getTotalItemCount() / $annuaires->getItemNumberPerPage())
+            ]);
+        }
+
         return $this->render('annuaire/showAll.html.twig', [
-            'annuaires' => $annuaireRepository->sortAlphabetically(),
+                'annuaires' => $annuaires,
+                'form' => $form->createView()
         ]);
     }
 
@@ -355,7 +371,6 @@ class HomeController extends AbstractController
      * @param EntrepriseRepository $entrepriseRepository
      * @param Mailer $mailer
      * @param UserPasswordEncoderInterface $passwordEncoder
-     * @param UserRepository $userRepository
      * @return Response
      * @throws LoaderError
      * @throws RuntimeError
@@ -392,7 +407,7 @@ class HomeController extends AbstractController
             $user->setEmail($form->get('email')->getData());
             $user->setFirstname($form->get('firstname')->getData());
             $user->setLastname($form->get('lastname')->getData());
-            $user->setModeration(User::EN_ATTENTE);
+            $user->setIsAccepted(false);
             $user->setRoles(['ROLE_SUPER_RECRUTEUR']);
             $user->setPassword(
                 $passwordEncoder->encodePassword(

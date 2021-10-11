@@ -1,4 +1,46 @@
+{% form_theme form _self %}
 {{ form_start(form) }}
-    {{ form_widget(form) }}
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <b>Description</b>
+            {{ form_row(form.title) }}
+            {{ form_row(form.content) }}
+        </div>
+
+        <div class="col-md-4">
+            <b>Autres détails</b>
+            {{ form_row(form.web_link) }}
+            {{ form_row(form.telephone) }}
+            {{ form_row(form.categorie) }}
+            {{ form_row(form.email) }}
+            {{ form_row(form.image) }}
+        </div>
+        <div class="col-md-4">
+            <h3>Adresse</h3>
+            <div id="adresse" data-prototype="{{ form_row(form.adresse.vars.prototype)|e('html_attr') }}">
+                {% for adresse in form.adresse %}
+                    {{ form_row(adresse) }}
+                {% endfor %}
+                <span></span>
+            </div>
+        </div>
+    </div>
     <input type="submit" value="Enregistrer" class="bouton solid" />
+</div>
 {{ form_end(form) }}
+
+<script>
+    new TomSelect('#annuaire_categorie', {
+        plugins: {
+            remove_button:{
+                title:'Supprimer',
+            }
+        },
+        persist: false,
+        create: true,
+        onDelete: function(values) {
+            return confirm(values.length > 1 ? 'Are you sure you want to remove these ' + values.length + ' items?' : 'Are you sure you want to remove "' + values[0] + '"?');
+        }
+    });
+</script>

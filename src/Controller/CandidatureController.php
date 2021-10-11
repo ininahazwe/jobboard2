@@ -2,21 +2,13 @@
 
 namespace App\Controller;
 
-use App\Entity\Annonce;
 use App\Entity\Candidature;
-use App\Entity\Messages;
-use App\Entity\User;
-use App\Form\CandidatureType;
-use App\Form\MessagesType;
-use App\Repository\AnnonceRepository;
 use App\Repository\CandaditureRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use App\Service\Mailer;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Twig\Environment;
-use Twig\Loader\ArrayLoader;
+
 
 #[Route('/cms/candidature')]
 class CandidatureController extends AbstractController

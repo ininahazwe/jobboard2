@@ -2,9 +2,13 @@
 
 namespace App\Repository;
 
+use App\Data\SearchDataAnnuaire;
 use App\Entity\Annuaire;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use Knp\Component\Pager\Pagination\PaginationInterface;
+use Knp\Component\Pager\PaginatorInterface;
 
 /**
  * @method Annuaire|null find($id, $lockMode = null, $lockVersion = null)
@@ -14,9 +18,12 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class AnnuaireRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private PaginatorInterface $paginator;
+
+    public function __construct(ManagerRegistry $registry, PaginatorInterface $paginator)
     {
         parent::__construct($registry, Annuaire::class);
+        $this->paginator = $paginator;
     }
 
     public function sortAlphabetically() {
@@ -25,32 +32,47 @@ class AnnuaireRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    // /**
-    //  * @return Annuaire[] Returns an array of Annuaire objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('a.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Annuaire
+    /**
+     * @param SearchDataAnnuaire $search
+     * @return PaginationInterface
+     */
+    public function findSearch(SearchDataAnnuaire $search): PaginationInterface
     {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        $query = $this->getSearchQuery($search)->getQuery()->getResult();
+
+        return $this->paginator->paginate(
+                $query,
+                $search->page,
+                100
+        );
     }
-    */
+
+    public function getSearchQuery (SearchDataAnnuaire $search): QueryBuilder
+    {
+        $query = $this
+                ->createQueryBuilder('a');
+
+        //->join('a.contrat', 'c');
+
+        if(!empty($search->q)){
+            $query
+                    ->andWhere('a.title LIKE :q')
+                    ->setParameter('q', "%" . $search->q . "%");
+        }
+        if(!empty($search->category)){
+            $query
+                    ->innerJoin('a.categorie', 'c')
+                    ->andWhere('c.id IN (:categorie_annuaire)')
+                    ->setParameter('categorie_annuaire', $search->category);
+        }
+        if(!empty($search->adresse)){
+            $query
+                    ->innerJoin('a.adresse', 'd')
+                    ->andWhere('d.id IN (:adresse)')
+                    ->setParameter('adresse', $search->adresse);
+        }
+
+        return $query;
+    }
 }

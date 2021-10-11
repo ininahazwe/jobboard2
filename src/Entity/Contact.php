@@ -61,6 +61,17 @@ class Contact
      */
     private ?string $message;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     * @Assert\Length(
+     *      min = 1,
+     *      max = 15,
+     *      minMessage = "un minimum de {{ limit }} caractères est requis",
+     *      maxMessage = "{{ limit }} caractères sont la limite"
+     * )
+     */
+    private ?string $phone;
+
     public function getFirstname(): ?string
     {
         return $this->firstname;
@@ -118,6 +129,22 @@ class Contact
     {
         $this->message = $message;
 
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getSubject(): ?string {
+        return $this->subject;
+    }
+
+    /**
+     * @param string|null $subject
+     * @return Contact
+     */
+    public function setSubject(?string $subject): Contact {
+        $this->subject = $subject;
         return $this;
     }
 }

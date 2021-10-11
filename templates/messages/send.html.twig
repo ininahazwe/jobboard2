@@ -1,35 +1,50 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Messagerie
-{% endblock %}
+{% block title %}Messages{% endblock %}
 
 {% block body %}
-    <section class="container">
-        <div class="row">
-            <div class="col">
-                <h1>Envoyer un message</h1>
-                {{ form(form) }}
-                <a class="btn btn-primary" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
-                    Voir mes dossiers
-                </a>
+<main id="main">
+    <!-- ======= Breadcrumbs ======= -->
+    <section id="breadcrumbs" class="breadcrumbs">
+        <div class="container">
+            <ol>
+                <li><a href="{{ path('app_home') }}">Home</a></li>
+                <li><a href="{{ path('app_profile') }}">Dashboard</a></li>
+                <li><a href="{{ path('messages_index') }}">Messages</a></li>
+                <li>Envoi</li>
+            </ol>
+            <h1>Envoyer un message</h1>
+        </div>
+    </section><!-- End Breadcrumbs -->
+    <section class="inner-page">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    {% include('layouts/_dash_sidebar.html.twig') %}
+                </div>
+                <div class="col-md-9">
+                    <a class="btn app-btn-primary mb-4" href="{{ path('messages_new') }}">
+                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-file-earmark-arrow-down me-2" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8 0a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2H9v6a1 1 0 1 1-2 0V9H1a1 1 0 0 1 0-2h6V1a1 1 0 0 1 1-1z"/>
+                        </svg>Envoyer un message
+                    </a>
+                    <nav id="orders-table-tab" class="orders-table-tab app-nav-tabs nav shadow-sm flex-column flex-sm-row mb-4">
+                        <a class="flex-sm-fill text-sm-center nav-link active" href="{{ path('messages_index') }}" role="tab" aria-controls="orders-all" aria-selected="true">Boîte de réception</a>
+                        <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('messages_sent') }}" role="tab" aria-controls="orders-paid" aria-selected="false">Eléments envoyés</a>
+                    </nav>
+                    <div class="tab-content" id="orders-table-tab-content">
+                        {{ form_start(form) }}
+                            <div class="" style="width: 500px">
+                                {{ form_row(form.title) }}
+                                {{ form_row(form.message) }}
+                                {{ form_row(form.recipient) }}
+                                <input type="submit" value="Envoyer" class="bouton solid" />
+                            </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
             </div>
         </div>
     </section>
-    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-        <div class="offcanvas-header">
-            <h2 class="offcanvas-title" id="offcanvasExampleLabel">Mes dossiers</h2>
-            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body">
-            <div class="list-group">
-                <a href="{{ path("messages_index") }}" class="list-group-item list-group-item-action">Accueil</a>
-            </div>
-            <div class="list-group">
-                <a href="{{ path("messages_received") }}" class="list-group-item list-group-item-action">Boîte de réception</a>
-            </div>
-            <div class="list-group">
-                <a href="{{ path("messages_sent") }}" class="list-group-item list-group-item-action">Eléments envoyés</a>
-            </div>
-        </div>
-    </div>
+</main>
 {% endblock %}

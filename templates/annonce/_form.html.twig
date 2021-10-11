@@ -132,3 +132,31 @@
              display: none;
          }
 </style>
+
+<script>
+
+    new TomSelect('#annonce_auteur', {
+        plugins: {
+            remove_button:{
+                title:'Supprimer',
+            }
+        },
+        persist: false,
+        create: true,
+        onDelete: function(values) {
+            return confirm(values.length > 1 ? 'Are you sure you want to remove these ' + values.length + ' items?' : 'Are you sure you want to remove "' + values[0] + '"?');
+        }
+    });
+    new TomSelect('#annonce_type_contrat', {
+        plugins: {
+            remove_button:{
+                title:'Supprimer',
+            }
+        },
+        persist: false,
+        create: true,
+        onDelete: function(values) {
+            return confirm(values.length > 1 ? 'Are you sure you want to remove these ' + values.length + ' items?' : 'Are you sure you want to remove "' + values[0] + '"?');
+        }
+    });
+</script>

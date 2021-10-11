@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Entreprise;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\ORMException;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -212,6 +213,29 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->where('u.moderation = 0')
         ;
         return $query->getQuery()->getResult();
+    }
+
+    /**
+     * @return mixed
+     * @throws NonUniqueResultException
+     */
+    public function countAllUser(): mixed {
+        $queryBuilder = $this->createQueryBuilder('a');
+        $queryBuilder->select('COUNT(a.id) as value');
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    public function allEmailGmail()
+    {
+        $value = "gmail";
+
+        return $this->createQueryBuilder('u')
+                ->andWhere('u.email like :email')
+                ->setParameter('email', '%'.$value.'%')
+                ->getQuery()
+                ->getResult()
+                ;
     }
 
 }

@@ -6,3 +6,6 @@ twig:
     globals:
         hcaptcha_site_key: '%env(HCAPTCHA_SITEKEY)%'
         titre: 'Handi-CV'
+        app_environment: '%env(APP_ENV)%'
+        stripe_public_key_test: '%env(STRIPE_PUBLIC_KEY_TEST)%'
+        stripe_public_key_live: '%env(STRIPE_PUBLIC_KEY_LIVE)%'

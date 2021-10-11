@@ -29,6 +29,7 @@
                     <thead>
                         <tr>
                             <th>Formule</th>
+                            <th>Description</th>
                             <th>Nombre d'offres</th>
                             <th>Début de contrat</th>
                             <th>Fin de contrat</th>
@@ -41,6 +42,7 @@
                     {% for offre in offres %}
                         <tr>
                             <td>{{ offre.formule }}</td>
+                            <td>{{ offre.description }}</td>
                             <td>{{ offre.nombreOffres }}</td>
                             <td>{{ offre.debutContratAt ? offre.debutContratAt|date('d-m-Y') : '' }}</td>
                             <td>{{ offre.finContratAt ? offre.finContratAt|date('d-m-Y') : '' }}</td>

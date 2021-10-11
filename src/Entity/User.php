@@ -159,12 +159,7 @@ class User implements UserInterface
     private Collection $candidatures_recruteur;
 
     /**
-     * @ORM\OneToMany(targetEntity=Messages::class, mappedBy="sender")
-     */
-    private Collection $messages;
-
-    /**
-     * @ORM\OneToMany(targetEntity=Messages::class, mappedBy="sent", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Messages::class, mappedBy="sender", orphanRemoval=true)
      */
     private Collection $sent;
 
@@ -193,6 +188,16 @@ class User implements UserInterface
      */
     private Collection $favoris;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private ?bool $isAccepted;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Order::class, mappedBy="user")
+     */
+    private Collection $orders;
+
     public function __construct()
     {
         $this->isTermsClients = false;
@@ -203,13 +208,13 @@ class User implements UserInterface
         $this->files = new ArrayCollection();
         $this->annonces_auteurs = new ArrayCollection();
         $this->candidatures_recruteur = new ArrayCollection();
-        $this->messages = new ArrayCollection();
         $this->sent = new ArrayCollection();
         $this->received = new ArrayCollection();
         $this->annonces = new ArrayCollection();
         $this->createdAt = new \DateTimeImmutable('now');
         $this->blogs = new ArrayCollection();
         $this->favoris = new ArrayCollection();
+        $this->orders = new ArrayCollection();
     }
 
     public function getEmail(): string
@@ -638,35 +643,6 @@ class User implements UserInterface
     /**
      * @return Collection
      */
-    public function getMessages(): Collection
-    {
-        return $this->messages;
-    }
-
-    public function addMessage(Messages $message): self
-    {
-        if (!$this->messages->contains($message)) {
-            $this->messages[] = $message;
-            $message->setSender($this);
-        }
-
-        return $this;
-    }
-
-    public function removeMessage(Messages $message): self
-    {
-        if ($this->messages->removeElement($message)) {
-            if ($message->getSender() === $this) {
-                $message->setSender(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection
-     */
     public function getSent(): Collection
     {
         return $this->sent;
@@ -1032,6 +1008,48 @@ class User implements UserInterface
     {
         if ($this->favoris->removeElement($favori)) {
             $favori->removeFavori($this);
+        }
+
+        return $this;
+    }
+
+    public function getIsAccepted(): ?bool
+    {
+        return $this->isAccepted;
+    }
+
+    public function setIsAccepted(?bool $isAccepted): self
+    {
+        $this->isAccepted = $isAccepted;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Order[]
+     */
+    public function getOrders(): Collection
+    {
+        return $this->orders;
+    }
+
+    public function addOrder(Order $order): self
+    {
+        if (!$this->orders->contains($order)) {
+            $this->orders[] = $order;
+            $order->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrder(Order $order): self
+    {
+        if ($this->orders->removeElement($order)) {
+            // set the owning side to null (unless already changed)
+            if ($order->getUser() === $this) {
+                $order->setUser(null);
+            }
         }
 
         return $this;

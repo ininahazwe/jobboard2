@@ -12,52 +12,66 @@
                     <li><a href="{{ path('messages_received') }}">Messagerie</a></li>
                     <li>Gestion des candidatures</li>
                 </ol>
-                <h1>Candidatures ({{ app.user.received|length }})</h1>
+                <h1>Messages envoyés</h1>
             </div>
         </section><!-- End Breadcrumbs -->
         <section class="inner-page">
             <div class="container">
                 <div class="row">
                     <div class="col-md-3">
-                        <div class="list-group">
-                            <a href="{{ path("messages_received") }}" class="list-group-item list-group-item-action">Boîte de réception ({{ app.user.received|length }})</a>
-                        </div>
-                        <div class="list-group">
-                            <a href="{{ path("messages_sent") }}" class="list-group-item list-group-item-action active">Eléments envoyés ({{ app.user.sent|length }})</a>
-                        </div>
+                        {% include('layouts/_dash_sidebar.html.twig') %}
                     </div>
                     <div class="col-md-9">
-                        <table class="table">
-                            <thead>
+                        <a class="btn app-btn-primary mb-4" href="{{ path('messages_new') }}">
+                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-file-earmark-arrow-down me-2"
+                                 fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M8 0a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2H9v6a1 1 0 1 1-2 0V9H1a1 1 0 0 1 0-2h6V1a1 1 0 0 1 1-1z"/>
+                            </svg>
+                            Envoyer un message
+                        </a>
+                        <nav id="orders-table-tab"
+                             class="orders-table-tab app-nav-tabs nav shadow-sm flex-column flex-sm-row mb-4">
+                            <a class="flex-sm-fill text-sm-center nav-link active" href="{{ path('messages_index') }}"
+                               role="tab" aria-controls="orders-all" aria-selected="false">Boîte de réception</a>
+                            <a class="flex-sm-fill text-sm-center nav-link" href="{{ path('messages_sent') }}"
+                               role="tab" aria-controls="orders-paid" aria-selected="true">Eléments envoyés</a>
+                        </nav>
+                        <div class="tab-content" id="orders-table-tab-content">
+                            <table class="table">
+                                <thead>
                                 <tr>
                                     <th>De</th>
                                     <th>Sujet</th>
                                     <th>Date</th>
                                     <th>Actions</th>
                                 </tr>
-                            </thead>
-                            <tbody>
+                                </thead>
+                                <tbody>
 
-                            {% for message in app.user.sent %}
-                                {% set bold = "" %}
-                                {% if message.isRead == 0 %}
-                                    {% set bold = "fw-bold" %}
-                                {% endif %}
-                                <tr>
-                                    <td {{bold}} >{{ message.sender.email }}</td>
-                                    <td {{bold}} ><a href="{{ path("messages_read", {id: message.id}) }}">{{ message.titre }}</td>
-                                    <td {{bold}} >{{ message.createdAt|date }}</td>
-                                    <td>
-                                        <a href="{{ path("messages_delete", {id: message.id}) }}"><i class="fas fa-trash"></i></a>
-                                    </td>
-                                </tr>
-                            {% else %}
-                                <tr>
-                                    <td colspan="12">no records found</td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
+                                {% for message in app.user.sent %}
+                                    {% set bold = "" %}
+                                    {% if message.isRead == 0 %}
+                                        {% set bold = "fw-bold" %}
+                                    {% endif %}
+                                    <tr>
+                                        <td {{ bold }} >{{ message.sender.email }}</td>
+                                        <td {{ bold }} ><a
+                                                    href="{{ path("messages_read", {id: message.id}) }}">{{ message.title }}
+                                        </td>
+                                        <td {{ bold }} >{{ message.createdAt|date }}</td>
+                                        <td>
+                                            <a href="{{ path("messages_delete", {id: message.id}) }}"><i
+                                                        class="fas fa-trash"></i></a>
+                                        </td>
+                                    </tr>
+                                {% else %}
+                                    <tr>
+                                        <td colspan="12">no records found</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

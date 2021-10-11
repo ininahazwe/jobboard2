@@ -82,10 +82,21 @@ class Offre
      */
     private Collection $annonces;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Order::class, mappedBy="offre")
+     */
+    private Collection $orders;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private ?string $description;
+
     public function __construct()
     {
         $this->annonces = new ArrayCollection();
         $this->createdAt = new \DateTimeImmutable('now');
+        $this->orders = new ArrayCollection();
 
     }
 
@@ -118,7 +129,7 @@ class Offre
         return $this->debutContratAt;
     }
 
-    public function setDebutContratAt(\DateTimeInterface $debutContratAt): self
+    public function setDebutContratAt($debutContratAt): self
     {
         $this->debutContratAt = $debutContratAt;
 
@@ -130,7 +141,7 @@ class Offre
         return $this->finContratAt;
     }
 
-    public function setFinContratAt(\DateTimeInterface $finContratAt): self
+    public function setFinContratAt($finContratAt): self
     {
         $this->finContratAt = $finContratAt;
 
@@ -208,8 +219,7 @@ class Offre
 
         return $this;
     }
-    public function isModele()
-    {
+    public function isModele(): bool {
         if ($this->getModeleOffreCommerciale()){
             return true;
 
@@ -217,8 +227,7 @@ class Offre
         return false;
     }
 
-    public function isActive()
-    {
+    public function isActive(): bool {
         $now = new \DateTime('now');
         if ($now < $this->getFinContratAt()){
             return true;
@@ -226,8 +235,7 @@ class Offre
         return false;
     }
 
-    public function isActiveNotFactured()
-    {
+    public function isActiveNotFactured(): bool {
 
         $now = new \DateTime('now');
         if ($now < $this->getFinContratAt() && $this->getIsFacture() == true ){
@@ -237,8 +245,7 @@ class Offre
     }
 
 
-    public function isPassed()
-    {
+    public function isPassed(): bool {
         $now = new \DateTime('now');
         if ($now > $this->getFinContratAt()){
             return true;
@@ -246,8 +253,7 @@ class Offre
         return false;
     }
 
-    public function getStatusName()
-    {
+    public function getStatusName(): string {
         if ($this->isActive()){
             return "Active";
         }
@@ -270,7 +276,7 @@ class Offre
     }
 
     /**
-     * @return Collection|Annonce[]
+     * @return Collection
      */
     public function getAnnonces(): Collection
     {
@@ -312,5 +318,47 @@ class Offre
     public function onPreUpdate()
     {
         $this->setUpdatedAt(new \DateTime('now'));
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getOrders(): Collection
+    {
+        return $this->orders;
+    }
+
+    public function addOrder(Order $order): self
+    {
+        if (!$this->orders->contains($order)) {
+            $this->orders[] = $order;
+            $order->setOffre($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrder(Order $order): self
+    {
+        if ($this->orders->removeElement($order)) {
+            // set the owning side to null (unless already changed)
+            if ($order->getOffre() === $this) {
+                $order->setOffre(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
     }
 }

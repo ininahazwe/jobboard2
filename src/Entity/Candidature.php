@@ -73,11 +73,6 @@ class Candidature
     private Collection $lettre_motivation;
 
     /**
-     * @ORM\OneToOne(targetEntity=Messages::class, mappedBy="candidature", cascade={"persist", "remove"})
-     */
-    private ?Messages $messages;
-
-    /**
      * @ORM\Column(type="integer", nullable=true)
      */
     private ?int $statut;
@@ -277,28 +272,6 @@ class Candidature
         }else if($statut = '2'){
             return 'Refusée';
         }
-    }
-
-    public function getMessages(): ?Messages
-    {
-        return $this->messages;
-    }
-
-    public function setMessages(?Messages $messages): self
-    {
-        // unset the owning side of the relation if necessary
-        if ($messages === null && $this->messages !== null) {
-            $this->messages->setCandidature(null);
-        }
-
-        // set the owning side of the relation if necessary
-        if ($messages !== null && $messages->getCandidature() !== $this) {
-            $messages->setCandidature($this);
-        }
-
-        $this->messages = $messages;
-
-        return $this;
     }
 
     public function getStatut(): ?int

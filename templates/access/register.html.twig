@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello AccessController!{% endblock %}
+{% block title %}Identification{% endblock %}
 
 {% block body %}
     <main id="main">
@@ -8,43 +8,39 @@
             <div class="wrapper">
                 <div class="forms-wrapper">
                     <div class="signin-signup">
-                        <form name="registration_form" class="sign-up-form">
-                            <h2 class="title">Inscription</h2>
-                            <div class="input-field">
-                                <i class="bi bi-person-fill"></i>
-                                <input type="email" id="registration_form_email" name="registration_form[email]" required="required" autofocus="autofocus" placeholder="E-mail">
+                        <form action="{{ path('access_login') }}" class="sign-in-form" method="post" name="login_form">
+                            {% if error %}
+                                <div class="alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                            {% endif %}
+                            <div class="notification">
+                                <p id="errMsg"></p>
+                            </div>
+                            <h2 class="title">Connexion</h2>
+                            <div role="group" class="input-field email active">
+                                <i class="bi bi-at"></i>
+                                <input type="email" placeholder="E-mail" id="inputEmail" name="email" required autofocus/>
                             </div>
                             <div class="input-field">
-                                <i class="fas fa-envelope"></i>
-                                <input type="text" id="registration_form_firstname" name="registration_form[firstname]" required="required" autofocus="autofocus" placeholder="Prénom">
+                                <i class="bi bi-lock-fill"></i>
+                                <input type="password" placeholder="Password" id="inputPassword" name="password" required/>
                             </div>
-                            <div class="input-field">
-                                <i class="fas fa-lock"></i>
-                                <input type="text" id="registration_form_lastname" name="registration_form[lastname]" required="required" autofocus="autofocus" placeholder="Nom">
+                            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                            <input type="hidden" name="go_to" value="/cms/user/">
+                            <div class="extra mt-3 row justify-content-between">
+                                <div class="col-6">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="remember_me_checkbox" name="_remember_me">
+                                        <label for="remember_me_checkbox">Se souvenir de moi</label>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="forgot-password text-end">
+                                        <a href="{{ path('app_forgot_password') }}">Mot de passe oublié ?</a>
+                                    </div>
+                                </div><!--//col-6-->
                             </div>
-                            <div class="input-field">
-                                <i class="fas fa-lock"></i>
-                                <input type="password" id="registration_form_password_first" name="registration_form[password][first]" placeholder="Mot de passe">
-                            </div>
-                            <div class="input-field">
-                                <i class="fas fa-lock"></i>
-                                <input type="password" id="registration_form_password_second" name="registration_form[password][second]" placeholder="Resaisir le mot de passe">
-                            </div>
-                            <fieldset class="sweet-candy">
-                                <label for="registration_form_phone">Phone</label>
-                                <input type="text" id="registration_form_phone" name="registration_form[phone]" autocomplete="off" tabindex="-1" class="form-control">
-                            </fieldset>
-                            <fieldset class="sweet-candy">
-                                <label for="registration_form_faxNumber">Fax number</label>
-                                <input type="text" id="registration_form_faxNumber" name="registration_form[faxNumber]" autocomplete="off" tabindex="-1" class="form-control">
-                            </fieldset>
-                            <input type="checkbox" id="registration_form_agreeTerms" name="registration_form[agreeTerms]" required="required" class="form-check-input" value="1">
-                            <label class="form-check-label required" for="registration_form_agreeTerms">
-                                J'accepte les conditions d'utilisation <a href="#">TOTO</a>
-                            </label>
-
-                            <input type="submit" class="bouton" value="Sign up"/>
-                            <p class="social-text">Ou avec l'une de ces plateformes</p>
+                            <input type="submit" value="Valider" class="bouton solid"/>
+                            <p class="social-text">ou avec l'une de ces plateformes</p>
                             <div class="social-media">
                                 <a href="#" class="social-icon">
                                     <i class="fab fa-facebook-f"></i>
@@ -60,13 +56,66 @@
                                 </a>
                             </div>
                         </form>
+
+
+                        {{ form_start(registrationForm, {'attr': {'class': 'sign-up-form', 'action': path('access_register')} }) }}
+                        <div class="notification">
+                            <p id="errMsgRegistration"></p>
+                        </div>
+                        <h2 class="title">Inscription</h2>
+                        <div role="group" class="input-field emailRegistration active">
+                            <i class="bi bi-at"></i>
+                            {{ form_widget(registrationForm.email) }}
+                        </div>
+                        <div class="input-field">
+                            <i class="bi bi-person-fill"></i>
+                            {{ form_widget(registrationForm.firstname) }}
+                        </div>
+                        <div class="input-field">
+                            <i class="bi bi-person-fill"></i>
+                            {{ form_widget(registrationForm.lastname) }}
+                        </div>
+
+
+                        <div class="input-field">
+                            <i class="bi bi-person-fill"></i>
+                            <input type="password" id="registration_form_password_first" name="registration_form[password][first]"
+                                   maxlength="255" placeholder="Mot de passe" class=""></div>
+                        <div class="input-field">
+                            <i class="bi bi-person-fill"></i>
+                            <input type="password" id="registration_form_password_second" name="registration_form[password][second]" maxlength="255"
+                                   placeholder="Confirmer le mot de passe" class="">
+                        </div>
+
+
+                        {#                            {{ form_widget(registrationForm.password) }}#}
+
+                        <div>
+                            {{ form_label(registrationForm.agreeTerms) }}
+                            {{ form_errors(registrationForm.agreeTerms) }}
+                            {{ form_widget(registrationForm.agreeTerms) }}
+                        </div>
+
+                        <fieldset class="sweet-candy">
+                            {{ form_label(registrationForm.phone) }}
+                            {{ form_errors(registrationForm.phone) }}
+                            {{ form_widget(registrationForm.phone) }}
+                        </fieldset>
+                        <fieldset class="sweet-candy">
+                            {{ form_label(registrationForm.faxNumber) }}
+                            {{ form_errors(registrationForm.faxNumber) }}
+                            {{ form_widget(registrationForm.faxNumber) }}
+                        </fieldset>
+
+                        <button type="submit" class="btn btn-primary mt-2">Valider</button>
+                        {{ form_end(registrationForm, {'render_rest': false}) }}
                     </div>
                 </div>
 
                 <div class="panels-wrapper">
                     <div class="panel left-panel">
                         <div class="content">
-                            <h3>Pas encore inscrit</h3>
+                            <h3 class="text-white">Pas encore inscrit</h3>
                             <p>
                                 Créez votre compte et gérez vos candicatures,
                                 en un clic!
@@ -79,7 +128,7 @@
                     </div>
                     <div class="panel right-panel">
                         <div class="content">
-                            <h3>Déjà inscrit ?</h3>
+                            <h3 class="text-white">Déjà inscrit ?</h3>
                             <p>
                                 Grâce à vos identidiants,
                                 accèdez à votre espace personnel.
@@ -95,12 +144,20 @@
         </section>
     </main>
     <script src="{{ asset('assets/js/login-register.js') }}"></script>
+    <script>
+        $('#registration_form_password div').each(function() {
+            $(this).removeClass( "form-group" ).addClass("input-field");
+        });
+        $('.input-field input').each(function() {
+            $(this).removeClass( "form-control" );
+        });
+    </script>
 {% endblock %}
+
 {% form_theme registrationForm _self %}
 {% block _registration_form_agreeTerms_widget %}
     <input type="checkbox" id="registration_form_agreeTerms" name="registration_form[agreeTerms]" required="required" class="form-check-input" value="1">
     <label class="form-check-label required" for="registration_form_agreeTerms">
         J'accepte les conditions d'utilisation <a href="#">TOTO</a>
     </label>
-
 {% endblock %}

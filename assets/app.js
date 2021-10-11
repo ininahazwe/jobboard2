@@ -32,6 +32,10 @@ $(document).ready( function () {
     });
 });
 
+$(function () {
+    $('.datepicker').datepicker();
+});
+
 new Filter(document.querySelector('.js-filter'))
 
 // Font Awesome

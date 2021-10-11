@@ -200,6 +200,11 @@ Voici les
    composer require symfony/ux-dropzone
    ```
 
+17. Stripe / Paiement en ligne
+   ```sh
+   composer require stripe/stripe-php
+   ```
+
 <!-- USAGE EXAMPLES -->
 ## Usage
 

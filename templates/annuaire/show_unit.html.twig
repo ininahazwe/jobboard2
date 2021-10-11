@@ -22,9 +22,11 @@
                     <div class="col-lg-4">
                         <div class="portfolio-info">
                             <i class="bi bi-house"></i>
-                            <div>{{ annuaire.addresse }}</div>
-                            <div>{{ annuaire.city }}</div>
-                            <div>{{ annuaire.codePostal }}</div>
+                            <div>
+                                {% for adresse in annuaire.adresse %}
+                                    {{ adresse.city }}<br>{{ adresse.zipcode }}
+                                {% endfor %}
+                            </div>
                             <hr>
                             <i class="bi bi-link-45deg"></i>
                             <div><a href="{{ annuaire.webLink }}" target="_blank">{{ annuaire.webLink }}</a></div>

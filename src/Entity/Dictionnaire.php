@@ -75,11 +75,6 @@ class Dictionnaire
     private Collection $annonces_type_contrat;
 
     /**
-     * @ORM\OneToMany(targetEntity=Annuaire::class, mappedBy="categorie")
-     */
-    private Collection $annuaires;
-
-    /**
      * @ORM\OneToMany(targetEntity=Profile::class, mappedBy="civilite")
      */
     private Collection $profile;
@@ -114,12 +109,17 @@ class Dictionnaire
    */
   private Collection $experiences;
 
+  /**
+   * @ORM\ManyToMany(targetEntity=Annuaire::class, mappedBy="categorie")
+   */
+  private Collection $annuaires;
+
     public function __construct()
     {
+        $this->setCreatedAt(new \DateTimeImmutable('now'));
         $this->annonces = new ArrayCollection();
         $this->annonces_experience = new ArrayCollection();
         $this->annonces_type_contrat = new ArrayCollection();
-        $this->annuaires = new ArrayCollection();
         $this->profile = new ArrayCollection();
         $this->metiers = new ArrayCollection();
         $this->diplome = new ArrayCollection();
@@ -127,6 +127,7 @@ class Dictionnaire
         $this->entreprise = new ArrayCollection();
         $this->agenda = new ArrayCollection();
         $this->experiences = new ArrayCollection();
+        $this->annuaires = new ArrayCollection();
     }
 
     public function setId($id)
@@ -240,37 +241,6 @@ class Dictionnaire
 
         return $this;
     }
-
-    /**
-     * @return Collection
-     */
-    public function getAnnuaires(): Collection
-    {
-        return $this->annuaires;
-    }
-
-    public function addAnnuaire(Annuaire $annuaire): self
-    {
-        if (!$this->annuaires->contains($annuaire)) {
-            $this->annuaires[] = $annuaire;
-            $annuaire->setCategorie($this);
-        }
-
-        return $this;
-    }
-
-    public function removeAnnuaire(Annuaire $annuaire): self
-    {
-        if ($this->annuaires->removeElement($annuaire)) {
-            // set the owning side to null (unless already changed)
-            if ($annuaire->getCategorie() === $this) {
-                $annuaire->setCategorie(null);
-            }
-        }
-
-        return $this;
-    }
-
 
     /**
      * @return string[]
@@ -665,5 +635,32 @@ class Dictionnaire
     }
 
     return $this;
+  }
+
+    /**
+     * @return Collection
+     */
+  public function getAnnuaires(): Collection
+  {
+      return $this->annuaires;
+  }
+
+  public function addAnnuaire(Annuaire $annuaire): self
+  {
+      if (!$this->annuaires->contains($annuaire)) {
+          $this->annuaires[] = $annuaire;
+          $annuaire->addCategorie($this);
+      }
+
+      return $this;
+  }
+
+  public function removeAnnuaire(Annuaire $annuaire): self
+  {
+      if ($this->annuaires->removeElement($annuaire)) {
+          $annuaire->removeCategorie($this);
+      }
+
+      return $this;
   }
 }

@@ -75,3 +75,24 @@ a{
 html.is-animating .transition-fade {
   opacity: 0;
 }
+
+/* remove autocomplete highlight */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active  {
+  -webkit-box-shadow: 0 0 0 30px #f0f0f0 inset !important;
+}
+@-webkit-keyframes autofill {
+  0%,100% {
+    color: #666;
+    background: transparent;
+  }
+}
+
+/* remove background when autofill input css */
+input:-webkit-autofill {
+  -webkit-animation-delay: 1s; /* Safari support - any positive time runs instantly */
+  -webkit-animation-name: autofill;
+  -webkit-animation-fill-mode: both;
+}
