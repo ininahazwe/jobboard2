@@ -150,8 +150,6 @@ class UserController extends AbstractController
             $twig = new Environment($loader);
             $message = $twig->render('email',['user' => $user]);
 
-            $this->addFlash('success', 'Candidature réussie');
-
             $mailer->send([
                 'recipient_email' => $user->getEmail(),
                 'subject'         => $email->getSubject(),
