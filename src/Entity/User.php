@@ -1026,7 +1026,7 @@ class User implements UserInterface
     }
 
     /**
-     * @return Collection|Order[]
+     * @return Collection
      */
     public function getOrders(): Collection
     {
